@@ -1,4 +1,4 @@
-package com.example.findpeople.findpeople;
+package dada.findpeople;
 
 import org.junit.Test;
 

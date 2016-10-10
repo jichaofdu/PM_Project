@@ -1,4 +1,4 @@
-package com.example.findpeople.findpeople;
+package dada.findpeople;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

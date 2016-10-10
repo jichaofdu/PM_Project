@@ -4,8 +4,8 @@ android {
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
     defaultConfig {
-        applicationId "com.example.findpeople.findpeople"
-        minSdkVersion 17
+        applicationId "dada.findpeople"
+        minSdkVersion 23
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"

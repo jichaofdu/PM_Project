@@ -6,6 +6,7 @@
 Name | Type | Description
 ---|---|---
 userId | integer | 用户id
+phone | string | 手机号
 username | string | 用户名
 password | string | 密码(hash)
 credit | integer | 信用额度 

@@ -25,7 +25,7 @@ userId | integer | 任务发起人id
 publishedTime | datetime | 任务发布时间
 deadline | datetime | 任务截止时间
 location | location | 任务目标地点
-tags | [tag] | 任务标签列表
+tags | [string] | 任务标签列表
 
 
 ### Location
@@ -36,7 +36,9 @@ longtitude | double | 经度
 latitude | double | 纬度
 description | string | 地点描述
 
+---
 
+//不确定以下是否需要
 ### Tag
 Name | Type | Description
 ---|---|---

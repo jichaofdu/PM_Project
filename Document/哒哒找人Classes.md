@@ -10,7 +10,8 @@ phone | string | 手机号
 username | string | 用户名
 password | string | 密码(hash)
 credit | integer | 信用额度 
-sex | string | 性别
+sex | integer | 性别(1,2,3)
+avatar | string | 头像
 bio | string | 个人简介
 
 
@@ -21,7 +22,7 @@ Name | Type | Description
 taskId | integer | 任务id
 title | string | 标题
 description | string | 任务描述
-userId | integer | 任务发起人id
+publisher | user | 任务发起人
 publishedTime | datetime | 任务发布时间
 deadline | datetime | 任务截止时间
 location | location | 任务目标地点

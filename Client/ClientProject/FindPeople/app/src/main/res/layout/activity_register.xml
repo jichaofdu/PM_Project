@@ -13,18 +13,18 @@
     <!-- Login progress -->
 
     <ProgressBar
-        android:id="@+id/login_progress"
+        android:id="@+id/register_progress"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
     <ScrollView
-        android:id="@+id/login_form"
+        android:id="@+id/register_form"
         android:layout_width="340dp"
         android:layout_height="464dp">
         <LinearLayout
-            android:id="@+id/email_login_form"
+            android:id="@+id/email_register_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -41,7 +41,7 @@
                     android:src="@drawable/ic_menu_camera" />]
             </LinearLayout>
             <EditText
-                android:id="@+id/email_login"
+                android:id="@+id/email_register"
                 android:text="chaojifudan@outlook.com"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -49,23 +49,36 @@
                 android:inputType="textEmailAddress"
                 android:maxLines="1" />
             <EditText
-                android:id="@+id/password_login"
+                android:id="@+id/nickname_register"
+                android:text="请把这里改掉谢谢"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_nickname"
+                android:inputType="textEmailAddress"
+                android:maxLines="1" />
+            <EditText
+                android:id="@+id/password_register"
                 android:text="140311jc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_password"
-                android:imeActionId="@+id/login"
-                android:imeActionLabel="@string/action_sign_in_short"
-                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1" />
+            <EditText
+                android:id="@+id/passwordAgain_register"
+                android:text="140311jc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_passwordAgain"
                 android:inputType="textPassword"
                 android:maxLines="1" />
             <Button
-                android:id="@+id/email_login_button"
+                android:id="@+id/email_register_button"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in"
+                android:text="@string/action_register"
                 android:textStyle="bold" />
             <LinearLayout
                 android:layout_width="match_parent"
@@ -73,24 +86,18 @@
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">
                 <Button
-                    android:id="@+id/email_turn_to_register_button"
+                    android:id="@+id/email_turn_to_login_button"
                     style="?android:textAppearanceSmall"
                     android:layout_width="161dp"
                     android:layout_height="match_parent"
                     android:layout_marginTop="16dp"
                     android:layout_gravity="center"
-                    android:text="@string/action_turn_to_register"
+                    android:text="@string/action_turn_to_login"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
-    <TextView
-        android:text="@string/copyright_messsage"
-        android:layout_width="342dp"
-        android:layout_height="match_parent"
-        android:id="@+id/textView2"
-       />
 
 
 </LinearLayout>

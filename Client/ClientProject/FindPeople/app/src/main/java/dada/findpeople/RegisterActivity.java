@@ -15,124 +15,108 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class RegisterActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
-    private UserLoginTask authTask = null;
 
-    private EditText emailEditText;
-    private EditText passwordEditText;
-    private Button signInButton;
-    private Button turnToRegisterButton;
+    private UserRegisterTask authTask;
+    private EditText emailView;
+    private EditText nicknameView;
+    private EditText passwordView;
+    private EditText passwordAgainView;
     private View progressView;
     private View loginFormView;
+    private Button emailRegisterButton;
+    private Button turnToLoginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        loginFormView = findViewById(R.id.login_form);
-        progressView = findViewById(R.id.login_progress);
-
-        emailEditText = (EditText) findViewById(R.id.email_login);
-        passwordEditText = (EditText) findViewById(R.id.password_login);
-        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                return onEditorActionListenerMethod(id);
-            }
-        });
-        signInButton = (Button) findViewById(R.id.email_login_button);
-        signInButton.setOnClickListener(new OnClickListener() {
+        setContentView(R.layout.activity_register);
+        emailView = (EditText) findViewById(R.id.email_register);
+        nicknameView = (EditText) findViewById(R.id.nickname_register);
+        passwordView = (EditText) findViewById(R.id.password_register);
+        passwordAgainView = (EditText)findViewById(R.id.passwordAgain_register);
+        emailRegisterButton = (Button) findViewById(R.id.email_register_button);
+        emailRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                attemptRegister();
             }
         });
-        turnToRegisterButton = (Button) findViewById(R.id.email_turn_to_register_button);
-        turnToRegisterButton.setOnClickListener(new OnClickListener() {
+        turnToLoginButton = (Button) findViewById(R.id.email_turn_to_login_button);
+        turnToLoginButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                turnToRegisterPage();
+                turnToLoginPage();
             }
         });
+        loginFormView = findViewById(R.id.register_form);
+        progressView = findViewById(R.id.register_progress);
     }
 
-    private boolean onEditorActionListenerMethod(int id){
-        if (id == R.id.login || id == EditorInfo.IME_NULL) {
-            attemptLogin();
-            return true;
-        }
-        return false;
-    }
-
-    private void turnToRegisterPage(){
-        System.out.println("[Tip]点击了按钮，准备跳转到注册页面");
-        Intent intent = new Intent();
-        intent.setClass(LoginActivity.this, RegisterActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    private void turnToMainActivity(){
-        System.out.println("[Tip]从LoginActivity进入到MainActivity");
-        Intent intent = new Intent();
-        intent.setClass(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    private void attemptLogin() {
+    private void attemptRegister() {
         if (authTask != null) {
             return;
         }
-        emailEditText.setError(null);
-        passwordEditText.setError(null);
-        String email = emailEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
+        emailView.setError(null);
+        nicknameView.setError(null);
+        passwordView.setError(null);
+        passwordAgainView.setError(null);
+        String email = emailView.getText().toString();
+        String nickname = nicknameView.getText().toString();
+        String password = passwordView.getText().toString();
+        String passwordAgain = passwordAgainView.getText().toString();
         boolean cancel = false;
         View focusView = null;
         if (!isPasswordValid(password)) {
-            passwordEditText.setError(getString(R.string.error_invalid_password));
-            focusView = passwordEditText;
+            passwordView.setError(getString(R.string.error_invalid_password));
+            focusView = passwordView;
+            cancel = true;
+        }
+        if(!isPasswordAgainValid(password,passwordAgain)){
+            passwordAgainView.setError("您的两次密码输入不相同");
+            focusView = passwordAgainView;
             cancel = true;
         }
         if (TextUtils.isEmpty(email)) {
-            emailEditText.setError(getString(R.string.error_field_required));
-            focusView = emailEditText;
+            emailView.setError(getString(R.string.error_field_required));
+            focusView = emailView;
             cancel = true;
         } else if (!isEmailValid(email)) {
-            emailEditText.setError(getString(R.string.error_invalid_email));
-            focusView = emailEditText;
+            emailView.setError(getString(R.string.error_invalid_email));
+            focusView = emailView;
+            cancel = true;
+        }
+        if(!isNicknameValid(nickname)){
+            nicknameView.setError("您的昵称不符合规范");
+            focusView = nicknameView;
             cancel = true;
         }
         if (cancel == true) {
-            System.out.println("[Tip]获得了不合法的输入，线程被终止");
             focusView.requestFocus();
         } else {
-            System.out.println("[Tip]输入检测通过，进入到正常过程");
             showProgress(true);
-            authTask = new UserLoginTask(email, password);
+            authTask = new UserRegisterTask(email,nickname, password);
             authTask.execute((Void) null);
         }
     }
 
     private boolean isEmailValid(String email) {
-        System.out.println("[Tip]你输入的用户名是：" + email);
-        if(email.contains("@") == true){
+        return email.contains("@");
+    }
+
+    private boolean isNicknameValid(String nickname){
+        if(nickname != null && nickname.length() > 0) {
             return true;
         }else{
             return false;
@@ -140,13 +124,33 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private boolean isPasswordValid(String password) {
-        System.out.println("[Tip]你输入的密码是：" + password);
-        if(password.length() >= 6){
+        if(password != null && password.length() >= 6){
             return true;
         }else{
             return false;
         }
     }
+
+    private boolean isPasswordAgainValid(String password,String passwordAgain){
+        return (passwordAgain.length() >=6 && password.equals(passwordAgain));
+    }
+
+    private void turnToLoginPage(){
+        System.out.println("[Tip]点击了按钮，准备跳转到登录页面");
+        Intent intent = new Intent();
+        intent.setClass(RegisterActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void turnToMainActivity(){
+        System.out.println("[Tip]从LoginActivity进入到MainActivity");
+        Intent intent = new Intent();
+        intent.setClass(RegisterActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
 
     /**
      * Shows the progress UI and hides the login form.
@@ -180,17 +184,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(this,
-                // Retrieve data rows for the device user's 'profile' contact.
                 Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
                         ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
-
-                // Select only email addresses.
                 ContactsContract.Contacts.Data.MIMETYPE +
                         " = ?", new String[]{ContactsContract.CommonDataKinds.Email
                 .CONTENT_ITEM_TYPE},
-
-                // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
                 ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
     }
 
@@ -202,10 +200,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             emails.add(cursor.getString(ProfileQuery.ADDRESS));
             cursor.moveToNext();
         }
+
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) { }
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+    }
 
     private interface ProfileQuery {
         String[] PROJECTION = {
@@ -217,24 +217,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         int IS_PRIMARY = 1;
     }
 
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String email;
+        private final String nickname;
         private final String password;
 
-        UserLoginTask(String em, String pw) {
+        UserRegisterTask(String em,String nc, String pw) {
             email = em;
             password = pw;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
+            nickname = nc;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            return checkUsernamePasswordMatch();
+            return true;
         }
 
         @Override
@@ -244,15 +241,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (success == true) {
                 turnToMainActivity();
             } else {
-                passwordEditText.setError(getString(R.string.error_incorrect_password));
-                passwordEditText.requestFocus();
+                passwordView.setError(getString(R.string.error_incorrect_register));
+                passwordView.requestFocus();
             }
-        }
-
-        protected  boolean checkUsernamePasswordMatch(){
-            System.out.println("[Tip]向服务器发送的用户名是：" + email);
-            System.out.println("[Tip]向服务器发送的密码是  ：" + password);
-            return true;
         }
 
         @Override

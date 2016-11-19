@@ -37,11 +37,3 @@ longitude | double | 经度
 latitude | double | 纬度
 description | string | 地点描述
 
----
-
-//不确定以下是否需要
-### Tag
-Name | Type | Description
----|---|---
-tagId | integer | 标签id
-name | string | 标签名

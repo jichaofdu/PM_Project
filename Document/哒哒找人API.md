@@ -392,7 +392,7 @@ title | string | | optional
 description | string | | optional
 userId | integer | | optional
 deadline | datetime | | optional
-longtitude | dobule | | optional
+longitude | dobule | | optional
 latitude | double | | optional
 locationDscp | string | 任务地点的文字描述 | optional
 tags | [string] |标签列表 | optional

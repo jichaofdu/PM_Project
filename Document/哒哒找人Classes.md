@@ -33,7 +33,7 @@ tags | [string] | 任务标签列表
 Name | Type | Description
 ---|---|---
 locationId | integer | 地点id
-longtitude | double | 经度
+longitude | double | 经度
 latitude | double | 纬度
 description | string | 地点描述
 

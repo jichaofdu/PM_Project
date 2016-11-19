@@ -139,6 +139,7 @@ name | type | description | note
 userId | integer | | required
 username | string | | optional
 sex | string | | optional
+avatar | string | | optional
 bio | string | | optional
 
 #### 返回示例
@@ -184,11 +185,16 @@ limit | integer | 限制获取的任务个数 | optional
             "taskId":1,
             "title":"求拿快递",
             "description":"啊啊啊求拿快递",
-            "userId":1,
+            "publishier":{
+                "userId":2,
+                "username":"xxx",
+                "phone":"123456789012",
+                //以及其他补充属性
+            }
             "publishedTime":"2016-11-08 12:00:00",
             "deadline":"2016-11-08 18:00:00",
             "location":{
-                "longtitude":0.00,
+                "longitude":0.00,
                 "latitude":0.00
                 "description":"阿康烧烤"
             },
@@ -232,11 +238,16 @@ limit | integer | 限制获取的任务个数 | optional
             "taskId":1,
             "title":"求拿快递",
             "description":"啊啊啊求拿快递",
-            "userId":1,
+            "publishier":{
+                "userId":2,
+                "username":"xxx",
+                "phone":"123456789012",
+                //以及其他补充属性
+            },
             "publishedTime":"2016-11-08 12:00:00",
             "deadline":"2016-11-08 18:00:00",
             "location":{
-                "longtitude":0.00,
+                "longitude":0.00,
                 "latitude":0.00,
                 "description":"阿康烧烤"
             },
@@ -273,7 +284,7 @@ title | string | | required
 description | string | | required
 userId | integer | | required
 deadline | datetime | | optional
-longtitude | dobule | | optional
+longitude | dobule | | optional
 latitude | double | | optional
 locationDscp | string | 任务地点的文字描述 | optional
 tags | [string] |标签列表 | optional
@@ -288,11 +299,16 @@ tags | [string] |标签列表 | optional
         "taskId":1,
         "title":"求拿快递",
         "description":"啊啊啊求拿快递",
-        "userId":1,
+        "publishier":{
+                "userId":2,
+                "username":"xxx",
+                "phone":"123456789012",
+                //以及其他补充属性
+        },
         "publishedTime":"2016-11-08 12:00:00",
         "deadline":"2016-11-08 18:00:00",
         "location":{
-            "longtitude":0.00,
+            "longitude":0.00,
             "latitude":0.00,
             "description":"阿康烧烤"
         },
@@ -333,11 +349,16 @@ taskId | integer | | optional
         "taskId":1,
         "title":"求拿快递",
         "description":"啊啊啊求拿快递",
-        "userId":1,
+        "publishier":{
+                "userId":2,
+                "username":"xxx",
+                "phone":"123456789012",
+                //以及其他补充属性
+        },
         "publishedTime":"2016-11-08 12:00:00",
         "deadline":"2016-11-08 18:00:00",
         "location":{
-            "longtitude":0.00,
+            "longitude":0.00,
             "latitude":0.00,
             "description":"阿康烧烤"
         },
@@ -386,11 +407,16 @@ tags | [string] |标签列表 | optional
         "taskId":1,
         "title":"求拿快递",
         "description":"啊啊啊求拿快递",
-        "userId":1,
+        "publishier":{
+                "userId":2,
+                "username":"xxx",
+                "phone":"123456789012",
+                //以及其他补充属性
+        },
         "publishedTime":"2016-11-08 12:00:00",
         "deadline":"2016-11-08 18:00:00",
         "location":{
-            "longtitude":0.00,
+            "longitude":0.00,
             "latitude":0.00,
             "description":"阿康烧烤"
         },

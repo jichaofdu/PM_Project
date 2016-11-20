@@ -32,7 +32,6 @@ tags | [string] | 任务标签列表
 ### Location
 Name | Type | Description
 ---|---|---
-locationId | integer | 地点id
 longitude | double | 经度
 latitude | double | 纬度
 description | string | 地点描述

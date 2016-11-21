@@ -14,7 +14,7 @@
 use Illuminate\Http\Response;
 
 $app->get('/', function () use ($app) {
-    return $app->version();
+    return '哒哒找人v0.0';
 });
 
 
@@ -22,8 +22,3 @@ $app->get('/', function () use ($app) {
 $app->post('/register', 'UserController@register');
 //login
 $app->post('/login', 'UserController@login');
-
-
-$app->get('/keyfortest', function () {
-    return str_random(32);
-});

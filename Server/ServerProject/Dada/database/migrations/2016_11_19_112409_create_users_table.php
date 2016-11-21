@@ -21,8 +21,8 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->integer('credit');
             $table->integer('sex');
-            $table->string('avatar');
-            $table->string('bio');
+            $table->string('avatar')->default('');
+            $table->string('bio')->default('好像没有什么想说的');
             $table->timestamps();
         });
     }

@@ -11,6 +11,11 @@
 |
 */
 
+use Illuminate\Http\Response;
+
 $app->get('/', function () use ($app) {
     return $app->version();
 });
+
+$app->post('/register', 'UserController@register');
+

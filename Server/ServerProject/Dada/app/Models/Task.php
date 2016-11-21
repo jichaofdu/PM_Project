@@ -13,5 +13,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
-    private $primaryKey = 'task_id';
+    protected $primaryKey = 'task_id';
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Response;
+
 class ExampleController extends Controller
 {
     /**
@@ -12,6 +14,11 @@ class ExampleController extends Controller
     public function __construct()
     {
         //
+    }
+
+    public function test()
+    {
+        return 'hello';
     }
 
     //

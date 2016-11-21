@@ -14,4 +14,9 @@ class TestHttp extends TestCase
         echo $response;
     }
 
+    public function testLogin()
+    {
+        $response = $this->call('POST', '/login', ['phone' => '12345', 'password' => 'test123']);
+        echo $response;
+    }
 }

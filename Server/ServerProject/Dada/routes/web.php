@@ -17,5 +17,13 @@ $app->get('/', function () use ($app) {
     return $app->version();
 });
 
-$app->post('/register', 'UserController@register');
 
+//register
+$app->post('/register', 'UserController@register');
+//login
+$app->post('/login', 'UserController@login');
+
+
+$app->get('/keyfortest', function () {
+    return str_random(32);
+});

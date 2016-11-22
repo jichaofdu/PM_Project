@@ -18,6 +18,10 @@ $app->get('/', function () use ($app) {
 });
 
 
+$app->get('/foo/bar', function () use ($app) {
+    return '哒哒找人v0.routertest';
+});
+
 //register
 $app->post('/register', 'UserController@register');
 //login

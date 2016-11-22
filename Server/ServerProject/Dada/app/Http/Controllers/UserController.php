@@ -10,9 +10,11 @@ namespace App\Http\Controllers;
 
 
 use App\Models\User;
+use Illuminate\Contracts\Logging\Log;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Exception;
 
 class UserController extends Controller
 {
@@ -31,14 +33,16 @@ class UserController extends Controller
         $user->username = $username;
         $user->password = Crypt::encrypt($password);
 
-        if ($user->save()) {
-            $result = 'succeed';
-            return new Response(['result' => $result, 'user' => $user]);
-        } else {
+        try {
+            $user->save();
+        } catch (Exception $exception) {
             $result = 'failed';
-            $error = '';
+            $error = 'User existed';
             return new Response(['result' => $result, 'error' => $error]);
         }
+
+        $result = 'succeed';
+        return new Response(['result' => $result, 'user' => $user]);
     }
 
     public function login(Request $request)

@@ -22,3 +22,12 @@ $app->get('/', function () use ($app) {
 $app->post('/register', 'UserController@register');
 //login
 $app->post('/login', 'UserController@login');
+
+//tests
+$app->get('/test', function () {
+    return 'GET succeed';
+});
+
+$app->post('/test', function () {
+    return 'Post succeed';
+});

@@ -22,6 +22,10 @@ $app->get('/foo/bar', function () use ($app) {
     return '哒哒找人v0.routertest';
 });
 
+$app->post('/foo', function () use ($app) {
+    return '哒哒找人v0.routerpost';
+});
+
 //register
 $app->post('/register', 'UserController@register');
 //login

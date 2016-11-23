@@ -16,8 +16,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Exception;
 
+require 'messageConstants.php';
+
 class UserController extends Controller
 {
+
+
+    /**
+     *
+     * User register
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function register(Request $request)
     {
         $phone = $request->input('phone');
@@ -36,15 +47,22 @@ class UserController extends Controller
         try {
             $user->save();
         } catch (Exception $exception) {
-            $result = 'failed';
+            $result = FAILED;
             $error = 'User existed';
             return new Response(['result' => $result, 'error' => $error]);
         }
 
-        $result = 'succeed';
+        $result = SUCCEED;
         return new Response(['result' => $result, 'user' => $user]);
     }
 
+    /**
+     *
+     * User login
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function login(Request $request)
     {
         $phone = $request->input('phone');
@@ -56,7 +74,7 @@ class UserController extends Controller
 
         $user = User::where('phone', $phone)->first();
         if (empty($user)) {
-            $result = 'failed';
+            $result = FAILED;
             $error = 'No such user';
             return new Response(['result' => $result, 'error' => $error]);
         }
@@ -64,16 +82,44 @@ class UserController extends Controller
         try {
             $decrypted = Crypt::decrypt($user->password);
             if ($decrypted == $password) {
-                $result = 'succeed';
+                $result = SUCCEED;
                 return new Response(['result' => $result, 'user' => $user]);
             } else {
-                $result = 'failed';
+                $result = FAILED;
                 $error = 'Wrong password';
                 return new Response(['result' => $result, 'error' => $error]);
             }
         } catch (DecryptException $e) {
             //
+            $result = FAILED;
+            $error = $e;
+            return new Response(['result' => $result, 'error' => $error]);
         }
+    }
+
+
+    /**
+     *
+     * Get user by userId
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function getUser(Request $request)
+    {
+        if (empty($userId = $request->input('userId'))) {
+            abort(400);
+        }
+
+        $user = User::find($userId);
+        if (empty($user)) {
+            $result = FAILED;
+            $error = 'No such user';
+            return new Response(['result' => $result, 'error' => $error]);
+        }
+
+        $result = SUCCEED;
+        return new Response(['result' => $result, 'user' => $user]);
     }
 
 }

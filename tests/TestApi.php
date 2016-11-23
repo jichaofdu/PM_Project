@@ -6,7 +6,7 @@
  * Date: 11/20/16
  * Time: 7:41 PM
  */
-class TestHttp extends TestCase
+class TestApi extends TestCase
 {
     public function testRegister()
     {
@@ -17,6 +17,12 @@ class TestHttp extends TestCase
     public function testLogin()
     {
         $response = $this->call('POST', '/login', ['phone' => '12345', 'password' => 'test123']);
+        echo $response;
+    }
+
+    public function testGetUser()
+    {
+        $response = $this->call('GET', '/getUser', ['userId' => '2']);
         echo $response;
     }
 

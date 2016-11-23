@@ -13,23 +13,18 @@
 
 use Illuminate\Http\Response;
 
-$app->get('/', function () use ($app) {
+$app->get('/', function () {
     return '哒哒找人v0.0';
-});
-
-
-$app->get('/foo/bar', function () use ($app) {
-    return '哒哒找人v0.routertest';
-});
-
-$app->post('/foo', function () use ($app) {
-    return '哒哒找人v0.routerpost';
 });
 
 //register
 $app->post('/register', 'UserController@register');
 //login
 $app->post('/login', 'UserController@login');
+//Get user by userId
+$app->get('/getUser', 'UserController@getUser');
+
+
 
 //tests
 $app->get('/test', function () {

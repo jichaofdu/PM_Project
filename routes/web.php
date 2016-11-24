@@ -23,6 +23,14 @@ $app->post('/register', 'UserController@register');
 $app->post('/login', 'UserController@login');
 //Get user by userId
 $app->get('/getUser', 'UserController@getUser');
+//Change user password
+$app->post('/changePassword', 'UserController@changePassword');
+//Update user profile
+$app->post('/updateProfile', 'UserController@updateProfile');
+//Get tasks by publisher_id
+$app->get('/getPublishedTasks', 'UserController@getPublishedTasks');
+//Publish task
+$app->post('/publishTask', 'TaskController@publishTask');
 
 
 

@@ -26,4 +26,28 @@ class TestApi extends TestCase
         echo $response;
     }
 
+    public function testChangePassword()
+    {
+        $response = $this->call('POST', '/changePassword', ['userId' => '1', 'oldPassword' => 'test', 'newPassword' => 'newtest']);
+        echo $response;
+    }
+
+    public function testUpdateProfile()
+    {
+        $response = $this->call('POST', '/updateProfile', ['userId' => '1', 'username' => 'test', 'sex' => '1', 'avatar' => 'smile', 'bio' => '呵呵']);
+        echo $response;
+    }
+
+    public function testGetPublishedTasks()
+    {
+        $response = $this->call('GET', '/getPublishedTasks', ['userId' => '1', 'limit' => '2']);
+        echo $response;
+    }
+
+    public function testPublishedTask()
+    {
+        $response = $this->call('POST', '/publishTask', ['title' => 'test', 'description' => 'test', 'userId' => '1', 'longitude' => '0', 'latitude' => '0', 'locationDscp' => 'test']);
+        echo $response;
+    }
+
 }

@@ -122,4 +122,109 @@ class UserController extends Controller
         return new Response(['result' => $result, 'user' => $user]);
     }
 
+    /**
+     *
+     * Change user password
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function changePassword(Request $request)
+    {
+        $userId = $request->input('userId');
+        $oldPassword = $request->input('oldPassword');
+        $newPassword = $request->input('newPassword');
+
+        if (empty($userId) || empty($oldPassword) || empty($newPassword)) {
+            abort(400);
+        }
+
+        $user = User::find($userId);
+        if (empty($user)) {
+            $result = FAILED;
+            $error = 'No such user';
+            return new Response(['result' => $result, 'error' => $error]);
+        }
+
+        try {
+            $decrypted = Crypt::decrypt($user->password);
+            if ($decrypted == $oldPassword) {
+                $user->password = Crypt::encrypt($newPassword);
+                $user->save();
+                $result = SUCCEED;
+                return new Response(['result' => $result]);
+            } else {
+                $result = FAILED;
+                $error = 'Wrong password';
+                return new Response(['result' => $result, 'error' => $error]);
+            }
+        } catch (DecryptException $e) {
+            //
+            $result = FAILED;
+            $error = $e;
+            return new Response(['result' => $result, 'error' => $error]);
+        }
+    }
+
+    /**
+     *
+     * Update user profile
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function updateProfile(Request $request)
+    {
+        $userId = $request->input('userId');
+        $username = $request->input('username');
+        $sex = $request->input('sex');
+        $avatar = $request->input('avatar');
+        $bio = $request->input('bio');
+
+        if (empty($userId)) {
+            abort(400);
+        }
+
+        $user = User::find($userId);
+        $user->username = $username;
+        $user->sex = $sex;
+        $user->avatar = $avatar;
+        $user->bio = $bio;
+
+        try{
+            $user->save();
+            $result = SUCCEED;
+            return new Response(['result' => $result, 'user' => $user]);
+        }
+        catch (Exception $exception) {
+            $result = FAILED;
+            $error = $exception;
+            return new Response(['result' => $result, 'error' => $error]);
+        }
+    }
+
+    /**
+     *
+     * Get tasks by publisher_id
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function getPublishedTasks(Request $request)
+    {
+        $userId = $request->input('userId');
+        $limit = $request->input('limit');
+
+        $user = User::find($userId);
+        if (empty($user)) {
+            $result = FAILED;
+            $error = 'No such user';
+            return new Response(['result' => $result, 'error' => $error]);
+        }
+
+        $tasks = Task::where('publisher_id', $userId)->take($limit)->get();
+        $result = SUCCEED;
+        return new Response(['result' => $result, 'tasks' => $tasks]);
+    }
+
 }

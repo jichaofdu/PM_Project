@@ -202,6 +202,13 @@ limit | integer | 限制获取的任务个数 | optional
             "tags":{
                 "拿快递",
                 "救命",
+            },
+            "status":2,
+            "accepter":{
+                "userId":3,
+                "username":"yyy",
+                "phone":"123456789012",
+                //以及其他补充属性
             }
             //以及其他补充属性
         },
@@ -257,6 +264,13 @@ limit | integer | 限制获取的任务个数 | optional
             "tags":{
                 "拿快递",
                 "救命"
+            },
+            "status":2,
+            "accepter":{
+                "userId":3,
+                "username":"yyy",
+                "phone":"123456789012",
+                //以及其他补充属性
             }
             //以及其他补充属性
         },
@@ -318,7 +332,9 @@ tags | [string] |标签列表 | optional
         "tags":{
                 "拿快递",
                 "救命"
-        }
+        },
+        "status":1,
+        "accepter":{}
         //以及其他补充属性
     }
 }
@@ -368,6 +384,13 @@ taskId | integer | | optional
         "tags":{
                 "拿快递",
                 "救命"
+        },
+        "status":2,
+        "accepter":{
+                "userId":3,
+                "username":"yyy",
+                "phone":"123456789012",
+                //以及其他补充属性
         }
         //以及其他补充属性
     }
@@ -426,6 +449,13 @@ tags | [string] |标签列表 | optional
         "tags":{
                 "拿快递",
                 "救命"
+        },
+        "status":2,
+        "accepter":{
+             "userId":3,
+             "username":"yyy",
+             "phone":"123456789012",
+             //以及其他补充属性
         }
         //以及其他补充属性
     }

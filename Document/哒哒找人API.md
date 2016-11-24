@@ -164,14 +164,15 @@ bio | string | | optional
 ```
 ---
 
-### 获取某个用户已完成的任务列表
+### 获取某个用户接受的任务列表（全部/进行中/已完成/取消）
 #### 请求方法：GET
-#### 请求url: /getDoneTasks
+#### 请求url: /getAcceptedTasks
 #### 请求参数
 
 name | type | description | note 
 ---|---|---|---
 userId | integer | | required
+status | integer | 不填写或填写0表示[全部],2表示[进行中],3表示[已完成],-1表示[取消]| optional
 limit | integer | 限制获取的任务个数 | optional
 
 #### 返回示例
@@ -215,9 +216,10 @@ limit | integer | 限制获取的任务个数 | optional
     "error":"Something happened"
 }
 ```
+
 ---
 
-### 获取某个用户发布的任务列表
+### 获取某个用户发布的任务列表（全部/待接受/进行中/已完成/取消）
 #### 请求方法：GET
 #### 请求url: /getPublishedTasks
 #### 请求参数
@@ -225,6 +227,7 @@ limit | integer | 限制获取的任务个数 | optional
 name | type | description | note 
 ---|---|---|---
 userId | integer | | required
+status | integer | 不填写或填写0表示[全部],1表示[待接受],2表示[进行中],3表示[已完成],-1表示[取消]| optional
 limit | integer | 限制获取的任务个数 | optional
 
 #### 返回示例

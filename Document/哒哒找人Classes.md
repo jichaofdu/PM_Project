@@ -27,6 +27,7 @@ publishedTime | datetime | 任务发布时间
 deadline | datetime | 任务截止时间
 location | location | 任务目标地点
 tags | [string] | 任务标签列表
+credit | integer | 完成任务可以得到的信誉奖励
 status | integer | 1:开放申请, 2:进行中, 3:已完成, -1:取消
 accepter | user | 任务接受者
 

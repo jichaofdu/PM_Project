@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddStatusAccepterIdToTasksTable extends Migration
+class AddColumnsToTasksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -17,6 +17,7 @@ class AddStatusAccepterIdToTasksTable extends Migration
             //
 //            $table->engine = 'InnoDB';
 
+            $table->dateTime('deadline');
             $table->integer('credit')->default(0);
             $table->integer('status')->default(1);
             $table->integer('accepter_id')->nullable();
@@ -45,8 +46,8 @@ class AddStatusAccepterIdToTasksTable extends Migration
     {
         Schema::table('tasks', function (Blueprint $table) {
             //
-            $table->dropColumn(['status', 'accepter_id']);
-            $table->dropForeign('publisher_id');
+            $table->dropColumn(['deadline', 'credit', 'status', 'accepter_id']);
+//            $table->dropForeign('publisher_id');
         });
     }
 }

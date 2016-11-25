@@ -203,6 +203,7 @@ limit | integer | 限制获取的任务个数 | optional
                 "拿快递",
                 "救命",
             },
+            "credit":5,
             "status":2,
             "accepter":{
                 "userId":3,
@@ -265,6 +266,7 @@ limit | integer | 限制获取的任务个数 | optional
                 "拿快递",
                 "救命"
             },
+            "credit":5,
             "status":2,
             "accepter":{
                 "userId":3,
@@ -333,6 +335,7 @@ tags | [string] |标签列表 | optional
                 "拿快递",
                 "救命"
         },
+        "credit":5,
         "status":1,
         "accepter":{}
         //以及其他补充属性
@@ -385,6 +388,7 @@ taskId | integer | | optional
                 "拿快递",
                 "救命"
         },
+        "credit":5,
         "status":2,
         "accepter":{
                 "userId":3,
@@ -450,6 +454,7 @@ tags | [string] |标签列表 | optional
                 "拿快递",
                 "救命"
         },
+        "credit":5,
         "status":2,
         "accepter":{
              "userId":3,

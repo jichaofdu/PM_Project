@@ -9,12 +9,14 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Tag;
+use App\Models\Task;
 use App\Models\User;
-use Illuminate\Contracts\Logging\Log;
-use Illuminate\Http\Response;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
 use Exception;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Crypt;
 
 require 'messageConstants.php';
 
@@ -43,6 +45,10 @@ class UserController extends Controller
         $user->phone = $phone;
         $user->username = $username;
         $user->password = Crypt::encrypt($password);
+        $user->credit = 0;
+        $user->sex = 0;
+        $user->avatar = "";
+        $user->bio = "好像没有什么想说的";
 
         try {
             $user->save();
@@ -53,7 +59,7 @@ class UserController extends Controller
         }
 
         $result = SUCCEED;
-        return new Response(['result' => $result, 'user' => $user]);
+        return new Response(['result' => $result, 'user' => $user->toArrayCamel()]);
     }
 
     /**
@@ -72,12 +78,8 @@ class UserController extends Controller
             abort(400);
         }
 
-        $user = User::where('phone', $phone)->first();
-        if (empty($user)) {
-            $result = FAILED;
-            $error = 'No such user';
-            return new Response(['result' => $result, 'error' => $error]);
-        }
+        $User = new User;
+        $user = $User->getUserByPhone($phone);
 
         try {
             $decrypted = Crypt::decrypt($user->password);
@@ -111,12 +113,8 @@ class UserController extends Controller
             abort(400);
         }
 
-        $user = User::find($userId);
-        if (empty($user)) {
-            $result = FAILED;
-            $error = 'No such user';
-            return new Response(['result' => $result, 'error' => $error]);
-        }
+        $User = new User;
+        $user = $User->getUser($userId);
 
         $result = SUCCEED;
         return new Response(['result' => $result, 'user' => $user]);
@@ -139,12 +137,8 @@ class UserController extends Controller
             abort(400);
         }
 
-        $user = User::find($userId);
-        if (empty($user)) {
-            $result = FAILED;
-            $error = 'No such user';
-            return new Response(['result' => $result, 'error' => $error]);
-        }
+        $User = new User;
+        $user = $User->getUser($userId);
 
         try {
             $decrypted = Crypt::decrypt($user->password);
@@ -176,32 +170,78 @@ class UserController extends Controller
     public function updateProfile(Request $request)
     {
         $userId = $request->input('userId');
-        $username = $request->input('username');
-        $sex = $request->input('sex');
-        $avatar = $request->input('avatar');
-        $bio = $request->input('bio');
-
         if (empty($userId)) {
             abort(400);
         }
 
-        $user = User::find($userId);
+        $User = new User;
+        $user = $User->getUser($userId);
+
+        $username = $request->input('username', $user->username);
+        $sex = $request->input('sex', $user->sex);
+        $avatar = $request->input('avatar', $user->avatar);
+        $bio = $request->input('bio', $user->bio);
+
         $user->username = $username;
         $user->sex = $sex;
         $user->avatar = $avatar;
         $user->bio = $bio;
 
-        try{
+        try {
             $user->save();
             $result = SUCCEED;
             return new Response(['result' => $result, 'user' => $user]);
-        }
-        catch (Exception $exception) {
+        } catch (Exception $exception) {
             $result = FAILED;
             $error = $exception;
             return new Response(['result' => $result, 'error' => $error]);
         }
     }
+
+
+    /**
+     *
+     * Get tasks by accepter_id
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function getAcceptedTasks(Request $request)
+    {
+        $userId = $request->input('userId');
+        $status = $request->input('status', 0);
+        $limit = $request->input('limit', 0);
+
+        if (empty($userId)) {
+            abort(400);
+        }
+
+        $User = new User;
+        $Tag = new Tag;
+        $Task = new Task;
+
+        $User->getUser($userId);
+
+        $tasksQuery = Task::where('accepter_id', $userId);
+        if ($status != 0) {
+            $tasksQuery = $tasksQuery->where('status', $status);
+        }
+
+        if ($limit > 0) {
+            $tasksQuery = $tasksQuery->take($limit);
+        }
+
+        $taskArray = $tasksQuery->get();
+
+        $tasks = [];
+        foreach ($taskArray as $taskItem) {
+            $tasks[] = $Task->formatTask($taskItem, $User, $Tag);
+        }
+
+        $result = SUCCEED;
+        return new Response(['result' => $result, 'tasks' => $tasks]);
+    }
+
 
     /**
      *
@@ -213,16 +253,35 @@ class UserController extends Controller
     public function getPublishedTasks(Request $request)
     {
         $userId = $request->input('userId');
-        $limit = $request->input('limit');
+        $status = $request->input('status', 0);
+        $limit = $request->input('limit', 0);
 
-        $user = User::find($userId);
-        if (empty($user)) {
-            $result = FAILED;
-            $error = 'No such user';
-            return new Response(['result' => $result, 'error' => $error]);
+        if (empty($userId)) {
+            abort(400);
         }
 
-        $tasks = Task::where('publisher_id', $userId)->take($limit)->get();
+        $User = new User;
+        $Tag = new Tag;
+        $Task = new Task;
+
+        $User->getUser($userId);
+
+        $tasksQuery = Task::where('publisher_id', $userId);
+        if ($status != 0) {
+            $tasksQuery = $tasksQuery->where('status', $status);
+        }
+
+        if ($limit > 0) {
+            $tasksQuery = $tasksQuery->take($limit);
+        }
+
+        $taskArray = $tasksQuery->get();
+
+        $tasks = [];
+        foreach ($taskArray as $taskItem) {
+            $tasks[] = $Task->formatTask($taskItem, $User, $Tag);
+        }
+
         $result = SUCCEED;
         return new Response(['result' => $result, 'tasks' => $tasks]);
     }

@@ -9,16 +9,8 @@
 namespace App\Models;
 
 
-use Illuminate\Auth\Authenticatable;
-use Laravel\Lumen\Auth\Authorizable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-
-class Task extends Model implements AuthenticatableContract, AuthorizableContract
+class Task extends CamelModel
 {
-    use Authenticatable, Authorizable;
-
     protected $primaryKey = 'task_id';
 
     /**
@@ -27,6 +19,31 @@ class Task extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $fillable = [
-        'title', 'description', 'publisher_id', 'published_time', 'longitude', 'latitude', 'location_dscp'
+        'title', 'description', 'publisher_id', 'published_time', 'longitude', 'latitude', 'location_dscp', 'deadline', 'credit', 'status', 'accepter_id'
     ];
+
+
+    public function formatTask($taskItem, $User, $Tag)
+    {
+
+        $task['taskId'] = $taskItem->task_id;
+        $task['title'] = $taskItem->title;
+        $task['description'] = $taskItem->description;
+        $task['publisher'] = $User->getUserNullable($taskItem->publisher_id);
+        $task['publishedTime'] = $taskItem->published_time;
+        $task['deadline'] = $taskItem->deadline;
+        $task['location'] = array(
+            'longitude' => $taskItem->longitude,
+            'latitude' => $taskItem->latitude,
+            'description' => $taskItem->location_dscp
+        );
+        $task['tags'] = $Tag->getTagsByTaskId($taskItem->task_id);
+        $task['credit'] = $taskItem->credit;
+        $task['status'] = $taskItem->status;
+        $task['accepter'] = $User->getUserNullable($taskItem->accepter_id);
+
+        return $task;
+    }
+
+
 }

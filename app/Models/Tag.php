@@ -9,7 +9,16 @@
 namespace App\Models;
 
 
-class Tags
+class Tag extends CamelModel
 {
+    public function getTagsByTaskId($taskId)
+    {
+        $tagsArray = Tag::where('task_id', $taskId)->get();
+        $tags = [];
+        foreach ($tagsArray as $tag) {
+            $tags[] = $tag->tag;
+        }
 
+        return $tags;
+    }
 }

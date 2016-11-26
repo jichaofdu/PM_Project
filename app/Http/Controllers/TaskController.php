@@ -11,10 +11,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use App\Models\User;
-use Illuminate\Contracts\Logging\Log;
-use Illuminate\Http\Response;
-use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 require 'messageConstants.php';
 
@@ -33,7 +32,7 @@ class TaskController extends Controller
         $title = $request->input('title');
         $description = $request->input('description');
         $userId = $request->input('userId');
-        //$deadline = $request->input('deadline');
+        $deadline = $request->input('deadline');
         $longitude = $request->input('longitude');
         $latitude = $request->input('latitude');
         $locationDscp = $request->input('locationDscp');
@@ -54,7 +53,7 @@ class TaskController extends Controller
         $task->title = $title;
         $task->description = $description;
         $task->publisher_id = $userId;
-        //$task->deadline = $deadline;
+        $task->deadline = $deadline;
         $task->longitude = $longitude;
         $task->latitude = $latitude;
         $task->location_dscp = $locationDscp;

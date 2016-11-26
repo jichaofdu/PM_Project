@@ -11,8 +11,6 @@
 |
 */
 
-use Illuminate\Http\Response;
-
 $app->get('/', function () {
     return '哒哒找人v0.0';
 });
@@ -27,6 +25,8 @@ $app->get('/getUser', 'UserController@getUser');
 $app->post('/changePassword', 'UserController@changePassword');
 //Update user profile
 $app->post('/updateProfile', 'UserController@updateProfile');
+//Get tasks by accepter_id
+$app->get('/getAcceptedTasks', 'UserController@getAcceptedTasks');
 //Get tasks by publisher_id
 $app->get('/getPublishedTasks', 'UserController@getPublishedTasks');
 //Publish task

@@ -16,7 +16,7 @@ class TestApi extends TestCase
 
     public function testLogin()
     {
-        $response = $this->call('POST', '/login', ['phone' => '12345', 'password' => 'test123']);
+        $response = $this->call('POST', '/login', ['phone' => '1234', 'password' => 'test123']);
         echo $response;
     }
 
@@ -28,25 +28,55 @@ class TestApi extends TestCase
 
     public function testChangePassword()
     {
-        $response = $this->call('POST', '/changePassword', ['userId' => '1', 'oldPassword' => 'test', 'newPassword' => 'newtest']);
+        $response = $this->call('POST', '/changePassword', ['userId' => '2', 'oldPassword' => 'test', 'newPassword' => 'newtest']);
         echo $response;
     }
 
     public function testUpdateProfile()
     {
-        $response = $this->call('POST', '/updateProfile', ['userId' => '1', 'username' => 'test', 'sex' => '1', 'avatar' => 'smile', 'bio' => '呵呵']);
+        $response = $this->call('POST', '/updateProfile', ['userId' => '2', 'username' => 'test', 'sex' => '1', 'avatar' => 'smile', 'bio' => '呵呵']);
+        echo $response;
+    }
+
+    public function testGetAcceptedTasks()
+    {
+        $response = $this->call('GET', '/getAcceptedTasks', ['userId' => '2', 'limit' => '2']);
         echo $response;
     }
 
     public function testGetPublishedTasks()
     {
-        $response = $this->call('GET', '/getPublishedTasks', ['userId' => '1', 'limit' => '2']);
+        $response = $this->call('GET', '/getPublishedTasks', ['userId' => '2', 'limit' => '2']);
         echo $response;
     }
 
-    public function testPublishedTask()
+    public function testPublishTask()
     {
-        $response = $this->call('POST', '/publishTask', ['title' => 'test', 'description' => 'test', 'userId' => '1', 'longitude' => '0', 'latitude' => '0', 'locationDscp' => 'test']);
+        $response = $this->call('POST', '/publishTask', ['title' => 'test', 'description' => 'test', 'userId' => '2', 'longitude' => '0', 'latitude' => '0', 'locationDscp' => 'test']);
+        echo $response;
+    }
+
+    public function testViewTask()
+    {
+        $response = $this->call('GET', '/viewTask', ['taskId' => 1]);
+        echo $response;
+    }
+
+    public function testAcceptTask()
+    {
+        $response = $this->call('POST', '/acceptTask', ['taskId' => 1, 'userId' => 5]);
+        echo $response;
+    }
+
+    public function testDoneTask()
+    {
+        $response = $this->call('POST', '/doneTask', ['taskId' => 1, 'userId' => 2]);
+        echo $response;
+    }
+
+    public function testCancelTask()
+    {
+        $response = $this->call('POST', '/cancelTask', ['taskId' => 1, 'userId' => 2]);
         echo $response;
     }
 

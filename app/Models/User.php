@@ -28,7 +28,7 @@ class User extends CamelModel implements AuthenticatableContract, AuthorizableCo
      * @var array
      */
     protected $hidden = [
-        'password',
+        'password', 'created_at', 'updated_at'
     ];
 
 
@@ -41,10 +41,31 @@ class User extends CamelModel implements AuthenticatableContract, AuthorizableCo
      */
     public function getUser($userId)
     {
+        return $user = User::findOrFail($userId);
+
+    }
+
+    /**
+     *
+     * Get an user by userId in camel case
+     *
+     * @param integer $userId
+     * @return User $user
+     */
+    public function getUserCamel($userId)
+    {
         return $user = User::findOrFail($userId)->toArrayCamel();
     }
 
-    public function getUserNullable($userId)
+
+    /**
+     *
+     * Get a nullable user by userId in camel case
+     *
+     * @param $userId
+     * @return mixed
+     */
+    public function getUserCamelNullable($userId)
     {
         $user = User::find($userId);
         if (isset($user)) {
@@ -52,10 +73,29 @@ class User extends CamelModel implements AuthenticatableContract, AuthorizableCo
         }
 
         return $user;
-//        return User::find($userId)->toArrayCamel();
+//        return User::find($userId);
     }
 
+    /**
+     *
+     * Get an user by phone
+     *
+     * @param $phone
+     * @return mixed
+     */
     public function getUserByPhone($phone)
+    {
+        return $user = User::where('phone', $phone)->firstOrFail();
+    }
+
+    /**
+     *
+     * Get an user by phone in camel case
+     *
+     * @param $phone
+     * @return mixed
+     */
+    public function getUserCamelByPhone($phone)
     {
         return $user = User::where('phone', $phone)->firstOrFail()->toArrayCamel();
     }

@@ -85,7 +85,7 @@ class UserController extends Controller
             $decrypted = Crypt::decrypt($user->password);
             if ($decrypted == $password) {
                 $result = SUCCEED;
-                return new Response(['result' => $result, 'user' => $user]);
+                return new Response(['result' => $result, 'user' => $user->toArrayCamel()]);
             } else {
                 $result = FAILED;
                 $error = 'Wrong password';
@@ -114,7 +114,7 @@ class UserController extends Controller
         }
 
         $User = new User;
-        $user = $User->getUser($userId);
+        $user = $User->getUserCamel($userId);
 
         $result = SUCCEED;
         return new Response(['result' => $result, 'user' => $user]);
@@ -190,7 +190,7 @@ class UserController extends Controller
         try {
             $user->save();
             $result = SUCCEED;
-            return new Response(['result' => $result, 'user' => $user]);
+            return new Response(['result' => $result, 'user' => $user->toArrayCamel()]);
         } catch (Exception $exception) {
             $result = FAILED;
             $error = $exception;
@@ -264,7 +264,7 @@ class UserController extends Controller
         $Tag = new Tag;
         $Task = new Task;
 
-        $User->getUser($userId);
+        $User->getUserCamel($userId);
 
         $tasksQuery = Task::where('publisher_id', $userId);
         if ($status != 0) {

@@ -11,6 +11,9 @@ namespace App\Models;
 
 class Tag extends CamelModel
 {
+
+    public $timestamps = false;
+
     public function getTagsByTaskId($taskId)
     {
         $tagsArray = Tag::where('task_id', $taskId)->get();

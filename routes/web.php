@@ -31,6 +31,14 @@ $app->get('/getAcceptedTasks', 'UserController@getAcceptedTasks');
 $app->get('/getPublishedTasks', 'UserController@getPublishedTasks');
 //Publish task
 $app->post('/publishTask', 'TaskController@publishTask');
+//View a task
+$app->get('/viewTask', 'TaskController@viewTask');
+//Accept a task
+$app->post('/acceptTask', 'TaskController@acceptTask');
+//Done a task
+$app->post('/doneTask', 'TaskController@doneTask');
+//Cancel a task
+$app->post('/cancelTask', 'TaskController@cancelTask');
 
 
 

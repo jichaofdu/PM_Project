@@ -307,7 +307,7 @@ longitude | dobule | | optional
 latitude | double | | optional
 locationDscp | string | 任务地点的文字描述 | optional
 tags | [string] |标签列表 | optional
-
+credit | integer | 完成该任务可获得的信誉值 | optional
 #### 返回示例
 
 ```

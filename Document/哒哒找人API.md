@@ -199,10 +199,10 @@ limit | integer | 限制获取的任务个数 | optional
                 "latitude":0.00
                 "description":"阿康烧烤"
             },
-            "tags":{
+            "tags":[
                 "拿快递",
                 "救命",
-            },
+            ],
             "credit":5,
             "status":2,
             "accepter":{
@@ -262,10 +262,10 @@ limit | integer | 限制获取的任务个数 | optional
                 "latitude":0.00,
                 "description":"阿康烧烤"
             },
-            "tags":{
+            "tags":[
                 "拿快递",
-                "救命"
-            },
+                "救命",
+            ],
             "credit":5,
             "status":2,
             "accepter":{
@@ -331,10 +331,10 @@ credit | integer | 完成该任务可获得的信誉值 | optional
             "latitude":0.00,
             "description":"阿康烧烤"
         },
-        "tags":{
+        "tags":[
                 "拿快递",
-                "救命"
-        },
+                "救命",
+        ],
         "credit":5,
         "status":1,
         "accepter":{}
@@ -359,7 +359,7 @@ credit | integer | 完成该任务可获得的信誉值 | optional
 
 name | type | description | note 
 ---|---|---|---
-taskId | integer | | optional
+taskId | integer | | required
 
 #### 返回示例
 
@@ -384,10 +384,10 @@ taskId | integer | | optional
             "latitude":0.00,
             "description":"阿康烧烤"
         },
-        "tags":{
+        "tags":[
                 "拿快递",
-                "救命"
-        },
+                "救命",
+        ],
         "credit":5,
         "status":2,
         "accepter":{
@@ -450,10 +450,10 @@ tags | [string] |标签列表 | optional
             "latitude":0.00,
             "description":"阿康烧烤"
         },
-        "tags":{
+        "tags":[
                 "拿快递",
-                "救命"
-        },
+                "救命",
+        ],
         "credit":5,
         "status":2,
         "accepter":{

@@ -31,7 +31,13 @@
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".pages.ResetPasswordActivity" />
-        <activity android:name=".pages.UserInfoActivity"></activity>
+        <activity android:name=".pages.UserInfoActivity" />
+        <activity android:name=".pages.PublishTaskStepOneActivity" />
+        <activity android:name=".pages.PublishTaskStepTwoActivity" />
+        <activity android:name=".pages.PublishTaskStepThreeActivity" />
+        <activity android:name=".pages.MyPublishTaskActivity" />
+        <activity android:name=".pages.MyAcceptTaskActivity" />
+        <activity android:name=".pages.NearbyTaskActivity"></activity>
     </application>
 
 </manifest>

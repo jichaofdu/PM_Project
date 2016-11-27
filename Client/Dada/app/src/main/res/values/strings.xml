@@ -34,15 +34,13 @@
     <string name="reset_password_new_password_again">重复新密码</string>
     <string name="reset_password_confirm_button">确认修改</string>
 
-    <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="fisrt_step_ok">选点完成 进入下一步</string>
+    <string name="second_step_title">请填写任务标题</string>
+    <string name="second_step_content">请填写任务详细内容</string>
+    <string name="second_step_ok">内容填写完成 进入下一步</string>
+    <string name="third_step_ok">完成任务创建</string>
+
+    <string name="title_activity_main">哒哒找人</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

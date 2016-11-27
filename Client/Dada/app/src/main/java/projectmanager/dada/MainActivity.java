@@ -11,6 +11,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+
+import projectmanager.dada.pages.MyAcceptTaskActivity;
+import projectmanager.dada.pages.MyPublishTaskActivity;
+import projectmanager.dada.pages.NearbyTaskActivity;
+import projectmanager.dada.pages.PublishTaskStepOneActivity;
 import projectmanager.dada.pages.ResetPasswordActivity;
 import projectmanager.dada.pages.UserInfoActivity;
 import projectmanager.dada.util.DataManager;
@@ -69,13 +74,17 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.main_publish_task) {
-
+            Intent nextPage = new Intent(MainActivity.this, PublishTaskStepOneActivity.class);
+            startActivity(nextPage);
         } else if (id == R.id.main_my_publish_task) {
-
+            Intent nextPage = new Intent(MainActivity.this, MyPublishTaskActivity.class);
+            startActivity(nextPage);
         } else if (id == R.id.main_my_accept_task) {
-
+            Intent nextPage = new Intent(MainActivity.this, MyAcceptTaskActivity.class);
+            startActivity(nextPage);
         } else if (id == R.id.main_nearby_task) {
-
+            Intent nextPage = new Intent(MainActivity.this, NearbyTaskActivity.class);
+            startActivity(nextPage);
         } else if (id == R.id.main_user_info_setting) {
             Intent nextPage = new Intent(MainActivity.this, UserInfoActivity.class);
             startActivity(nextPage);

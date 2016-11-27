@@ -39,6 +39,7 @@ class TaskController extends Controller
         $latitude = $request->input('latitude');
         $locationDscp = $request->input('locationDscp');
         $tags = $request->input('tags');
+        $credit = $request->input('credit', 1);
 
         if (empty($title) || empty($description) || empty($userId)) {
             abort(400);
@@ -52,18 +53,27 @@ class TaskController extends Controller
         $task->title = $title;
         $task->description = $description;
         $task->publisher_id = $userId;
-        $task->deadline = $deadline;
+        $task->published_time = date("Y-m-d h:i:sa");
+        if (!is_null($deadline)) {
+            $task->deadline = date("Y-m-d h:i:sa", strtotime($deadline));
+        }
         $task->longitude = $longitude;
         $task->latitude = $latitude;
         $task->location_dscp = $locationDscp;
+        $task->credit = $credit;
+        $task->status = 1;
 
         try {
             DB::beginTransaction();
             $task->save();
-            foreach ($tags as $tagItem) {
-                $tag = new Tag;
-                $tag->task_id = $task->task_id;
-                $tag->tag = $tagItem;
+
+            if (!empty($tags)) {
+                foreach ($tags as $tagItem) {
+                    $tag = new Tag;
+                    $tag->task_id = $task->task_id;
+                    $tag->tag = $tagItem;
+                    $tag->save();
+                }
             }
             DB::commit();
 
@@ -98,6 +108,39 @@ class TaskController extends Controller
         $result = SUCCEED;
         return new Response(['result' => $result, 'task' => $task]);
     }
+
+
+    /**
+     *
+     * Edit an existed task
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function editTask(Request $request)
+    {
+        $taskId = $request->input('task_id');
+
+        if (empty($taskId)) {
+            abort(400);
+        }
+
+        $Task = new Task;
+        $Tag = new Tag;
+        $task = $Task->getTaskByTaskIdRaw($taskId);
+        $originTags = $Tag->getTagsByTaskId($taskId);
+
+        $title = $request->input('title', $task->title);
+        $description = $request->input('description', $task->description);
+        $deadline = $request->input('deadline', $task->deadline);
+        $longitude = $request->input('longitude', $task->longitude);
+        $latitude = $request->input('latitude', $task->latitude);
+        $locationDscp = $request->input('locationDscp', $task->location_dscp);
+        $tags = $request->input('tags', json_encode($originTags));
+
+    }
+
+
 
     /**
      *

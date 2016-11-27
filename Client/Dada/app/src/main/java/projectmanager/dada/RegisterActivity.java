@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,6 +35,7 @@ public class RegisterActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.activity_register);
         registerFormView = findViewById(R.id.register_form);
         progressView = findViewById(R.id.register_progress);
@@ -41,16 +43,6 @@ public class RegisterActivity extends AppCompatActivity{
         usernameView = (EditText) findViewById(R.id.register_username);
         passwordView = (EditText) findViewById(R.id.register_password);
         passwordAgainView = (EditText) findViewById(R.id.register_passwordAgain);
-        passwordAgainView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_NULL && keyEvent.getAction() == KeyEvent.ACTION_UP) {
-                    attemptRegister();
-                    return true;
-                }
-                return false;
-            }
-        });
         registerButton = (Button) findViewById(R.id.register_button);
         registerButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -166,17 +158,19 @@ public class RegisterActivity extends AppCompatActivity{
         private final String phone;
         private final String username;
         private final String password;
+        private User registerUser;
 
         UserRegisterTask(String ph, String un, String pw) {
             phone = ph;
             username = un;
             password = pw;
+            registerUser = null;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             ApiManager apiManager = new ApiManager();
-            User registerUser = apiManager.handleRegister(phone,username,password);
+            registerUser = apiManager.handleRegister(phone,username,password);
             if(registerUser == null){
                 System.out.println("[Tip] Register Fail.");
                 return false;
@@ -194,9 +188,10 @@ public class RegisterActivity extends AppCompatActivity{
                 //1.结束本页面
                 //2.将当前登录的User对象的保存下来
                 //3.并跳转到主页面去
-
-
-
+                finish();
+                Intent nextPage = new Intent(RegisterActivity.this,MainActivity.class);
+                nextPage.putExtra("user",registerUser);
+                startActivity(nextPage);
             } else {
                 //1.登陆失败的提示信息
                 phoneView.setError(getString(R.string.error_incorrect_password));

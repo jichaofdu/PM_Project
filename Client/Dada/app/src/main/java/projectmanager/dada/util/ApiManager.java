@@ -66,7 +66,7 @@ public class ApiManager {
                     int credit = Integer.parseInt(creditString);
                     String sexString = userJson.getString("sex");
                     int sex = Integer.parseInt(sexString);
-                    String avatorString = userJson.getString("avator");
+                    String avatorString = userJson.optString("avator");
                     String bioString = userJson.getString("bio");
                     User returnUser = new User(userId, userPhoneString, passwordString, userUsernameString,
                             credit, sex, avatorString, bioString);
@@ -132,7 +132,7 @@ public class ApiManager {
                     int credit = Integer.parseInt(creditString);
                     String sexString = userJson.getString("sex");
                     int sex = Integer.parseInt(sexString);
-                    String avatorString = userJson.getString("avator");
+                    String avatorString = userJson.optString("avator");
                     String bioString = userJson.getString("bio");
                     User returnUser = new User(userId,userPhoneString,passwordString,userUsernameString,
                             credit,sex,avatorString,bioString);
@@ -152,6 +152,45 @@ public class ApiManager {
         }catch (Exception e){
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public String handleChangePassword(int userId,String oldPassword,String newPassword){
+        try{
+            HttpClient client = new DefaultHttpClient();
+            HttpPost request = new HttpPost("https://relay.nxtsysx.net/changePassword/");
+            List<NameValuePair> postParameters = new ArrayList<>();
+            postParameters.add(new BasicNameValuePair("userId", "" + userId));
+            postParameters.add(new BasicNameValuePair("oldPassword", oldPassword));
+            postParameters.add(new BasicNameValuePair("newPassword", newPassword));
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
+            request.setEntity(formEntity);
+            System.out.println(request.getURI().toASCIIString());
+            HttpResponse response = client.execute(request);
+            if(response.getStatusLine().getStatusCode() == 200) {
+                InputStream is = response.getEntity().getContent();
+                String str = convertStreamToString(is);
+                JSONObject resultJson = new JSONObject(str);
+                String result = resultJson.getString("result");
+                if (result.equals("succeed")) {
+                    return "succeed";
+                }else{
+                    return resultJson.getString("error");
+                }
+            } else {
+                System.out.println("[Error] Change Password Process. Status Code:" +
+                        response.getStatusLine().getStatusCode());
+                return "failed";
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+            return "failed";
+        }catch (IOException e){
+            e.printStackTrace();
+            return "failed";
+        }catch (Exception e){
+            e.printStackTrace();
+            return "failed";
         }
     }
 
@@ -180,7 +219,4 @@ public class ApiManager {
         }
         return sb.toString();
     }
-
-
-
 }

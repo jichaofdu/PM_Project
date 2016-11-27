@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,21 +33,12 @@ public class LoginActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.activity_login);
         loginFormView = findViewById(R.id.login_form);
         progressView = findViewById(R.id.login_progress);
         phoneView = (EditText) findViewById(R.id.login_phone);
         passwordView = (EditText) findViewById(R.id.login_password);
-        passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_NULL && keyEvent.getAction() == KeyEvent.ACTION_UP) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
         signInButton = (Button) findViewById(R.id.login_sign_in_button);
         signInButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -154,16 +146,18 @@ public class LoginActivity extends AppCompatActivity{
 
         private final String phone;
         private final String password;
+        private User loginUser;
 
         UserLoginTask(String ph, String pw) {
             phone = ph;
             password = pw;
+            loginUser = null;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             ApiManager apiManager = new ApiManager();
-            User loginUser = apiManager.handleLogin(phone,password);
+            loginUser = apiManager.handleLogin(phone,password);
             if(loginUser == null){
                 System.out.println("[Tip] Login Fail.");
                 return false;
@@ -178,15 +172,16 @@ public class LoginActivity extends AppCompatActivity{
             showProgress(false);
             if (success == true) {
                 //1.结束本页面
-                finish();
                 //2.将当前登录的User对象的保存下来
-
                 //3.并跳转到主页面去
-
+                finish();
+                Intent nextPage = new Intent(LoginActivity.this,MainActivity.class);
+                nextPage.putExtra("user",loginUser);
+                startActivity(nextPage);
             } else {
                 //1.登陆失败的提示信息
-                phoneView.setError(getString(R.string.error_incorrect_password));
                 //2.登陆失败，将焦点放在密码框焦点上
+                phoneView.setError(getString(R.string.error_incorrect_password));
                 passwordView.requestFocus();
             }
         }

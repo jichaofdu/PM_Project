@@ -19,6 +19,21 @@
     <string name="error_field_required">此处不得为空。</string>
     <string name="error_password_again_not_match">两次密码不匹配</string>
 
+    <string name="main_publish_task">发布新任务</string>
+    <string name="main_my_publish_task">我发布的任务</string>
+    <string name="main_my_accept_task">我接受的任务</string>
+    <string name="main_nearby_task">附近的任务</string>
+    <string name="main_user_info_setting">我的资料</string>
+    <string name="main_password_reset">重置密码</string>
+    <string name="main_logout">登出</string>
+    <string name="nav_title">用户名</string>
+    <string name="nav_descripition">用户的自己的签名的描述</string>
+
+    <string name="reset_password_old_password">旧密码</string>
+    <string name="reset_password_new_password">新密码</string>
+    <string name="reset_password_new_password_again">重复新密码</string>
+    <string name="reset_password_confirm_button">确认修改</string>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
@@ -27,4 +42,10 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

@@ -420,7 +420,6 @@ name | type | description | note
 taskId | integer | | required
 title | string | | optional
 description | string | | optional
-userId | integer | | optional
 deadline | datetime | | optional
 longitude | dobule | | optional
 latitude | double | | optional

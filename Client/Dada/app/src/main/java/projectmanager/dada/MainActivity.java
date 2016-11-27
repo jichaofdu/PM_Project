@@ -11,24 +11,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
-
-import projectmanager.dada.model.User;
 import projectmanager.dada.pages.ResetPasswordActivity;
+import projectmanager.dada.pages.UserInfoActivity;
+import projectmanager.dada.util.DataManager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    /**
-     * 当前登录的用户
-     */
-    private User currentUser;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        currentUser = (User) getIntent().getSerializableExtra("user");
-
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -63,6 +55,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         if (id == R.id.action_logout) {
             finish();
+            DataManager.getInstance().setCurrentUser(null);
             Intent intent = new Intent(MainActivity.this,LoginActivity.class);
             startActivity(intent);
             return true;
@@ -84,10 +77,10 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.main_nearby_task) {
 
         } else if (id == R.id.main_user_info_setting) {
-
+            Intent nextPage = new Intent(MainActivity.this, UserInfoActivity.class);
+            startActivity(nextPage);
         } else if (id == R.id.main_password_reset) {
             Intent nextPage = new Intent(MainActivity.this, ResetPasswordActivity.class);
-            nextPage.putExtra("user",currentUser);
             startActivity(nextPage);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

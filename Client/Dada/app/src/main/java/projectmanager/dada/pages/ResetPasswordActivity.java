@@ -18,6 +18,7 @@ import android.widget.Toast;
 import projectmanager.dada.R;
 import projectmanager.dada.model.User;
 import projectmanager.dada.util.ApiManager;
+import projectmanager.dada.util.DataManager;
 
 public class ResetPasswordActivity extends AppCompatActivity{
 
@@ -28,16 +29,11 @@ public class ResetPasswordActivity extends AppCompatActivity{
     private View              progressView;
     private View              resetPasswordFormView;
     private Button            confirmButton;
-
-    private User              currentUser;
     private String            resetResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        currentUser = (User) getIntent().getSerializableExtra("user");
-
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.activity_reset_password);
         progressView = findViewById(R.id.reset_password_progress);
@@ -52,7 +48,6 @@ public class ResetPasswordActivity extends AppCompatActivity{
                 attemptResetPassword();
             }
         });
-
     }
 
     /**
@@ -147,7 +142,7 @@ public class ResetPasswordActivity extends AppCompatActivity{
         ResetPasswordTask(String op, String np) {
             oldPassword = op;
             newPassword = np;
-            userId = currentUser.getUserId();
+            userId = DataManager.getInstance().getCurrentUser().getUserId();
         }
 
         @Override

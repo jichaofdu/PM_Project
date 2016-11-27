@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import projectmanager.dada.model.User;
 import projectmanager.dada.util.ApiManager;
+import projectmanager.dada.util.DataManager;
 
 public class RegisterActivity extends AppCompatActivity{
 
@@ -185,17 +186,12 @@ public class RegisterActivity extends AppCompatActivity{
             registerTask = null;
             showProgress(false);
             if (success == true) {
-                //1.结束本页面
-                //2.将当前登录的User对象的保存下来
-                //3.并跳转到主页面去
                 finish();
                 Intent nextPage = new Intent(RegisterActivity.this,MainActivity.class);
-                nextPage.putExtra("user",registerUser);
+                DataManager.getInstance().setCurrentUser(registerUser);
                 startActivity(nextPage);
             } else {
-                //1.登陆失败的提示信息
                 phoneView.setError(getString(R.string.error_incorrect_password));
-                //2.登陆失败，将焦点放在密码框焦点上
                 passwordView.requestFocus();
             }
         }

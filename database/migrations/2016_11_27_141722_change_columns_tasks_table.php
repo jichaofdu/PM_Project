@@ -15,7 +15,7 @@ class ChangeColumnsTasksTable extends Migration
     {
         Schema::table('tasks', function (Blueprint $table) {
             //
-            $table->double('longitude')->nullbale()->change();
+            $table->double('longitude')->nullable()->change();
             $table->double('latitude')->nullable()->change();
             $table->string('location_dscp')->nullable()->change();
             $table->string('deadline')->nullable()->change();
@@ -31,7 +31,7 @@ class ChangeColumnsTasksTable extends Migration
     {
         Schema::table('tasks', function (Blueprint $table) {
             //
-            $table->double('longitude')->nullbale(false)->change();
+            $table->double('longitude')->nullable(false)->change();
             $table->double('latitude')->nullable(false)->change();
             $table->string('location_dscp')->nullable(false)->change();
             $table->string('deadline')->nullable(false)->change();

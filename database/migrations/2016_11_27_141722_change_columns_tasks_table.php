@@ -18,7 +18,7 @@ class ChangeColumnsTasksTable extends Migration
             $table->double('longitude')->nullable()->change();
             $table->double('latitude')->nullable()->change();
             $table->string('location_dscp')->nullable()->change();
-            $table->string('deadline')->nullable()->change();
+            $table->dateTime('deadline')->nullable()->change();
         });
     }
 
@@ -34,7 +34,7 @@ class ChangeColumnsTasksTable extends Migration
             $table->double('longitude')->nullable(false)->change();
             $table->double('latitude')->nullable(false)->change();
             $table->string('location_dscp')->nullable(false)->change();
-            $table->string('deadline')->nullable(false)->change();
+            $table->dateTime('deadline')->nullable(false)->change();
         });
     }
 }

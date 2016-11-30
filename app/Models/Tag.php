@@ -12,8 +12,6 @@ namespace App\Models;
 class Tag extends CamelModel
 {
 
-    public $timestamps = false;
-
     public function getTagsByTaskId($taskId)
     {
         $tagsArray = Tag::where('task_id', $taskId)->get();
@@ -24,4 +22,8 @@ class Tag extends CamelModel
 
         return $tags;
     }
+
+    protected $hidden = [
+        'created_at', 'updated_at'
+    ];
 }

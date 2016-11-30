@@ -12,7 +12,6 @@ namespace App\Models;
 class Task extends CamelModel
 {
     protected $primaryKey = 'task_id';
-    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.

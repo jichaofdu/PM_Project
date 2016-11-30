@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateTagsTable extends Migration
 {
@@ -16,7 +16,9 @@ class CreateTagsTable extends Migration
         //
         Schema::create('tags', function (Blueprint $table) {
             $table->integer('task_id');
+//            $table->foreign('task_id')->references('task_id')->on('tasks')->onDelete('cascade');
             $table->string('tag');
+            $table->timestamps();
         });
     }
 

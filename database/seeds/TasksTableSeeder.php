@@ -22,7 +22,7 @@ class TasksTableSeeder extends Seeder
             DB::table('tasks')->insert([
                 'title' => str_random(10),
                 'description' => str_random(10),
-                'publisher_id' => $publisherId = mt_rand(1, 15),
+                'publisher_id' => $publisherId = mt_rand(1, 10),
                 'published_time' => date("Y-m-d h:i:sa"),
                 'status' => mt_rand(2, 3),
                 'accepter_id' => $this->randomId(15, $publisherId)

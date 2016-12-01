@@ -1,5 +1,7 @@
 package projectmanager.dada.util;
 
+import android.support.annotation.Nullable;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -14,7 +16,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import projectmanager.dada.model.Location;
+import projectmanager.dada.model.Task;
 import projectmanager.dada.model.User;
 
 /**
@@ -58,20 +64,7 @@ public class ApiManager {
                     String userString = resultJson.getString("user");
                     System.out.println(userString);
                     JSONObject userJson = new JSONObject(userString);
-                    String userIdString = userJson.getString("userId");
-                    int userId = Integer.parseInt(userIdString);
-                    String userPhoneString = userJson.getString("phone");
-                    String passwordString = "DefaultPassword";
-                    String userUsernameString = userJson.getString("username");
-                    String creditString = userJson.getString("credit");
-                    int credit = Integer.parseInt(creditString);
-                    String sexString = userJson.getString("sex");
-                    int sex = Integer.parseInt(sexString);
-                    String avatorString = userJson.optString("avatar");
-                    String bioString = userJson.getString("bio");
-                    User returnUser = new User(userId, userPhoneString, passwordString, userUsernameString,
-                            credit, sex, avatorString, bioString);
-                    return returnUser;
+                    return parseUser(userJson);
                 }
             } else {
                 System.out.println("[Error] Login Process. Status Code:" +
@@ -123,20 +116,7 @@ public class ApiManager {
                     String userString = resultJson.getString("user");
                     System.out.println(userString);
                     JSONObject userJson = new JSONObject(userString);
-                    String userIdString = userJson.getString("userId");
-                    int userId = Integer.parseInt(userIdString);
-                    String userPhoneString = userJson.getString("phone");
-                    String passwordString = "DefaultPassword";
-                    String userUsernameString = userJson.getString("username");
-                    String creditString = userJson.getString("credit");
-                    int credit = Integer.parseInt(creditString);
-                    String sexString = userJson.getString("sex");
-                    int sex = Integer.parseInt(sexString);
-                    String avatorString = userJson.optString("avatar");
-                    String bioString = userJson.getString("bio");
-                    User returnUser = new User(userId,userPhoneString,passwordString,userUsernameString,
-                            credit,sex,avatorString,bioString);
-                    return returnUser;
+                    return parseUser(userJson);
                 }
             } else {
                 System.out.println("[Error] Register Process. Status Code:" +
@@ -237,20 +217,7 @@ public class ApiManager {
                     String userString = resultJson.getString("user");
                     System.out.println(userString);
                     JSONObject userJson = new JSONObject(userString);
-                    String userIdString = userJson.getString("userId");
-                    int rtUserId = Integer.parseInt(userIdString);
-                    String userPhoneString = userJson.getString("phone");
-                    String passwordString = "DefaultPassword";
-                    String userUsernameString = userJson.getString("username");
-                    String creditString = userJson.getString("credit");
-                    int credit = Integer.parseInt(creditString);
-                    String sexString = userJson.getString("sex");
-                    int rtSex = Integer.parseInt(sexString);
-                    String avatorString = userJson.optString("avator");
-                    String bioString = userJson.getString("bio");
-                    User returnUser = new User(rtUserId,userPhoneString,passwordString,userUsernameString,
-                            credit,rtSex,avatorString,bioString);
-                    return returnUser;
+                    return parseUser(userJson);
                 }
             } else {
                 System.out.println("[Error] Update profile Process. Status Code:" +
@@ -269,12 +236,13 @@ public class ApiManager {
         }
     }
 
+
     /**
      * 通过用户的id来获取用户对象本身。
      * @param userId 准备获取的用户的id
      * @return       成功则返回对象本身。否则返回Null
      */
-    public User getUserById(int userId){
+    public User handleGetUserById(int userId){
         try {
             HttpClient client = new DefaultHttpClient();
             HttpPost request = new HttpPost("https://relay.nxtsysx.net/getUser/");
@@ -297,20 +265,7 @@ public class ApiManager {
                     String userString = resultJson.getString("user");
                     System.out.println(userString);
                     JSONObject userJson = new JSONObject(userString);
-                    String userIdString = userJson.getString("userId");
-                    int rtUserId = Integer.parseInt(userIdString);
-                    String userPhoneString = userJson.getString("phone");
-                    String passwordString = "DefaultPassword";
-                    String userUsernameString = userJson.getString("username");
-                    String creditString = userJson.getString("credit");
-                    int credit = Integer.parseInt(creditString);
-                    String sexString = userJson.getString("sex");
-                    int rtSex = Integer.parseInt(sexString);
-                    String avatorString = userJson.optString("avator");
-                    String bioString = userJson.getString("bio");
-                    User returnUser = new User(rtUserId,userPhoneString,passwordString,userUsernameString,
-                            credit,rtSex,avatorString,bioString);
-                    return returnUser;
+                    return parseUser(userJson);
                 }
             } else {
                 System.out.println("[Error] Update profile Process. Status Code:" +
@@ -328,6 +283,390 @@ public class ApiManager {
             return null;
         }
     }
+
+    /**
+     * 发布新任务的接口
+     * @param title        任务标题
+     * @param description  任务描述
+     * @param userId       发布者id
+     * @param deadline     截止时间
+     * @param longitude    地点经纬度
+     * @param latitude     地点经纬度
+     * @param locationDscp 地点描述
+     * @param tags         标签
+     * @param credit       信用
+     * @return             返回新创建的任务对象本身
+     */
+    private Task handlePublishTask(String title, String description, int userId, Date deadline, double longitude, double latitude, String locationDscp, String[] tags, int credit){
+        try{
+            HttpClient client = new DefaultHttpClient();
+            HttpPost request = new HttpPost("https://relay.nxtsysx.net/publishTask/");
+            List<NameValuePair> postParameters = new ArrayList<>();
+            postParameters.add(new BasicNameValuePair("title", "" + title));
+            postParameters.add(new BasicNameValuePair("description", description));
+            postParameters.add(new BasicNameValuePair("userId", "" + userId));
+            postParameters.add(new BasicNameValuePair("deadline", "" + deadline.toString()));
+            postParameters.add(new BasicNameValuePair("longitude", "" + longitude));
+            postParameters.add(new BasicNameValuePair("latitude", "" + latitude));
+            postParameters.add(new BasicNameValuePair("locationDscp", "" + longitude));
+            postParameters.add(new BasicNameValuePair("tags", "" + ""));
+            postParameters.add(new BasicNameValuePair("credit", "" + credit));
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
+            request.setEntity(formEntity);
+            System.out.println(request.getURI().toASCIIString());
+            HttpResponse response = client.execute(request);
+            if (response.getStatusLine().getStatusCode() == 200) {
+                InputStream is = response.getEntity().getContent();
+                String str = convertStreamToString(is);
+                JSONObject resultJson = new JSONObject(str);
+                String result = resultJson.getString("result");
+                if(result.equals("failed")){
+                    String error = resultJson.getString("error");
+                    System.out.println("[Error] Publish Task process. Error Message:" + error);
+                    return null;
+                }else{
+                    String taskString = resultJson.getString("task");
+                    System.out.println(taskString);
+                    JSONObject taskJson = new JSONObject(taskString);
+                    return parseTask(taskJson);
+                }
+            }else{
+                System.out.println("[Error] Publish Task Process. Status Code:" +
+                        response.getStatusLine().getStatusCode());
+                return null;
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+            return null;
+        }catch (IOException e){
+            e.printStackTrace();
+            return null;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 根据id来获取对应的Task对象
+     * @param taskId 你想要获得的任务对象的id
+     * @return       任意一步出错将返回null
+     */
+    private Task handleGetTaskById(int taskId){
+        try{
+            HttpClient client = new DefaultHttpClient();
+            HttpPost request = new HttpPost("https://relay.nxtsysx.net/viewTask/");
+            List<NameValuePair> postParameters = new ArrayList<>();
+            postParameters.add(new BasicNameValuePair("taskId", "" + taskId));
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
+            request.setEntity(formEntity);
+            System.out.println(request.getURI().toASCIIString());
+            HttpResponse response = client.execute(request);
+            if (response.getStatusLine().getStatusCode() == 200) {
+                InputStream is = response.getEntity().getContent();
+                String str = convertStreamToString(is);
+                JSONObject resultJson = new JSONObject(str);
+                String result = resultJson.getString("result");
+                if(result.equals("failed")){
+                    String error = resultJson.getString("error");
+                    System.out.println("[Error] View Task process. Error Message:" + error);
+                    return null;
+                }else{
+                    String taskString = resultJson.getString("task");
+                    System.out.println(taskString);
+                    JSONObject taskJson = new JSONObject(taskString);
+                    return parseTask(taskJson);
+                }
+            }else{
+                System.out.println("[Error] View Task Process. Status Code:" +
+                        response.getStatusLine().getStatusCode());
+                return null;
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+            return null;
+        }catch (IOException e){
+            e.printStackTrace();
+            return null;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 修改任务信息的接口
+     * @param taskId       任务id
+     * @param title        标题
+     * @param description  任务描述
+     * @param userId       用户id
+     * @param deadline     截止日期
+     * @param longitude    经纬度
+     * @param latitude     经纬度
+     * @param locationDscp 地址描述*
+     * @param tags         任务标签
+     * @return             成功修改将返回对象，其它出错情况均返回null
+     */
+    private Task handleEditTask(int taskId,String title,String description,int userId,Date deadline,double longitude,double latitude,String locationDscp,String[] tags){
+        try{
+            HttpClient client = new DefaultHttpClient();
+            HttpPost request = new HttpPost("https://relay.nxtsysx.net/editTask/");
+            List<NameValuePair> postParameters = new ArrayList<>();
+            postParameters.add(new BasicNameValuePair("taskId", "" + taskId));
+            postParameters.add(new BasicNameValuePair("title", "" + title));
+            postParameters.add(new BasicNameValuePair("description", "" + description));
+            postParameters.add(new BasicNameValuePair("deadline", "" + deadline));
+            postParameters.add(new BasicNameValuePair("longitude", "" + longitude));
+            postParameters.add(new BasicNameValuePair("latitude", "" + latitude));
+            postParameters.add(new BasicNameValuePair("locationDscp", "" + locationDscp));
+            postParameters.add(new BasicNameValuePair("tags", "" + ""));
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
+            request.setEntity(formEntity);
+            System.out.println(request.getURI().toASCIIString());
+            HttpResponse response = client.execute(request);
+            if (response.getStatusLine().getStatusCode() == 200) {
+                InputStream is = response.getEntity().getContent();
+                String str = convertStreamToString(is);
+                JSONObject resultJson = new JSONObject(str);
+                String result = resultJson.getString("result");
+                if(result.equals("failed")){
+                    String error = resultJson.getString("error");
+                    System.out.println("[Error] Edit Task process. Error Message:" + error);
+                    return null;
+                }else{
+                    String taskString = resultJson.getString("task");
+                    System.out.println(taskString);
+                    JSONObject taskJson = new JSONObject(taskString);
+                    return parseTask(taskJson);
+                }
+            }else{
+                System.out.println("[Error] Edit Task Process. Status Code:" +
+                        response.getStatusLine().getStatusCode());
+                return null;
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+            return null;
+        }catch (IOException e){
+            e.printStackTrace();
+            return null;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
+        return null;
+    }
+
+    /**
+     * 接受任务的接口
+     * @param taskId 要接受的任务id
+     * @param userId 将要接受任务的用户id
+     * @return 如果报错或者没有正常返回200，则返回null
+     *         正常返回但是fail，返回错误报告
+     *         正常且成功，则会返回“success”
+     */
+    private String handleAcceptTask(int taskId,int userId){
+        try{
+            HttpClient client = new DefaultHttpClient();
+            HttpPost request = new HttpPost("https://relay.nxtsysx.net/acceptTask/");
+            List<NameValuePair> postParameters = new ArrayList<>();
+            postParameters.add(new BasicNameValuePair("taskId", "" + taskId));
+            postParameters.add(new BasicNameValuePair("userId", "" + userId));
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
+            request.setEntity(formEntity);
+            System.out.println(request.getURI().toASCIIString());
+            HttpResponse response = client.execute(request);
+            if (response.getStatusLine().getStatusCode() == 200) {
+                InputStream is = response.getEntity().getContent();
+                String str = convertStreamToString(is);
+                JSONObject resultJson = new JSONObject(str);
+                String result = resultJson.getString("result");
+                if(result.equals("failed")){
+                    String error = resultJson.getString("error");
+                    System.out.println("[Error] Accept Task process. Error Message:" + error);
+                    return error;
+                }else{
+                    return "success";
+                }
+            }else{
+                System.out.println("[Error] Accept Task Process. Status Code:" +
+                        response.getStatusLine().getStatusCode());
+                return null;
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+            return null;
+        }catch (IOException e){
+            e.printStackTrace();
+            return null;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 完成某个任务的接口
+     * @param taskId 已接受的任务id
+     * @param userId 接受任务的用户id
+     * @return 如果报错或者没有正常返回200，则返回null
+     *         正常返回但是fail，返回错误报告
+     *         正常且成功，则会返回“success”
+     */
+    private String handleDoneTask(int taskId,int userId){
+        try{
+            HttpClient client = new DefaultHttpClient();
+            HttpPost request = new HttpPost("https://relay.nxtsysx.net/doneTask/");
+            List<NameValuePair> postParameters = new ArrayList<>();
+            postParameters.add(new BasicNameValuePair("taskId", "" + taskId));
+            postParameters.add(new BasicNameValuePair("userId", "" + userId));
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
+            request.setEntity(formEntity);
+            System.out.println(request.getURI().toASCIIString());
+            HttpResponse response = client.execute(request);
+            if (response.getStatusLine().getStatusCode() == 200) {
+                InputStream is = response.getEntity().getContent();
+                String str = convertStreamToString(is);
+                JSONObject resultJson = new JSONObject(str);
+                String result = resultJson.getString("result");
+                if(result.equals("failed")){
+                    String error = resultJson.getString("error");
+                    System.out.println("[Error] Done Task process. Error Message:" + error);
+                    return error;
+                }else{
+                    return "success";
+                }
+            }else{
+                System.out.println("[Error] Done Task Process. Status Code:" +
+                        response.getStatusLine().getStatusCode());
+                return null;
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+            return null;
+        }catch (IOException e){
+            e.printStackTrace();
+            return null;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 取消某个任务的接口。
+     * @param taskId 任务的id
+     * @param userId 发起者用户的id
+     * @return 如果报错或者没有正常返回200，则返回null
+     *         正常返回但是fail，返回错误报告
+     *         正常且成功，则会返回“success”
+     */
+    private String handleCancelTask(int taskId,int userId){
+        try{
+            HttpClient client = new DefaultHttpClient();
+            HttpPost request = new HttpPost("https://relay.nxtsysx.net/cancelTask/");
+            List<NameValuePair> postParameters = new ArrayList<>();
+            postParameters.add(new BasicNameValuePair("taskId", "" + taskId));
+            postParameters.add(new BasicNameValuePair("userId", "" + userId));
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
+            request.setEntity(formEntity);
+            System.out.println(request.getURI().toASCIIString());
+            HttpResponse response = client.execute(request);
+            if (response.getStatusLine().getStatusCode() == 200) {
+                InputStream is = response.getEntity().getContent();
+                String str = convertStreamToString(is);
+                JSONObject resultJson = new JSONObject(str);
+                String result = resultJson.getString("result");
+                if(result.equals("failed")){
+                    String error = resultJson.getString("error");
+                    System.out.println("[Error] Cancel Task process. Error Message:" + error);
+                    return error;
+                }else{
+                    return "success";
+                }
+            }else{
+                System.out.println("[Error] Cancel Task Process. Status Code:" +
+                        response.getStatusLine().getStatusCode());
+                return null;
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+            return null;
+        }catch (IOException e){
+            e.printStackTrace();
+            return null;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    /**
+     * 解析Task数据
+     */
+    public Task parseTask(JSONObject taskJson) throws JSONException{
+        String taskIdString = taskJson.getString("taskId");
+        int taskId = Integer.parseInt(taskIdString);
+        String titleString = taskJson.getString("title");
+        String descriptionString = taskJson.getString("description");
+        String publisherInfoString = taskJson.getString("publisher");
+        JSONObject userJson = new JSONObject(publisherInfoString);
+        User publisher = parseUser(userJson);
+        String publishedTimeString = taskJson.getString("publishedTime");
+        Date publishedTime = new Date(publishedTimeString);
+        String deadlineString = taskJson.getString("deadline");
+        Date deadlineTime = new Date(deadlineString);
+        String locationInfoString = taskJson.getString("location");
+        JSONObject locationJson = new JSONObject(locationInfoString);
+        Location loacation = parseLocation(locationJson);
+        String tagsInfoString = taskJson.getString("tags");
+        String creditString = taskJson.getString("credit");
+        int credit = Integer.parseInt(creditString);
+        String statusString = taskJson.getString("status");
+        int status = Integer.parseInt(statusString);
+        String accepterString = taskJson.getString("accepter");
+        JSONObject accepterJson = new JSONObject(accepterString);
+        User accepter = parseUser(accepterJson);
+        //todo tags和accepter暂时设置为null
+        return new Task(taskId,titleString,descriptionString,publisher,publishedTime,deadlineTime,loacation,
+                null,credit,status,null);
+    }
+
+    /**
+     * 解析Locations数据
+     */
+    public Location parseLocation(JSONObject locationJson) throws  JSONException{
+        String logitutdeString = locationJson.getString("longitude");
+        double longitude = Double.parseDouble(logitutdeString);
+        String latitudeString = locationJson.getString("latitude");
+        double latitude = Double.parseDouble(latitudeString);
+        String description = locationJson.getString("description");
+        return new Location(0,longitude,latitude,description);
+    }
+
+    /**
+     * 解析User数据
+     */
+    public User parseUser(JSONObject userJson) throws JSONException{
+        String userIdString = userJson.getString("userId");
+        int userId = Integer.parseInt(userIdString);
+        String userPhoneString = userJson.getString("phone");
+        String passwordString = "DefaultPassword";
+        String userUsernameString = userJson.getString("username");
+        String creditString = userJson.getString("credit");
+        int credit = Integer.parseInt(creditString);
+        String sexString = userJson.getString("sex");
+        int sex = Integer.parseInt(sexString);
+        String avatorString = userJson.optString("avatar");
+        String bioString = userJson.getString("bio");
+        User returnUser = new User(userId,userPhoneString,passwordString,userUsernameString,
+                credit,sex,avatorString,bioString);
+        return returnUser;
+    }
+
+
 
     /**
      * 本方法用于将字节流转化成字符串。

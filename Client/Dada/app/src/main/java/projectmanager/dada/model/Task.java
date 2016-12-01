@@ -13,9 +13,10 @@ public class Task {
     private Location location;
     private String[] tags;
     private int      status;
+    private int      credit;
     private User     accepter;
 
-    public Task(int taskId, String title, String description, User publisher, Date publishedTime, Date deadline, Location location, String[] tags, int status, User accepter) {
+    public Task(int taskId, String title, String description, User publisher, Date publishedTime, Date deadline, Location location, String[] tags,int credit, int status, User accepter) {
         this.taskId = taskId;
         this.title = title;
         this.description = description;
@@ -25,6 +26,7 @@ public class Task {
         this.location = location;
         this.tags = tags;
         this.status = status;
+        this.credit = credit;
         this.accepter = accepter;
     }
 

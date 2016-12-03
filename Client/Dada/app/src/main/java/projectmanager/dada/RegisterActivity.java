@@ -17,6 +17,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import projectmanager.dada.model.User;
 import projectmanager.dada.util.ApiManager;
 import projectmanager.dada.util.DataManager;
@@ -191,8 +193,10 @@ public class RegisterActivity extends AppCompatActivity{
                 DataManager.getInstance().setCurrentUser(registerUser);
                 startActivity(nextPage);
             } else {
-                phoneView.setError(getString(R.string.error_incorrect_password));
+                phoneView.setError(DataManager.getInstance().getRegisterErrorMessage());
                 passwordView.requestFocus();
+                Toast.makeText(getApplicationContext(), DataManager.getInstance().getRegisterErrorMessage(),
+                        Toast.LENGTH_LONG).show();
             }
         }
 

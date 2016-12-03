@@ -57,20 +57,26 @@ public class ApiManager {
                 } else {
                     String error = resultJson.getString("error");
                     System.out.println("[Error] Login process. Login fail. Error Message:" + error);
+                    DataManager.getInstance().setLoginErrorMesssage(error);
                     return null;
                 }
             } else {
                 System.out.println("[Error] Login Process. Status Code:" +
                         response.getStatusLine().getStatusCode());
+                DataManager.getInstance().setLoginErrorMesssage("Status:"
+                        + response.getStatusLine().getStatusCode());
                 return null;
             }
         }catch (JSONException e){
+            DataManager.getInstance().setLoginErrorMesssage("JSON Exception");
             e.printStackTrace();
             return null;
         }catch (IOException e){
+            DataManager.getInstance().setLoginErrorMesssage("IO Exception");
             e.printStackTrace();
             return null;
         }catch (Exception e){
+            DataManager.getInstance().setLoginErrorMesssage("Exception");
             e.printStackTrace();
             return null;
         }
@@ -109,20 +115,26 @@ public class ApiManager {
                 }else{
                     String error = resultJson.getString("error");
                     System.out.println("[Error] Register process. Register fail. Error Message:" + error);
+                    DataManager.getInstance().setRegisterErrorMessage(error);
                     return null;
                 }
             } else {
                 System.out.println("[Error] Register Process. Status Code:" +
                                     response.getStatusLine().getStatusCode());
+                DataManager.getInstance().setRegisterErrorMessage("Status Code:"
+                        + response.getStatusLine().getStatusCode());
                 return null;
             }
         }catch (JSONException e){
+            DataManager.getInstance().setRegisterErrorMessage("JSON Exception");
             e.printStackTrace();
             return null;
         }catch (IOException e){
+            DataManager.getInstance().setRegisterErrorMessage("IO Exception");
             e.printStackTrace();
             return null;
         }catch (Exception e){
+            DataManager.getInstance().setRegisterErrorMessage("Exception");
             e.printStackTrace();
             return null;
         }

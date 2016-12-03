@@ -17,6 +17,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import projectmanager.dada.model.User;
 import projectmanager.dada.util.ApiManager;
 import projectmanager.dada.util.DataManager;
@@ -177,8 +179,10 @@ public class LoginActivity extends AppCompatActivity{
                 DataManager.getInstance().setCurrentUser(loginUser);
                 startActivity(nextPage);
             } else {
-                phoneView.setError(getString(R.string.error_incorrect_password));
+                phoneView.setError(DataManager.getInstance().getLoginErrorMesssage());
                 passwordView.requestFocus();
+                Toast.makeText(getApplicationContext(),DataManager.getInstance().getLoginErrorMesssage(),
+                        Toast.LENGTH_LONG).show();
             }
         }
 

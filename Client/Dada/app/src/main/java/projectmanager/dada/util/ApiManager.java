@@ -1,6 +1,5 @@
 package projectmanager.dada.util;
 
-
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -17,7 +16,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import projectmanager.dada.model.Location;
 import projectmanager.dada.model.Task;
 import projectmanager.dada.model.User;
@@ -26,10 +24,6 @@ import projectmanager.dada.model.User;
  * 和服务器相关联的相关接口均在此类中完成。
  */
 public class ApiManager {
-
-    private final String scheme = "https";
-    private final String host = "relay.nxtsysx.net";
-    private static ApiManager apiManager;
 
     /**
      * 本函数书用于像应用层提供登录的接口。应用层调取此方法并得到返回的对象。
@@ -55,15 +49,15 @@ public class ApiManager {
                 String str = convertStreamToString(is);
                 JSONObject resultJson = new JSONObject(str);
                 String result = resultJson.getString("result");
-                if (result.equals("failed")) {
-                    String error = resultJson.getString("error");
-                    System.out.println("[Error] Login process. Login fail. Error Message:" + error);
-                    return null;
-                } else {
+                if (result.equals("succeed")) {
                     String userString = resultJson.getString("user");
                     System.out.println(userString);
                     JSONObject userJson = new JSONObject(userString);
                     return parseUser(userJson);
+                } else {
+                    String error = resultJson.getString("error");
+                    System.out.println("[Error] Login process. Login fail. Error Message:" + error);
+                    return null;
                 }
             } else {
                 System.out.println("[Error] Login Process. Status Code:" +
@@ -107,15 +101,15 @@ public class ApiManager {
                 String str = convertStreamToString(is);
                 JSONObject resultJson = new JSONObject(str);
                 String result = resultJson.getString("result");
-                if(result.equals("failed")){
-                    String error = resultJson.getString("error");
-                    System.out.println("[Error] Register process. Register fail. Error Message:" + error);
-                    return null;
-                }else{
+                if(result.equals("succeed")){
                     String userString = resultJson.getString("user");
                     System.out.println(userString);
                     JSONObject userJson = new JSONObject(userString);
                     return parseUser(userJson);
+                }else{
+                    String error = resultJson.getString("error");
+                    System.out.println("[Error] Register process. Register fail. Error Message:" + error);
+                    return null;
                 }
             } else {
                 System.out.println("[Error] Register Process. Status Code:" +
@@ -208,15 +202,15 @@ public class ApiManager {
                 String str = convertStreamToString(is);
                 JSONObject resultJson = new JSONObject(str);
                 String result = resultJson.getString("result");
-                if(result.equals("failed")){
-                    String error = resultJson.getString("error");
-                    System.out.println("[Error] Update Profile process. Update profile fail. Error Message:" + error);
-                    return null;
-                }else{
+                if(result.equals("succeed")){
                     String userString = resultJson.getString("user");
                     System.out.println(userString);
                     JSONObject userJson = new JSONObject(userString);
                     return parseUser(userJson);
+                }else{
+                    String error = resultJson.getString("error");
+                    System.out.println("[Error] Update Profile process. Update profile fail. Error Message:" + error);
+                    return null;
                 }
             } else {
                 System.out.println("[Error] Update profile Process. Status Code:" +
@@ -234,7 +228,6 @@ public class ApiManager {
             return null;
         }
     }
-
 
     /**
      * 通过用户的id来获取用户对象本身。
@@ -256,15 +249,15 @@ public class ApiManager {
                 String str = convertStreamToString(is);
                 JSONObject resultJson = new JSONObject(str);
                 String result = resultJson.getString("result");
-                if(result.equals("failed")){
-                    String error = resultJson.getString("error");
-                    System.out.println("[Error] Get User process. Get User profile fail. Error Message:" + error);
-                    return null;
-                }else{
+                if(result.equals("succeed")){
                     String userString = resultJson.getString("user");
                     System.out.println(userString);
                     JSONObject userJson = new JSONObject(userString);
                     return parseUser(userJson);
+                }else{
+                    String error = resultJson.getString("error");
+                    System.out.println("[Error] Get User process. Get User profile fail. Error Message:" + error);
+                    return null;
                 }
             } else {
                 System.out.println("[Error] Update profile Process. Status Code:" +
@@ -319,15 +312,15 @@ public class ApiManager {
                 String str = convertStreamToString(is);
                 JSONObject resultJson = new JSONObject(str);
                 String result = resultJson.getString("result");
-                if(result.equals("failed")){
-                    String error = resultJson.getString("error");
-                    System.out.println("[Error] Publish Task process. Error Message:" + error);
-                    return null;
-                }else{
+                if(result.equals("succeed")){
                     String taskString = resultJson.getString("task");
                     System.out.println(taskString);
                     JSONObject taskJson = new JSONObject(taskString);
                     return parseTask(taskJson);
+                }else{
+                    String error = resultJson.getString("error");
+                    System.out.println("[Error] Publish Task process. Error Message:" + error);
+                    return null;
                 }
             }else{
                 System.out.println("[Error] Publish Task Process. Status Code:" +
@@ -366,15 +359,15 @@ public class ApiManager {
                 String str = convertStreamToString(is);
                 JSONObject resultJson = new JSONObject(str);
                 String result = resultJson.getString("result");
-                if(result.equals("failed")){
-                    String error = resultJson.getString("error");
-                    System.out.println("[Error] View Task process. Error Message:" + error);
-                    return null;
-                }else{
+                if(result.equals("succeed")){
                     String taskString = resultJson.getString("task");
                     System.out.println(taskString);
                     JSONObject taskJson = new JSONObject(taskString);
                     return parseTask(taskJson);
+                }else{
+                    String error = resultJson.getString("error");
+                    System.out.println("[Error] View Task process. Error Message:" + error);
+                    return null;
                 }
             }else{
                 System.out.println("[Error] View Task Process. Status Code:" +
@@ -428,15 +421,15 @@ public class ApiManager {
                 String str = convertStreamToString(is);
                 JSONObject resultJson = new JSONObject(str);
                 String result = resultJson.getString("result");
-                if(result.equals("failed")){
-                    String error = resultJson.getString("error");
-                    System.out.println("[Error] Edit Task process. Error Message:" + error);
-                    return null;
-                }else{
+                if(result.equals("succeed")){
                     String taskString = resultJson.getString("task");
                     System.out.println(taskString);
                     JSONObject taskJson = new JSONObject(taskString);
                     return parseTask(taskJson);
+                }else{
+                    String error = resultJson.getString("error");
+                    System.out.println("[Error] Edit Task process. Error Message:" + error);
+                    return null;
                 }
             }else{
                 System.out.println("[Error] Edit Task Process. Status Code:" +
@@ -479,12 +472,12 @@ public class ApiManager {
                 String str = convertStreamToString(is);
                 JSONObject resultJson = new JSONObject(str);
                 String result = resultJson.getString("result");
-                if(result.equals("failed")){
+                if(result.equals("succeed")){
+                    return "succeed";
+                }else{
                     String error = resultJson.getString("error");
                     System.out.println("[Error] Accept Task process. Error Message:" + error);
                     return error;
-                }else{
-                    return "success";
                 }
             }else{
                 System.out.println("[Error] Accept Task Process. Status Code:" +
@@ -527,12 +520,12 @@ public class ApiManager {
                 String str = convertStreamToString(is);
                 JSONObject resultJson = new JSONObject(str);
                 String result = resultJson.getString("result");
-                if(result.equals("failed")){
+                if(result.equals("succeed")){
+                    return "succeed";
+                }else{
                     String error = resultJson.getString("error");
                     System.out.println("[Error] Done Task process. Error Message:" + error);
                     return error;
-                }else{
-                    return "success";
                 }
             }else{
                 System.out.println("[Error] Done Task Process. Status Code:" +
@@ -575,12 +568,12 @@ public class ApiManager {
                 String str = convertStreamToString(is);
                 JSONObject resultJson = new JSONObject(str);
                 String result = resultJson.getString("result");
-                if(result.equals("failed")){
+                if(result.equals("succeed")){
+                    return "succeed";
+                }else{
                     String error = resultJson.getString("error");
                     System.out.println("[Error] Cancel Task process. Error Message:" + error);
                     return error;
-                }else{
-                    return "success";
                 }
             }else{
                 System.out.println("[Error] Cancel Task Process. Status Code:" +
@@ -598,7 +591,6 @@ public class ApiManager {
             return null;
         }
     }
-
 
     /**
      * 解析Task数据
@@ -662,8 +654,6 @@ public class ApiManager {
                 credit,sex,avatorString,bioString);
         return returnUser;
     }
-
-
 
     /**
      * 本方法用于将字节流转化成字符串。

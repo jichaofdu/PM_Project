@@ -1,6 +1,5 @@
 package projectmanager.dada.util;
 
-import android.support.annotation.Nullable;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -454,8 +453,6 @@ public class ApiManager {
             e.printStackTrace();
             return null;
         }
-
-        return null;
     }
 
     /**

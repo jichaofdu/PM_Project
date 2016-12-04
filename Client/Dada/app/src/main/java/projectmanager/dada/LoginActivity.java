@@ -25,7 +25,7 @@ import projectmanager.dada.util.DataManager;
 
 public class LoginActivity extends AppCompatActivity{
 
-    private UserLoginTask loginTask = null;
+    private UserLoginTask loginTask;
     private EditText      phoneView;
     private EditText      passwordView;
     private View          progressView;

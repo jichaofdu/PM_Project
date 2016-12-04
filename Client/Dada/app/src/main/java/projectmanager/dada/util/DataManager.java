@@ -2,6 +2,7 @@ package projectmanager.dada.util;
 
 import java.util.HashMap;
 
+import projectmanager.dada.model.Location;
 import projectmanager.dada.model.Task;
 import projectmanager.dada.model.User;
 
@@ -29,6 +30,9 @@ public class DataManager {
 
     //用户附近的任务列表。Entry中Integer是taskId。
     private HashMap<Integer,Task> myNearbyList;
+
+    //新任务的位置
+    private Location location;
 
     private DataManager(){
         currentUser = null;
@@ -65,4 +69,11 @@ public class DataManager {
         this.loginErrorMesssage = loginErrorMesssage;
     }
 
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 }

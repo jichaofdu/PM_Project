@@ -37,4 +37,5 @@ dependencies {
     compile 'com.android.support:design:25.0.0'
     testCompile 'junit:junit:4.12'
     compile files('libs/AMap2DMap_2.9.2_AMapSearch_3.6.1_AMapLocation_3.1.0_20161122.jar')
+
 }

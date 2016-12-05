@@ -30,7 +30,7 @@ public class PublishTaskStepTwoActivity extends AppCompatActivity {
                 //// TODO: 2016/11/27
                 //   将获取到的用户的输入信息存放在DataManager中，留作后用
 
-                finish();
+//                finish();
                 Intent nextPage = new Intent(PublishTaskStepTwoActivity.this,PublishTaskStepThreeActivity.class);
                 startActivity(nextPage);
             }

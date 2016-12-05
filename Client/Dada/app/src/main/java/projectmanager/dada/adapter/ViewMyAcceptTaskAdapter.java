@@ -7,13 +7,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import java.util.List;
+import projectmanager.dada.R;
 import projectmanager.dada.model.Task;
 
 /**
  * jichao at 2016/12/03
  * 用来将任务集显示在手机上的adapter
  */
-public class ViewTaskAdapter extends ArrayAdapter<Task> {
+public class ViewMyAcceptTaskAdapter extends ArrayAdapter<Task> {
 
     int resourceId;
 
@@ -23,8 +24,9 @@ public class ViewTaskAdapter extends ArrayAdapter<Task> {
      * @param textViewResourceId ListView的子项布局id
      * @param tasks              要适配的数据
      */
-    public ViewTaskAdapter(Context context, int textViewResourceId, List<Task> tasks){
+    public ViewMyAcceptTaskAdapter(Context context, int textViewResourceId, List<Task> tasks){
         super(context,textViewResourceId,tasks);
+        System.out.println("Adapter构建成功");
         resourceId = textViewResourceId;
     }
 
@@ -35,27 +37,22 @@ public class ViewTaskAdapter extends ArrayAdapter<Task> {
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        System.out.println("Get View方法进入");
         Task task = getItem(position);//获得当前项的Task实例
         //为子项动态加载布局
         View view = LayoutInflater.from(getContext()).inflate(resourceId, null);//子项的view
-        TextView titleView;
-        TextView descriptionView;
-        TextView publisherView;
-        TextView publishTimeView;
-        TextView deadlineView;
-        TextView locationView;
-        TextView statusView;
-        TextView creditView;
-        TextView accepterView;
-
-//        ImageView fruitName = (ImageView) view.findViewById(R.id.fruid_image);
-//        TextView fruitName = (TextView) view.findViewById(R.id.fruit_name);
-//        fruitImage.setImageResource(fruit.getImageId());
-//        fruitName.setText(fruit.getName());
-
+        TextView titleView = (TextView) view.findViewById(R.id.my_accept_task_title);
+        titleView.setText(task.getTitle());
+        TextView descriptionView = (TextView)view.findViewById(R.id.my_accept_task_content);
+        descriptionView.setText(task.getDescription());
+//        TextView publisherView;
+//        TextView publishTimeView;
+//        TextView deadlineView;
+//        TextView locationView;
+//        TextView statusView;
+//        TextView creditView;
         return view;
     }
-
 
 
 }

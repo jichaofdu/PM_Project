@@ -22,6 +22,16 @@ public enum SexType {
     public String getName() {
         return name;
     }
+
+    public static String getTypeBySexId(int sexId){
+        SexType[] sexTypes = SexType.values();
+        for(SexType sex : sexTypes){
+            if(sex.getCode() == sexId){
+                return sex.getName();
+            }
+        }
+        return sexTypes[0].getName();
+    }
 }
 
 

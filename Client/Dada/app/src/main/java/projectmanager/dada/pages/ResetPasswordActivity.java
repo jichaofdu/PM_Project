@@ -3,10 +3,10 @@ package projectmanager.dada.pages;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.support.v7.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -15,8 +15,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import projectmanager.dada.R;
-import projectmanager.dada.model.User;
 import projectmanager.dada.util.ApiManager;
 import projectmanager.dada.util.DataManager;
 
@@ -147,8 +147,8 @@ public class ResetPasswordActivity extends AppCompatActivity{
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            ApiManager apiManager = new ApiManager();
-            resetResult = apiManager.handleChangePassword(userId,oldPassword,newPassword);
+//            ApiManager apiManager = new ApiManager();
+            resetResult = ApiManager.getInstance().handleChangePassword(userId,oldPassword,newPassword);
             if(!resetResult.equals("succeed")){
                 System.out.println("[Tip] Change Password Fail.");
                 return false;

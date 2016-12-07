@@ -5,18 +5,21 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ListView;;
+import android.widget.ListView;
+
 import java.util.ArrayList;
-import java.util.List;
+
 import projectmanager.dada.R;
 import projectmanager.dada.adapter.ViewMyPublishTaskAdapter;
 import projectmanager.dada.model.Task;
 import projectmanager.dada.model.User;
 import projectmanager.dada.util.ApiManager;
 import projectmanager.dada.util.DataManager;
+
+;
 
 public class MyPublishTaskActivity extends AppCompatActivity {
 
@@ -94,8 +97,8 @@ public class MyPublishTaskActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            ApiManager apiManager = new ApiManager();
-            ArrayList<Task> acceptList = apiManager.handleGetPublishTasks(nowLoginUser.getUserId(),
+//            ApiManager apiManager = new ApiManager();
+            ArrayList<Task> acceptList = ApiManager.getInstance().handleGetPublishTasks(nowLoginUser.getUserId(),
                     0,10);
             if(acceptList == null || acceptList.isEmpty()){
                 System.out.println("[Tip] Get My publish task set fail. Empty Set.");

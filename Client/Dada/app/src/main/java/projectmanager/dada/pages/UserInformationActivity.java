@@ -4,16 +4,23 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+
 import projectmanager.dada.R;
 import projectmanager.dada.model.SexType;
 import projectmanager.dada.model.User;
 import projectmanager.dada.util.DataManager;
+import projectmanager.dada.util.MPoPuWindow;
 
 /**
  * Created by JScarlet on 2016/12/6.
@@ -25,6 +32,15 @@ public class UserInformationActivity extends Activity {
     private TextView sex;
     private TextView phone;
     private TextView bio;
+    private Type type;
+    private MPoPuWindow puWindow;
+    private File file;
+    private Uri ImgUri;
+
+    public enum Type {
+        PHONE, CAMERA
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +83,23 @@ public class UserInformationActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(UserInformationActivity.this, "click the avatar view", Toast.LENGTH_SHORT).show();
+                puWindow = new MPoPuWindow(UserInformationActivity.this, UserInformationActivity.this);
+                puWindow.showPopupWindow(findViewById(R.id.avatarLayout));
+                puWindow.setOnGetTypeClckListener(new MPoPuWindow.onGetTypeClckListener() {
+
+                    @Override
+                    public void getType(Type type) {
+                        UserInformationActivity.this.type = type;
+                    }
+
+
+                    @Override
+                    public void getImgUri(Uri ImgUri, File file) {
+                        UserInformationActivity.this.ImgUri = ImgUri;
+                        UserInformationActivity.this.file = file;
+                    }
+                });
+
             }
         });
 
@@ -126,5 +159,34 @@ public class UserInformationActivity extends Activity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e("requestCode", type + "");
+        if (requestCode == 1) {
+            if (ImgUri != null) {
+                puWindow.onPhoto(ImgUri, 300, 300);
+            }
+        } else if (requestCode == 2) {
+            if (data != null) {
+                Uri uri = data.getData();
+                puWindow.onPhoto(uri, 300, 300);
+            }
+        } else if (requestCode == 3) {
+            if (type == Type.PHONE) {
+                if (data != null) {
+                    Bundle extras = data.getExtras();
+                    Bitmap bitmap = (Bitmap) extras.get("data");
+                    if (bitmap != null) {
+                        avatar.setImageBitmap(bitmap);
+                    }
+                }
+            } else if (type == Type.CAMERA) {
+                avatar.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
+            }
+        }
     }
 }

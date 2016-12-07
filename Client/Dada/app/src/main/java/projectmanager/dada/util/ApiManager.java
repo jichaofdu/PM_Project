@@ -25,6 +25,13 @@ import projectmanager.dada.model.User;
  * 和服务器相关联的相关接口均在此类中完成。
  */
 public class ApiManager {
+    private static ApiManager instance = null;
+    public static ApiManager getInstance(){
+        if(instance == null){
+            instance = new ApiManager();
+        }
+        return instance;
+    }
 
 
     /*************************************************************************************

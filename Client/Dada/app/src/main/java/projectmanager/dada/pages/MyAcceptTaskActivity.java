@@ -94,8 +94,8 @@ public class MyAcceptTaskActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            ApiManager apiManager = new ApiManager();
-            ArrayList<Task> acceptList = apiManager.handleGetAcceptTasks(nowLoginUser.getUserId(),
+//            ApiManager apiManager = new ApiManager();
+            ArrayList<Task> acceptList = ApiManager.getInstance().handleGetAcceptTasks(nowLoginUser.getUserId(),
                     0,10);
             if(acceptList == null || acceptList.isEmpty()){
                 System.out.println("[Tip] Get My accept task set fail. Empty Set.");

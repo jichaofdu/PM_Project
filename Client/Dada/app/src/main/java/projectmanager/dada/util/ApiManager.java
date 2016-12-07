@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -406,37 +407,38 @@ public class ApiManager {
 
     /**
      * 发布新任务的接口
-     * @param title        任务标题
-     * @param description  任务描述
-     * @param userId       发布者id
-     * @param deadline     截止时间
-     * @param longitude    地点经纬度
-     * @param latitude     地点经纬度
-     * @param locationDscp 地点描述
-     * @param tags         标签
-     * @param credit       信用
+     * @param task   发布的任务
      * @return             返回新创建的任务对象本身
      */
-    public Task handlePublishTask(String title, String description, int userId, Date deadline, double longitude, double latitude, String locationDscp, String[] tags, int credit){
+    public Task handlePublishTask(Task task){
         try{
             HttpClient client = new DefaultHttpClient();
             HttpPost request = new HttpPost("https://relay.nxtsysx.net/publishTask/");
             List<NameValuePair> postParameters = new ArrayList<>();
-            postParameters.add(new BasicNameValuePair("title", "" + title));
-            postParameters.add(new BasicNameValuePair("description", description));
-            postParameters.add(new BasicNameValuePair("userId", "" + userId));
-            postParameters.add(new BasicNameValuePair("deadline", "" + deadline.toString()));
-            postParameters.add(new BasicNameValuePair("longitude", "" + longitude));
-            postParameters.add(new BasicNameValuePair("latitude", "" + latitude));
-            postParameters.add(new BasicNameValuePair("locationDscp", "" + longitude));
+            postParameters.add(new BasicNameValuePair("title", "" + task.getTitle()));
+            postParameters.add(new BasicNameValuePair("description", task.getDescription()));
+            postParameters.add(new BasicNameValuePair("userId", "" + task.getPublisher().getUserId()));
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            postParameters.add(new BasicNameValuePair("deadline", "" + sdf.format(task.getDeadline())));
+            postParameters.add(new BasicNameValuePair("longitude", "" + task.getLocation().getLongitude()));
+            postParameters.add(new BasicNameValuePair("latitude", "" + task.getLocation().getLatitude()));
+            postParameters.add(new BasicNameValuePair("locationDscp", "" + task.getLocation().getDescription()));
 
-            JSONArray tagsJsonArr = new JSONArray(tags);
+            JSONArray tagsJsonArr = new JSONArray(task.getTags());
             postParameters.add(new BasicNameValuePair("tags", tagsJsonArr.toString()));
-
-            postParameters.add(new BasicNameValuePair("credit", "" + credit));
+            postParameters.add(new BasicNameValuePair("credit", "" + task.getCredit()));
             UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
             request.setEntity(formEntity);
+            System.out.println(tagsJsonArr.toString());
             System.out.println(request.getURI().toASCIIString());
+            BufferedReader reader = new BufferedReader(new InputStreamReader(formEntity.getContent(), "UTF-8"));
+            StringBuffer sb = new StringBuffer();
+            String s = "";
+            while ((s = reader.readLine()) != null)
+            {
+                sb.append(s).append("\n");
+            }
+            System.out.println(sb.toString());
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {
                 InputStream is = response.getEntity().getContent();

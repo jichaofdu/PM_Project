@@ -1,5 +1,6 @@
 package projectmanager.dada.model;
 
+
 import java.util.Date;
 
 public class Task {
@@ -8,7 +9,7 @@ public class Task {
     private String   title;
     private String   description;
     private User     publisher;
-    private Date     publishedTime;
+    private Date publishedTime;
     private Date     deadline;
     private Location location;
     private String[] tags;
@@ -29,6 +30,8 @@ public class Task {
         this.credit = credit;
         this.accepter = accepter;
     }
+
+    public Task(){}
 
     public int getTaskId() {
         return taskId;
@@ -100,6 +103,14 @@ public class Task {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public int getCredit() {
+        return credit;
+    }
+
+    public void setCredit(int credit) {
+        this.credit = credit;
     }
 
     public User getAccepter() {

@@ -22,6 +22,7 @@ import com.amap.api.maps2d.model.MarkerOptions;
 import projectmanager.dada.CheckPermissionsActivity;
 import projectmanager.dada.R;
 import projectmanager.dada.model.Location;
+import projectmanager.dada.model.Task;
 import projectmanager.dada.util.DataManager;
 
 /**
@@ -54,6 +55,23 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
         mMap.setMyLocationEnabled(true);// 可触发定位并显示定位层
         initLocation();
 
+        mMap.setOnMapClickListener(new AMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                if (marker == null) {
+                    marker = mMap.addMarker(new MarkerOptions().position(latLng));
+                } else {
+                    marker.setPosition(latLng);
+                }
+                Location location = new Location();
+                location.setLatitude(latLng.latitude);
+                location.setLongitude(latLng.longitude);
+                Task task = new Task();
+                task.setLocation(location);
+                DataManager.getInstance().setNewTask(task);
+            }
+        });
+
         stepOneFinishButton = (Button) findViewById(R.id.first_step_finish_button);
         stepOneFinishButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +81,7 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
                 //// TODO: 2016/11/27
                 //  将从地图上选到的地址信息，存放在DataManager中。留作后用。
                 //然后跳转到第二步的页面中
-                if (DataManager.getInstance().getLocation() != null) {
+                if (DataManager.getInstance().getNewTask().getLocation() != null) {
 
 //                    finish();
                     Intent nextPage = new Intent(PublishTaskStepOneActivity.this, PublishTaskStepTwoActivity.class);
@@ -97,7 +115,7 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
         //设置是否允许模拟位置,默认为false，不允许模拟位置
         mLocationOption.setMockEnable(false);
         //设置定位间隔,单位毫秒,默认为2000ms
-        mLocationOption.setInterval(100);
+        mLocationOption.setInterval(1000);
         //给定位客户端对象设置定位参数
         mLocationClient.setLocationOption(mLocationOption);
         //启动定位
@@ -109,9 +127,7 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
         super.onDestroy();
         mMapView.onDestroy();
         mLocationClient.onDestroy();
-        DataManager.getInstance().setLocation(null);
-        mLocationClient = null;
-        mLocationOption = null;
+        DataManager.getInstance().getNewTask().setLocation(null);
     }
 
     @Override
@@ -159,20 +175,7 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
                     LatLng latLng = new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude());
                     mMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
                     mMap.moveCamera(CameraUpdateFactory.zoomTo(17));
-                    mMap.setOnMapClickListener(new AMap.OnMapClickListener() {
-                        @Override
-                        public void onMapClick(LatLng latLng) {
-                            if (marker == null) {
-                                marker = mMap.addMarker(new MarkerOptions().position(latLng));
-                            } else {
-                                marker.setPosition(latLng);
-                            }
-                            Location location = new Location();
-                            location.setLatitude(latLng.latitude);
-                            location.setLongitude(latLng.longitude);
-                            DataManager.getInstance().setLocation(location);
-                        }
-                    });
+
                     myLatLng = latLng;
                     isFirstLoc = false;
                 }

@@ -31,8 +31,8 @@ public class DataManager {
     //用户附近的任务列表。Entry中Integer是taskId。
     private HashMap<Integer,Task> myNearbyList;
 
-    //新任务的位置
-    private Location location;
+    //新任务
+    private Task newTask;
 
     private DataManager(){
         currentUser = null;
@@ -69,11 +69,11 @@ public class DataManager {
         this.loginErrorMesssage = loginErrorMesssage;
     }
 
-    public Location getLocation() {
-        return location;
+    public Task getNewTask() {
+        return newTask;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setNewTask(Task newTask) {
+        this.newTask = newTask;
     }
 }

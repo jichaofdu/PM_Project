@@ -9,7 +9,7 @@ public class Task {
     private String   title;
     private String   description;
     private User     publisher;
-    private Date publishedTime;
+    private Date     publishedTime;
     private Date     deadline;
     private Location location;
     private String[] tags;

@@ -4,6 +4,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -57,7 +58,6 @@ public class ApiManager {
             postParameters.add(new BasicNameValuePair("password", password));
             UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
             request.setEntity(formEntity);
-            System.out.println(request.getURI().toASCIIString());
             HttpResponse response = client.execute(request);
 
             if (response.getStatusLine().getStatusCode() == 200) {
@@ -67,7 +67,6 @@ public class ApiManager {
                 String result = resultJson.getString("result");
                 if (result.equals("succeed")) {
                     String userString = resultJson.getString("user");
-                    System.out.println(userString);
                     JSONObject userJson = new JSONObject(userString);
                     return parseUser(userJson);
                 } else {
@@ -116,7 +115,6 @@ public class ApiManager {
             postParameters.add(new BasicNameValuePair("password", password));
             UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
             request.setEntity(formEntity);
-            System.out.println(request.getURI().toASCIIString());
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {
                 InputStream is = response.getEntity().getContent();
@@ -125,7 +123,6 @@ public class ApiManager {
                 String result = resultJson.getString("result");
                 if(result.equals("succeed")){
                     String userString = resultJson.getString("user");
-                    System.out.println(userString);
                     JSONObject userJson = new JSONObject(userString);
                     return parseUser(userJson);
                 }else{
@@ -173,7 +170,6 @@ public class ApiManager {
             postParameters.add(new BasicNameValuePair("newPassword", newPassword));
             UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
             request.setEntity(formEntity);
-            System.out.println(request.getURI().toASCIIString());
             HttpResponse response = client.execute(request);
             if(response.getStatusLine().getStatusCode() == 200) {
                 InputStream is = response.getEntity().getContent();
@@ -223,8 +219,8 @@ public class ApiManager {
             postParameters.add(new BasicNameValuePair("avatar", "" + avator));
             postParameters.add(new BasicNameValuePair("bio", "" + bio));
             UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
+            formEntity.setContentEncoding("UTF-8");
             request.setEntity(formEntity);
-            System.out.println(request.getURI().toASCIIString());
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {
                 InputStream is = response.getEntity().getContent();
@@ -233,7 +229,6 @@ public class ApiManager {
                 String result = resultJson.getString("result");
                 if(result.equals("succeed")){
                     String userString = resultJson.getString("user");
-                    System.out.println(userString);
                     JSONObject userJson = new JSONObject(userString);
                     return parseUser(userJson);
                 }else{
@@ -266,12 +261,7 @@ public class ApiManager {
     public User handleGetUserById(int userId){
         try {
             HttpClient client = new DefaultHttpClient();
-            HttpPost request = new HttpPost("https://relay.nxtsysx.net/getUser/");
-            List<NameValuePair> postParameters = new ArrayList<>();
-            postParameters.add(new BasicNameValuePair("userId", "" + userId));
-            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
-            request.setEntity(formEntity);
-            System.out.println(request.getURI().toASCIIString());
+            HttpGet request = new HttpGet("https://relay.nxtsysx.net/getUser?userId=" + userId);
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {
                 InputStream is = response.getEntity().getContent();
@@ -280,7 +270,6 @@ public class ApiManager {
                 String result = resultJson.getString("result");
                 if(result.equals("succeed")){
                     String userString = resultJson.getString("user");
-                    System.out.println(userString);
                     JSONObject userJson = new JSONObject(userString);
                     return parseUser(userJson);
                 }else{
@@ -322,14 +311,8 @@ public class ApiManager {
     public ArrayList<Task> handleGetPublishTasks(int userId,int selectedStatus,int limit){
         try{
             HttpClient client = new DefaultHttpClient();
-            HttpPost request = new HttpPost("https://relay.nxtsysx.net/getPublishedTasks/");
-            List<NameValuePair> postParameters = new ArrayList<>();
-            postParameters.add(new BasicNameValuePair("userId", "" + userId));
-            postParameters.add(new BasicNameValuePair("status", "" + selectedStatus));
-            postParameters.add(new BasicNameValuePair("limit", "" + limit));
-            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
-            request.setEntity(formEntity);
-            System.out.println(request.getURI().toASCIIString());
+            HttpGet request = new HttpGet("https://relay.nxtsysx.net/getPublishedTasks?userId=" + userId
+                                        +"&status=" + selectedStatus + "&limit=" + limit);
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {
                 InputStream is = response.getEntity().getContent();
@@ -369,14 +352,8 @@ public class ApiManager {
     public ArrayList<Task> handleGetAcceptTasks(int userId,int selectedStatus,int limit){
         try{
             HttpClient client = new DefaultHttpClient();
-            HttpPost request = new HttpPost("https://relay.nxtsysx.net/getAcceptedTasks/");
-            List<NameValuePair> postParameters = new ArrayList<>();
-            postParameters.add(new BasicNameValuePair("userId", "" + userId));
-            postParameters.add(new BasicNameValuePair("status", "" + selectedStatus));
-            postParameters.add(new BasicNameValuePair("limit", "" + limit));
-            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
-            request.setEntity(formEntity);
-            System.out.println(request.getURI().toASCIIString());
+            HttpGet request = new HttpGet("https://relay.nxtsysx.net/getAcceptedTasks?userId=" + userId
+                    + "&status=" + selectedStatus + "&limit=" + limit);
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {
                 InputStream is = response.getEntity().getContent();
@@ -424,22 +401,18 @@ public class ApiManager {
             postParameters.add(new BasicNameValuePair("longitude", "" + task.getLocation().getLongitude()));
             postParameters.add(new BasicNameValuePair("latitude", "" + task.getLocation().getLatitude()));
             postParameters.add(new BasicNameValuePair("locationDscp", "" + task.getLocation().getDescription()));
-
             JSONArray tagsJsonArr = new JSONArray(task.getTags());
+            //postParameters.add(new BasicNameValuePair("tags", ""));
             postParameters.add(new BasicNameValuePair("tags", tagsJsonArr.toString()));
             postParameters.add(new BasicNameValuePair("credit", "" + task.getCredit()));
             UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
             request.setEntity(formEntity);
-            System.out.println(tagsJsonArr.toString());
-            System.out.println(request.getURI().toASCIIString());
             BufferedReader reader = new BufferedReader(new InputStreamReader(formEntity.getContent(), "UTF-8"));
             StringBuffer sb = new StringBuffer();
             String s = "";
-            while ((s = reader.readLine()) != null)
-            {
+            while ((s = reader.readLine()) != null) {
                 sb.append(s).append("\n");
             }
-            System.out.println(sb.toString());
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {
                 InputStream is = response.getEntity().getContent();
@@ -448,17 +421,15 @@ public class ApiManager {
                 String result = resultJson.getString("result");
                 if(result.equals("succeed")){
                     String taskString = resultJson.getString("task");
-                    System.out.println(taskString);
                     JSONObject taskJson = new JSONObject(taskString);
                     return parseTask(taskJson);
                 }else{
                     String error = resultJson.getString("error");
-                    System.out.println("[Error] Publish Task process. Error Message:" + error);
+                    System.out.println("[Error] Publish Task process.Status Code 200 But Error Message:" + error);
                     return null;
                 }
             }else{
-                System.out.println("[Error] Publish Task Process. Status Code:" +
-                        response.getStatusLine().getStatusCode());
+                System.out.println("[Error] Publish Task Process. Status Code:" + response.getStatusLine().getStatusCode());
                 return null;
             }
         }catch (JSONException e){
@@ -481,12 +452,7 @@ public class ApiManager {
     public Task handleGetTaskById(int taskId){
         try{
             HttpClient client = new DefaultHttpClient();
-            HttpPost request = new HttpPost("https://relay.nxtsysx.net/viewTask/");
-            List<NameValuePair> postParameters = new ArrayList<>();
-            postParameters.add(new BasicNameValuePair("taskId", "" + taskId));
-            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
-            request.setEntity(formEntity);
-            System.out.println(request.getURI().toASCIIString());
+            HttpGet request = new HttpGet("https://relay.nxtsysx.net/viewTask?taskId=" + taskId);
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {
                 InputStream is = response.getEntity().getContent();
@@ -495,7 +461,7 @@ public class ApiManager {
                 String result = resultJson.getString("result");
                 if(result.equals("succeed")){
                     String taskString = resultJson.getString("task");
-                    System.out.println(taskString);
+                    System.out.println("[TaskString] " + taskString );
                     JSONObject taskJson = new JSONObject(taskString);
                     return parseTask(taskJson);
                 }else{
@@ -551,7 +517,6 @@ public class ApiManager {
 
             UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
             request.setEntity(formEntity);
-            System.out.println(request.getURI().toASCIIString());
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {
                 InputStream is = response.getEntity().getContent();
@@ -560,7 +525,6 @@ public class ApiManager {
                 String result = resultJson.getString("result");
                 if(result.equals("succeed")){
                     String taskString = resultJson.getString("task");
-                    System.out.println(taskString);
                     JSONObject taskJson = new JSONObject(taskString);
                     return parseTask(taskJson);
                 }else{
@@ -602,7 +566,6 @@ public class ApiManager {
             postParameters.add(new BasicNameValuePair("userId", "" + userId));
             UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
             request.setEntity(formEntity);
-            System.out.println(request.getURI().toASCIIString());
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {
                 InputStream is = response.getEntity().getContent();
@@ -650,7 +613,6 @@ public class ApiManager {
             postParameters.add(new BasicNameValuePair("userId", "" + userId));
             UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
             request.setEntity(formEntity);
-            System.out.println(request.getURI().toASCIIString());
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {
                 InputStream is = response.getEntity().getContent();
@@ -698,7 +660,6 @@ public class ApiManager {
             postParameters.add(new BasicNameValuePair("userId", "" + userId));
             UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
             request.setEntity(formEntity);
-            System.out.println(request.getURI().toASCIIString());
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {
                 InputStream is = response.getEntity().getContent();
@@ -806,7 +767,6 @@ public class ApiManager {
         String description = locationJson.getString("description");
         return new Location(0,longitude,latitude,description);
     }
-
 
 
     /**

@@ -94,7 +94,6 @@ public class MyAcceptTaskActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-//            ApiManager apiManager = new ApiManager();
             ArrayList<Task> acceptList = ApiManager.getInstance().handleGetAcceptTasks(nowLoginUser.getUserId(),
                     0,10);
             if(acceptList == null || acceptList.isEmpty()){

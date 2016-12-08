@@ -9,11 +9,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ListView;
-
 import java.util.ArrayList;
-
+import java.util.Date;
 import projectmanager.dada.R;
 import projectmanager.dada.adapter.ViewMyPublishTaskAdapter;
+import projectmanager.dada.model.Location;
 import projectmanager.dada.model.Task;
 import projectmanager.dada.model.User;
 import projectmanager.dada.util.ApiManager;
@@ -35,13 +35,44 @@ public class MyPublishTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_publish_task);
 
         myPublishTaskList = new ArrayList<>();
-        tryGetMyPublishTasks();
+
+
+        PublishTask publishTask = new PublishTask();
+        publishTask.execute((Void) null);
+
+
+//        tryGetMyPublishTasks();
 
         myPublishListView = (ListView) findViewById(R.id.my_publish_task_list_view);
         progressView = findViewById(R.id.get_my_publish_task_progress);
         myPublishTaskAdapter = new ViewMyPublishTaskAdapter(MyPublishTaskActivity.this,
                 R.layout.my_publish_task_view,myPublishTaskList);
         myPublishListView.setAdapter(myPublishTaskAdapter);
+    }
+
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     * -------------------------------------向服务器提交伪造的数据-------------------------------------
+     */
+    private void publishFakeDataToServer(){
+        for(int i = 0;i < 5;i++){
+            Task tempTask = new Task();
+            tempTask.setTitle("假数据");
+            tempTask.setDescription("这个是冀超伪造的假数据");
+            tempTask.setPublisher(DataManager.getInstance().getCurrentUser());
+            tempTask.setPublishedTime(new Date());
+            tempTask.setDeadline(new Date());
+            Location lo = new Location(0,5.0,6.0,"我也不知道这是哪里");
+            tempTask.setLocation(lo);
+            String[] tags = {"firstTag","secondTag","thirdTag"};
+            tempTask.setTags(tags);
+            tempTask.setStatus(0);
+            tempTask.setCredit(0);
+            tempTask.setAccepter(DataManager.getInstance().getCurrentUser());
+            //ApiManager.getInstance().handlePublishTask(tempTask);
+        }
+        Task task = ApiManager.getInstance().handleGetTaskById(31);
     }
 
     /**
@@ -125,6 +156,30 @@ public class MyPublishTaskActivity extends AppCompatActivity {
             getMyPublishSetTask = null;
             showProgress(false);
         }
+    }
+
+
+
+
+    public class PublishTask extends AsyncTask<Void, Void, Boolean> {
+
+        PublishTask() {
+
+        }
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            publishFakeDataToServer();
+            return true;
+        }
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (success) {
+            } else {
+            }
+        }
+
+        @Override
+        protected void onCancelled() { }
     }
 
 

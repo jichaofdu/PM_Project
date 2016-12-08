@@ -215,6 +215,7 @@ public class ApiManager {
         try {
             HttpClient client = new DefaultHttpClient();
             HttpPost request = new HttpPost("https://relay.nxtsysx.net/updateProfile/");
+            request.setHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
             List<NameValuePair> postParameters = new ArrayList<>();
             postParameters.add(new BasicNameValuePair("userId", "" + userId));
             postParameters.add(new BasicNameValuePair("username", username));
@@ -750,7 +751,7 @@ public class ApiManager {
         int sex = Integer.parseInt(sexString);
         String avatorString = userJson.optString("avatar");
         String bioString = userJson.getString("bio");
-        User returnUser = new User(userId,userPhoneString,passwordString,userUsernameString,
+        User returnUser = new User(userId,userPhoneString,userUsernameString,passwordString,
                 credit,sex,avatorString,bioString);
         return returnUser;
     }

@@ -28,7 +28,7 @@ class TestApi extends TestCase
 
     public function testChangePassword()
     {
-        $response = $this->call('POST', '/changePassword', ['userId' => '2', 'oldPassword' => 'test', 'newPassword' => 'newtest']);
+        $response = $this->call('POST', '/changePassword', ['userId' => '2', 'oldPassword' => '123456', 'newPassword' => 'newtest']);
         echo $response;
     }
 
@@ -54,7 +54,7 @@ class TestApi extends TestCase
     {
         $response = $this->call('POST', '/publishTask', ['title' => 'test', 'description' => 'test', 'userId' => '2',
             'deadline' => "2016-12-01 00:00:00", 'longitude' => '0', 'latitude' => '0', 'locationDscp' => 'test',
-            'tags' => ["haha", "yoyo"]]);
+            'tags' => '["haha", "yoyo"]']);
         echo $response;
     }
 

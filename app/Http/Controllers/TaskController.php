@@ -39,6 +39,10 @@ class TaskController extends Controller
         $latitude = $request->input('latitude');
         $locationDscp = $request->input('locationDscp');
         $tags = $request->input('tags');
+
+        $tags = json_decode($tags);
+        var_dump($tags);
+
         $credit = $request->input('credit', 1);
 
         if (empty($title) || empty($description) || empty($userId)) {
@@ -53,9 +57,9 @@ class TaskController extends Controller
         $task->title = $title;
         $task->description = $description;
         $task->publisher_id = $userId;
-        $task->published_time = date("Y-m-d h:i:sa");
+        $task->published_time = date("Y-m-d H:i:s");
         if (!is_null($deadline)) {
-            $task->deadline = date("Y-m-d h:i:sa", strtotime($deadline));
+            $task->deadline = date("Y-m-d H:i:s", strtotime($deadline));
         }
         $task->longitude = $longitude;
         $task->latitude = $latitude;

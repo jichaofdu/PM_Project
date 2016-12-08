@@ -142,6 +142,8 @@ class UserController extends Controller
 
         try {
             $decrypted = Crypt::decrypt($user->password);
+            echo $decrypted . "\n";
+            echo $oldPassword . "\n";
             if ($decrypted == $oldPassword) {
                 $user->password = Crypt::encrypt($newPassword);
                 $user->save();

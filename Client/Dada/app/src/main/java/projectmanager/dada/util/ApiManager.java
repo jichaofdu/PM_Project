@@ -8,6 +8,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,7 +57,7 @@ public class ApiManager {
             List<NameValuePair> postParameters = new ArrayList<>();
             postParameters.add(new BasicNameValuePair("phone", phone));
             postParameters.add(new BasicNameValuePair("password", password));
-            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters,HTTP.UTF_8);
             request.setEntity(formEntity);
             HttpResponse response = client.execute(request);
 
@@ -113,7 +114,7 @@ public class ApiManager {
             postParameters.add(new BasicNameValuePair("phone", phone));
             postParameters.add(new BasicNameValuePair("username", username));
             postParameters.add(new BasicNameValuePair("password", password));
-            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters,HTTP.UTF_8);
             request.setEntity(formEntity);
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {
@@ -168,7 +169,7 @@ public class ApiManager {
             postParameters.add(new BasicNameValuePair("userId", "" + userId));
             postParameters.add(new BasicNameValuePair("oldPassword", oldPassword));
             postParameters.add(new BasicNameValuePair("newPassword", newPassword));
-            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters,HTTP.UTF_8);
             request.setEntity(formEntity);
             HttpResponse response = client.execute(request);
             if(response.getStatusLine().getStatusCode() == 200) {
@@ -218,9 +219,9 @@ public class ApiManager {
             postParameters.add(new BasicNameValuePair("sex", "" + sex));
             postParameters.add(new BasicNameValuePair("avatar", "" + avator));
             postParameters.add(new BasicNameValuePair("bio", "" + bio));
-            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
-            formEntity.setContentEncoding("UTF-8");
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters, HTTP.UTF_8);
             request.setEntity(formEntity);
+            System.out.println("[Tip]" +  convertStreamToString(request.getEntity().getContent()));
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {
                 InputStream is = response.getEntity().getContent();
@@ -405,7 +406,7 @@ public class ApiManager {
             //postParameters.add(new BasicNameValuePair("tags", ""));
             postParameters.add(new BasicNameValuePair("tags", tagsJsonArr.toString()));
             postParameters.add(new BasicNameValuePair("credit", "" + task.getCredit()));
-            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters,HTTP.UTF_8);
             request.setEntity(formEntity);
             BufferedReader reader = new BufferedReader(new InputStreamReader(formEntity.getContent(), "UTF-8"));
             StringBuffer sb = new StringBuffer();
@@ -515,7 +516,7 @@ public class ApiManager {
             JSONArray tagsJsonArr = new JSONArray(tags);
             postParameters.add(new BasicNameValuePair("tags", tagsJsonArr.toString()));
 
-            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters,HTTP.UTF_8);
             request.setEntity(formEntity);
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {
@@ -564,7 +565,7 @@ public class ApiManager {
             List<NameValuePair> postParameters = new ArrayList<>();
             postParameters.add(new BasicNameValuePair("taskId", "" + taskId));
             postParameters.add(new BasicNameValuePair("userId", "" + userId));
-            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters,HTTP.UTF_8);
             request.setEntity(formEntity);
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {
@@ -611,7 +612,7 @@ public class ApiManager {
             List<NameValuePair> postParameters = new ArrayList<>();
             postParameters.add(new BasicNameValuePair("taskId", "" + taskId));
             postParameters.add(new BasicNameValuePair("userId", "" + userId));
-            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters,HTTP.UTF_8);
             request.setEntity(formEntity);
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {
@@ -658,7 +659,7 @@ public class ApiManager {
             List<NameValuePair> postParameters = new ArrayList<>();
             postParameters.add(new BasicNameValuePair("taskId", "" + taskId));
             postParameters.add(new BasicNameValuePair("userId", "" + userId));
-            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters,HTTP.UTF_8);
             request.setEntity(formEntity);
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {

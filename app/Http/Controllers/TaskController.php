@@ -41,7 +41,7 @@ class TaskController extends Controller
         $tags = $request->input('tags');
 
         $tags = json_decode($tags);
-        var_dump($tags);
+        //var_dump($tags);
 
         $credit = $request->input('credit', 1);
 

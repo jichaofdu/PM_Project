@@ -74,7 +74,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/regist_action_regist"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:background="@color/dada_blue" />
 
             <Button
                 android:id="@+id/register_turn_login_button"
@@ -83,7 +85,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/regist_action_turn_to_login"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/dada_blue"
+                android:background="@color/transparent" />
 
         </LinearLayout>
     </ScrollView>

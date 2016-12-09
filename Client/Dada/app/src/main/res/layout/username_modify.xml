@@ -24,14 +24,16 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="该昵称仅用于展示，无法用于登录"
+            android:text="该昵称仅用于展示，无法用于登录哦"
             android:padding="12dip"/>
 
         <Button
             android:id="@+id/btn_save_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="保存" />
+            android:text="保存"
+            android:background="@color/dada_blue"
+            android:textColor="@color/white"/>
 
     </LinearLayout>
 

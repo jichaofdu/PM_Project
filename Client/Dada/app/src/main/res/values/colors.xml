@@ -64,4 +64,7 @@
     <color name="white">#ffffffff</color>
     <color name="white_60_alpha">#99ffffff</color>
     <color name="white_80_alpha">#bbffffff</color>
+    <color name="dada_blue">#009fd3</color>
+    <color name="dada_yellow">#ffd95a</color>
+    <!--<color name="dada_yellow">#e7c83c</color>-->
 </resources>

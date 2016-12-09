@@ -78,7 +78,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/step_two_input_credit"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true"
+        android:background="@color/dada_yellow"
+        android:textColor="@color/white"/>
 
 
     <Button
@@ -88,7 +90,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:background="@color/dada_blue"
+        android:textColor="@color/white"/>
 
 
 </RelativeLayout>

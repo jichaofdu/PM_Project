@@ -92,7 +92,6 @@ public class PublishTaskStepThreeActivity extends Activity {
                     s[i] = mTagListView.getCheckedTags().get(i).getTitle();
                 }
                 task.setTags(s);
-                task.getLocation().setDescription("here");
 
                 PublishTask publishTask = new PublishTask(task);
                 publishTask.execute((Void) null);

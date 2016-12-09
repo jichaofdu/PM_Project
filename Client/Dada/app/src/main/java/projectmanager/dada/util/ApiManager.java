@@ -1,5 +1,11 @@
 package projectmanager.dada.util;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -9,6 +15,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -409,23 +417,35 @@ public class ApiManager {
             UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters,HTTP.UTF_8);
             request.setEntity(formEntity);
             BufferedReader reader = new BufferedReader(new InputStreamReader(formEntity.getContent(), "UTF-8"));
-            StringBuffer sb = new StringBuffer();
-            String s = "";
-            while ((s = reader.readLine()) != null) {
-                sb.append(s).append("\n");
-            }
+//            StringBuffer sb = new StringBuffer();
+//            String s = "";
+//            while ((s = reader.readLine()) != null) {
+//                sb.append(s).append("\n");
+//            }
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {
+//                String str = EntityUtils.toString(response.getEntity());
                 InputStream is = response.getEntity().getContent();
                 String str = convertStreamToString(is);
-                JSONObject resultJson = new JSONObject(str);
-                String result = resultJson.getString("result");
+                System.out.println(str);
+//                Gson gson = new Gson();
+//                str = gson.toJson(is);
+                Gson gson = new GsonBuilder()
+                        .setDateFormat("yyyy-MM-dd HH:mm")
+                        .create();
+                JsonReader jsonReader = new JsonReader(new StringReader(str));
+                jsonReader.setLenient(true);
+                JsonObject resultJson = new JsonParser().parse(jsonReader).getAsJsonObject();
+//                JSONObject resultJson = new JSONObject(str);
+
+                String result = resultJson.get("result").getAsString();
                 if(result.equals("succeed")){
-                    String taskString = resultJson.getString("task");
-                    JSONObject taskJson = new JSONObject(taskString);
-                    return parseTask(taskJson);
+                    Task t = gson.fromJson(resultJson.get("task"), Task.class);
+//                    System.out.println(taskString);
+//                    JSONObject taskJson = new JSONObject(taskString);
+                    return t;
                 }else{
-                    String error = resultJson.getString("error");
+                    String error = resultJson.get("error").getAsString();
                     System.out.println("[Error] Publish Task process.Status Code 200 But Error Message:" + error);
                     return null;
                 }

@@ -3,7 +3,10 @@ package projectmanager.dada.pages;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -25,6 +28,7 @@ import projectmanager.dada.model.Location;
 import projectmanager.dada.model.Task;
 import projectmanager.dada.util.DataManager;
 
+
 /**
  * 发布任务步骤一
  */
@@ -41,6 +45,7 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
     private boolean isFirstLoc = true;//是否是第一次定位
     private Marker marker;//选择任务地点的标记
     private LatLng myLatLng = null;//当前位置经纬度，用于resume后恢复位置
+    private EditText search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +74,16 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
                 Task task = new Task();
                 task.setLocation(location);
                 DataManager.getInstance().setNewTask(task);
+            }
+        });
+        search = (EditText) findViewById(R.id.first_step_search);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                search.setHint(null);
+//                PopupWindow popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,true);
+//                popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.tag_bg));
+//                popupWindow.showAsDropDown(view);
             }
         });
 
@@ -127,7 +142,9 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
         super.onDestroy();
         mMapView.onDestroy();
         mLocationClient.onDestroy();
-        DataManager.getInstance().getNewTask().setLocation(null);
+        if (DataManager.getInstance().getNewTask() != null) {
+            DataManager.getInstance().getNewTask().setLocation(null);
+        }
     }
 
     @Override

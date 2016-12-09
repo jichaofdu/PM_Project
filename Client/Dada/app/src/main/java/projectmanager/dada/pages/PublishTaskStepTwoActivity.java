@@ -28,6 +28,7 @@ public class PublishTaskStepTwoActivity extends AppCompatActivity {
     private EditText inputTaskTitle;
     private EditText inputTaskContent;
     private Button deadline;
+    private EditText inputTaskLocation;
     private EditText inputTaskCredit;
     private Button   stepTwoFinishButton;
     private String dateString;
@@ -41,6 +42,7 @@ public class PublishTaskStepTwoActivity extends AppCompatActivity {
 
         inputTaskTitle = (EditText) findViewById(R.id.step_two_input_title);
         inputTaskContent = (EditText) findViewById(R.id.step_two_input_content);
+        inputTaskLocation = (EditText) findViewById(R.id.step_two_input_location);
         deadline = (Button) findViewById(R.id.step_two_deadline);
         inputTaskCredit = (EditText) findViewById(R.id.step_two_input_credit);
         stepTwoFinishButton = (Button) findViewById(R.id.step_two_ok_button);
@@ -73,6 +75,7 @@ public class PublishTaskStepTwoActivity extends AppCompatActivity {
                 //   将获取到的用户的输入信息存放在DataManager中，留作后用
                 String title = inputTaskTitle.getText().toString();
                 String content = inputTaskContent.getText().toString();
+                String locationDscp = inputTaskLocation.getText().toString();
                 Date date = calendar.getTime();
                 View focus = null;
                 boolean b = false;
@@ -85,6 +88,7 @@ public class PublishTaskStepTwoActivity extends AppCompatActivity {
                 task.setDescription(content);
                 task.setDeadline(date);
                 task.setCredit(credit);
+                task.getLocation().setDescription(locationDscp);
                 if (credit > DataManager.getInstance().getCurrentUser().getCredit()) {
                     inputTaskCredit.setError(getString(R.string.error_credit));
                     focus = inputTaskCredit;

@@ -24,7 +24,7 @@
         android:id="@+id/step_two_input_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+        android:inputType="text"
         android:ems="10"
         android:layout_marginTop="14dp"
         android:layout_below="@+id/step_two_title"
@@ -52,8 +52,8 @@
         android:layout_alignParentEnd="true" />
 
     <TextView
-        android:id="@+id/step_two_credit"
-        android:text="@string/second_step_credit"
+        android:id="@+id/step_two_location"
+        android:text="@string/locationDscp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/step_two_input_content"
@@ -62,10 +62,30 @@
 
     <EditText
         android:layout_marginTop="14dp"
-        android:id="@+id/step_two_input_credit"
+        android:id="@+id/step_two_input_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
+        android:ems="10"
+        android:layout_below="@+id/step_two_location"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/step_two_credit"
+        android:text="@string/second_step_credit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/step_two_input_location"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_marginTop="14dp"
+        android:id="@+id/step_two_input_credit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
         android:ems="10"
         android:layout_below="@+id/step_two_credit"
         android:layout_alignParentStart="true"

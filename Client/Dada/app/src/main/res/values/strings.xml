@@ -51,4 +51,6 @@
     <string name="error_credit">你的信誉值不足</string>
     <string name="add_tag">自定义标签</string>
     <string name="add_tag_button">增加标签</string>
+    <string name="locationDscp">请填写详细地址</string>
+    <string name="search_hint">输入地点</string>
 </resources>

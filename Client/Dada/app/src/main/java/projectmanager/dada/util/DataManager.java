@@ -1,8 +1,6 @@
 package projectmanager.dada.util;
 
 import java.util.HashMap;
-
-import projectmanager.dada.model.Location;
 import projectmanager.dada.model.Task;
 import projectmanager.dada.model.User;
 

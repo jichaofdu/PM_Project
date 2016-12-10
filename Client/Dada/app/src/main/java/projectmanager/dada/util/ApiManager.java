@@ -5,20 +5,18 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.json.JSONObject;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +24,6 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import projectmanager.dada.model.Location;
 import projectmanager.dada.model.Task;
@@ -91,14 +88,6 @@ public class ApiManager {
                         + response.getStatusLine().getStatusCode());
                 return null;
             }
-        }catch (JSONException e){
-            DataManager.getInstance().setLoginErrorMesssage("JSON Exception");
-            e.printStackTrace();
-            return null;
-        }catch (IOException e){
-            DataManager.getInstance().setLoginErrorMesssage("IO Exception");
-            e.printStackTrace();
-            return null;
         }catch (Exception e){
             DataManager.getInstance().setLoginErrorMesssage("Exception");
             e.printStackTrace();
@@ -147,14 +136,6 @@ public class ApiManager {
                         + response.getStatusLine().getStatusCode());
                 return null;
             }
-        }catch (JSONException e){
-            DataManager.getInstance().setRegisterErrorMessage("JSON Exception");
-            e.printStackTrace();
-            return null;
-        }catch (IOException e){
-            DataManager.getInstance().setRegisterErrorMessage("IO Exception");
-            e.printStackTrace();
-            return null;
         }catch (Exception e){
             DataManager.getInstance().setRegisterErrorMessage("Exception");
             e.printStackTrace();
@@ -195,12 +176,6 @@ public class ApiManager {
                         response.getStatusLine().getStatusCode());
                 return "failed";
             }
-        }catch (JSONException e){
-            e.printStackTrace();
-            return "failed";
-        }catch (IOException e){
-            e.printStackTrace();
-            return "failed";
         }catch (Exception e){
             e.printStackTrace();
             return "failed";
@@ -250,12 +225,6 @@ public class ApiManager {
                         response.getStatusLine().getStatusCode());
                 return null;
             }
-        }catch (JSONException e){
-            e.printStackTrace();
-            return null;
-        }catch (IOException e){
-            e.printStackTrace();
-            return null;
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -291,12 +260,6 @@ public class ApiManager {
                         response.getStatusLine().getStatusCode());
                 return null;
             }
-        }catch (JSONException e){
-            e.printStackTrace();
-            return null;
-        }catch (IOException e){
-            e.printStackTrace();
-            return null;
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -320,31 +283,33 @@ public class ApiManager {
     public ArrayList<Task> handleGetPublishTasks(int userId,int selectedStatus,int limit){
         try{
             HttpClient client = new DefaultHttpClient();
-            HttpGet request = new HttpGet("https://relay.nxtsysx.net/getPublishedTasks?userId=" + userId
-                                        +"&status=" + selectedStatus + "&limit=" + limit);
+            HttpGet request = new HttpGet("https://relay.nxtsysx.net/getPublishedTasks?userId=" + userId +"&status=" + selectedStatus);
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {
                 InputStream is = response.getEntity().getContent();
                 String str = convertStreamToString(is);
-                JSONArray taskJsonArray = new JSONArray(str);
-                ArrayList<Task> rtResultList = new ArrayList<>();
-                for(int i = 0;i < taskJsonArray.length();i++){
-                    JSONObject taskJson = (JSONObject)taskJsonArray.get(i);
-                    Task tempTask = parseTask(taskJson);
-                    rtResultList.add(tempTask);
+                JSONObject jsonObj = new JSONObject(str);
+                String result = jsonObj.getString("result");
+                if(result.equals("succeed")){
+                    String tasksString = jsonObj.getString("tasks");
+                    JSONArray taskJsonArray = new JSONArray(tasksString);
+                    ArrayList<Task> rtResultList = new ArrayList<>();
+                    for(int i = 0;i < taskJsonArray.length();i++){
+                        JSONObject taskJson = (JSONObject)taskJsonArray.get(i);
+                        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm").create();
+                        Task tempTask = gson.fromJson(taskJson.toString(), Task.class);
+                        rtResultList.add(tempTask);
+                    }
+                    return rtResultList;
+                }else{
+                    System.out.println("[Error] Get My Publish Task Process Fail. Error:" + jsonObj.getString("error"));
+                    return null;
                 }
-                return rtResultList;
             }else{
                 System.out.println("[Error] Get My Publish Task Process. Status Code:" +
                         response.getStatusLine().getStatusCode());
                 return null;
             }
-        }catch (JSONException e){
-            e.printStackTrace();
-            return null;
-        }catch (IOException e){
-            e.printStackTrace();
-            return null;
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -367,25 +332,28 @@ public class ApiManager {
             if (response.getStatusLine().getStatusCode() == 200) {
                 InputStream is = response.getEntity().getContent();
                 String str = convertStreamToString(is);
-                JSONArray taskJsonArray = new JSONArray(str);
-                ArrayList<Task> rtResultList = new ArrayList<>();
-                for(int i = 0;i < taskJsonArray.length();i++){
-                    JSONObject taskJson = (JSONObject)taskJsonArray.get(i);
-                    Task tempTask = parseTask(taskJson);
-                    rtResultList.add(tempTask);
+                JSONObject jsonObj = new JSONObject(str);
+                String result = jsonObj.getString("result");
+                if(result.equals("succeed")){
+                    String tasksString = jsonObj.getString("tasks");
+                    JSONArray taskJsonArray = new JSONArray(tasksString);
+                    ArrayList<Task> rtResultList = new ArrayList<>();
+                    for(int i = 0;i < taskJsonArray.length();i++){
+                        JSONObject taskJson = (JSONObject)taskJsonArray.get(i);
+                        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm").create();
+                        Task tempTask = gson.fromJson(taskJson.toString(), Task.class);
+                        rtResultList.add(tempTask);
+                    }
+                    return rtResultList;
+                }else{
+                    System.out.println("[Error] Get My Accept Task Process Fail. Error:" + jsonObj.getString("error"));
+                    return null;
                 }
-                return rtResultList;
             }else{
                 System.out.println("[Error] Get My Accepted Task Process. Status Code:" +
                         response.getStatusLine().getStatusCode());
                 return null;
             }
-        }catch (JSONException e){
-            e.printStackTrace();
-            return null;
-        }catch (IOException e){
-            e.printStackTrace();
-            return null;
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -411,38 +379,21 @@ public class ApiManager {
             postParameters.add(new BasicNameValuePair("latitude", "" + task.getLocation().getLatitude()));
             postParameters.add(new BasicNameValuePair("locationDscp", "" + task.getLocation().getDescription()));
             JSONArray tagsJsonArr = new JSONArray(task.getTags());
-            //postParameters.add(new BasicNameValuePair("tags", ""));
             postParameters.add(new BasicNameValuePair("tags", tagsJsonArr.toString()));
             postParameters.add(new BasicNameValuePair("credit", "" + task.getCredit()));
             UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters,HTTP.UTF_8);
             request.setEntity(formEntity);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(formEntity.getContent(), "UTF-8"));
-//            StringBuffer sb = new StringBuffer();
-//            String s = "";
-//            while ((s = reader.readLine()) != null) {
-//                sb.append(s).append("\n");
-//            }
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == 200) {
-//                String str = EntityUtils.toString(response.getEntity());
                 InputStream is = response.getEntity().getContent();
                 String str = convertStreamToString(is);
-                System.out.println(str);
-//                Gson gson = new Gson();
-//                str = gson.toJson(is);
-                Gson gson = new GsonBuilder()
-                        .setDateFormat("yyyy-MM-dd HH:mm")
-                        .create();
+                Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm").create();
                 JsonReader jsonReader = new JsonReader(new StringReader(str));
                 jsonReader.setLenient(true);
                 JsonObject resultJson = new JsonParser().parse(jsonReader).getAsJsonObject();
-//                JSONObject resultJson = new JSONObject(str);
-
                 String result = resultJson.get("result").getAsString();
                 if(result.equals("succeed")){
                     Task t = gson.fromJson(resultJson.get("task"), Task.class);
-//                    System.out.println(taskString);
-//                    JSONObject taskJson = new JSONObject(taskString);
                     return t;
                 }else{
                     String error = resultJson.get("error").getAsString();
@@ -453,12 +404,6 @@ public class ApiManager {
                 System.out.println("[Error] Publish Task Process. Status Code:" + response.getStatusLine().getStatusCode());
                 return null;
             }
-        }catch (JSONException e){
-            e.printStackTrace();
-            return null;
-        }catch (IOException e){
-            e.printStackTrace();
-            return null;
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -482,9 +427,10 @@ public class ApiManager {
                 String result = resultJson.getString("result");
                 if(result.equals("succeed")){
                     String taskString = resultJson.getString("task");
-                    System.out.println("[TaskString] " + taskString );
                     JSONObject taskJson = new JSONObject(taskString);
-                    return parseTask(taskJson);
+                    Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm").create();
+                    Task tempTask = gson.fromJson(taskJson.toString(), Task.class);
+                    return tempTask;
                 }else{
                     String error = resultJson.getString("error");
                     System.out.println("[Error] View Task process. Error Message:" + error);
@@ -495,12 +441,6 @@ public class ApiManager {
                         response.getStatusLine().getStatusCode());
                 return null;
             }
-        }catch (JSONException e){
-            e.printStackTrace();
-            return null;
-        }catch (IOException e){
-            e.printStackTrace();
-            return null;
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -508,33 +448,27 @@ public class ApiManager {
     }
 
     /**
-     * 修改任务信息的接口
-     * @param taskId       任务id
-     * @param title        标题
-     * @param description  任务描述
-     * @param userId       用户id
-     * @param deadline     截止日期
-     * @param longitude    经纬度
-     * @param latitude     经纬度
-     * @param locationDscp 地址描述*
-     * @param tags         任务标签
-     * @return             成功修改将返回对象，其它出错情况均返回null
+     * 任务背景介绍
+     * @param task 任务
+     * @return
      */
-    public Task handleEditTask(int taskId,String title,String description,int userId,Date deadline,double longitude,double latitude,String locationDscp,String[] tags){
+    public Task handleEditTask(Task task){
         try{
             HttpClient client = new DefaultHttpClient();
             HttpPost request = new HttpPost("https://relay.nxtsysx.net/editTask/");
-            List<NameValuePair> postParameters = new ArrayList<>();
-            postParameters.add(new BasicNameValuePair("taskId", "" + taskId));
-            postParameters.add(new BasicNameValuePair("title", "" + title));
-            postParameters.add(new BasicNameValuePair("description", "" + description));
-            postParameters.add(new BasicNameValuePair("deadline", "" + deadline));
-            postParameters.add(new BasicNameValuePair("longitude", "" + longitude));
-            postParameters.add(new BasicNameValuePair("latitude", "" + latitude));
-            postParameters.add(new BasicNameValuePair("locationDscp", "" + locationDscp));
 
-            JSONArray tagsJsonArr = new JSONArray(tags);
+            List<NameValuePair> postParameters = new ArrayList<>();
+            postParameters.add(new BasicNameValuePair("title", "" + task.getTitle()));
+            postParameters.add(new BasicNameValuePair("description", task.getDescription()));
+            postParameters.add(new BasicNameValuePair("userId", "" + task.getPublisher().getUserId()));
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            postParameters.add(new BasicNameValuePair("deadline", "" + sdf.format(task.getDeadline())));
+            postParameters.add(new BasicNameValuePair("longitude", "" + task.getLocation().getLongitude()));
+            postParameters.add(new BasicNameValuePair("latitude", "" + task.getLocation().getLatitude()));
+            postParameters.add(new BasicNameValuePair("locationDscp", "" + task.getLocation().getDescription()));
+            JSONArray tagsJsonArr = new JSONArray(task.getTags());
             postParameters.add(new BasicNameValuePair("tags", tagsJsonArr.toString()));
+            postParameters.add(new BasicNameValuePair("credit", "" + task.getCredit()));
 
             UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters,HTTP.UTF_8);
             request.setEntity(formEntity);
@@ -547,7 +481,9 @@ public class ApiManager {
                 if(result.equals("succeed")){
                     String taskString = resultJson.getString("task");
                     JSONObject taskJson = new JSONObject(taskString);
-                    return parseTask(taskJson);
+                    Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm").create();
+                    Task tempTask = gson.fromJson(taskJson.toString(), Task.class);
+                    return tempTask;
                 }else{
                     String error = resultJson.getString("error");
                     System.out.println("[Error] Edit Task process. Error Message:" + error);
@@ -558,12 +494,6 @@ public class ApiManager {
                         response.getStatusLine().getStatusCode());
                 return null;
             }
-        }catch (JSONException e){
-            e.printStackTrace();
-            return null;
-        }catch (IOException e){
-            e.printStackTrace();
-            return null;
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -605,12 +535,6 @@ public class ApiManager {
                         response.getStatusLine().getStatusCode());
                 return null;
             }
-        }catch (JSONException e){
-            e.printStackTrace();
-            return null;
-        }catch (IOException e){
-            e.printStackTrace();
-            return null;
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -652,12 +576,6 @@ public class ApiManager {
                         response.getStatusLine().getStatusCode());
                 return null;
             }
-        }catch (JSONException e){
-            e.printStackTrace();
-            return null;
-        }catch (IOException e){
-            e.printStackTrace();
-            return null;
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -699,12 +617,6 @@ public class ApiManager {
                         response.getStatusLine().getStatusCode());
                 return null;
             }
-        }catch (JSONException e){
-            e.printStackTrace();
-            return null;
-        }catch (IOException e){
-            e.printStackTrace();
-            return null;
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -738,44 +650,6 @@ public class ApiManager {
         return returnUser;
     }
 
-    /**
-     * 解析Task数据
-     */
-    public Task parseTask(JSONObject taskJson) throws JSONException{
-        String taskIdString = taskJson.getString("taskId");
-        int taskId = Integer.parseInt(taskIdString);
-        String titleString = taskJson.getString("title");
-        String descriptionString = taskJson.getString("description");
-        String publisherInfoString = taskJson.getString("publisher");
-        JSONObject userJson = new JSONObject(publisherInfoString);
-        User publisher = parseUser(userJson);
-        String publishedTimeString = taskJson.getString("publishedTime");
-        Date publishedTime = new Date(publishedTimeString);
-        String deadlineString = taskJson.getString("deadline");
-        Date deadlineTime = new Date(deadlineString);
-        String locationInfoString = taskJson.getString("location");
-        JSONObject locationJson = new JSONObject(locationInfoString);
-        Location loacation = parseLocation(locationJson);
-
-        String tagsInfoString = taskJson.getString("tags");
-        JSONArray arr = new JSONArray(tagsInfoString);
-        int length = arr.length();
-        String[] tags = new String[length];
-        for(int i = 0;i < length;i++){
-            tags[i] = arr.getString(i);
-        }
-
-        String creditString = taskJson.getString("credit");
-        int credit = Integer.parseInt(creditString);
-        String statusString = taskJson.getString("status");
-        int status = Integer.parseInt(statusString);
-        String accepterString = taskJson.getString("accepter");
-        JSONObject accepterJson = new JSONObject(accepterString);
-        User accepter = parseUser(accepterJson);
-        //todo tags和accepter暂时设置为null
-        return new Task(taskId,titleString,descriptionString,publisher,publishedTime,deadlineTime,loacation,
-                tags,credit,status,null);
-    }
 
     /**
      * 解析Locations数据

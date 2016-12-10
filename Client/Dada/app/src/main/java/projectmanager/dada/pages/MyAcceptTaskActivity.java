@@ -29,15 +29,10 @@ public class MyAcceptTaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_accept_task);
-
-        myAcceptTaskList = new ArrayList<>();
-        tryGetMyAcceptTasks();
-
         myAcceptListView = (ListView) findViewById(R.id.my_accept_task_list_view);
         progressView = findViewById(R.id.get_my_accept_task_progress);
-        myAcceptTaskAdapter = new ViewMyAcceptTaskAdapter(MyAcceptTaskActivity.this,
-                R.layout.my_accept_task_view,myAcceptTaskList);
-        myAcceptListView.setAdapter(myAcceptTaskAdapter);
+        myAcceptTaskList = new ArrayList<>();
+        tryGetMyAcceptTasks();
     }
 
     /**
@@ -94,6 +89,7 @@ public class MyAcceptTaskActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... voids) {
+            showProgress(true);
             ArrayList<Task> acceptList = ApiManager.getInstance().handleGetAcceptTasks(nowLoginUser.getUserId(),
                     0,10);
             if(acceptList == null || acceptList.isEmpty()){
@@ -110,6 +106,10 @@ public class MyAcceptTaskActivity extends AppCompatActivity {
             getMyAcceptSetTask = null;
             showProgress(false);
             if (success == true) {
+                myAcceptTaskAdapter = new ViewMyAcceptTaskAdapter(MyAcceptTaskActivity.this,
+                        R.layout.my_accept_task_view,myAcceptTaskList);
+                myAcceptListView.setAdapter(myAcceptTaskAdapter);
+                myAcceptTaskAdapter.notifyDataSetChanged();
                 //todo 更改显示在图中的数据
             } else {
                 //todo  图中不现实任何东西
@@ -122,8 +122,5 @@ public class MyAcceptTaskActivity extends AppCompatActivity {
             showProgress(false);
         }
     }
-
-
-
 
 }

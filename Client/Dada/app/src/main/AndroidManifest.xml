@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="projectmanager.dada">
+
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -9,17 +10,17 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
-    <!--允许程序打开网络套接字-->
+    <!-- 允许程序打开网络套接字 -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!--允许程序设置内置sd卡的写权限-->
+    <!-- 允许程序设置内置sd卡的写权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!--允许程序获取网络状态-->
+    <!-- 允许程序获取网络状态 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!--允许程序访问WiFi网络信息-->
+    <!-- 允许程序访问WiFi网络信息 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!--允许程序读写手机状态和身份-->
+    <!-- 允许程序读写手机状态和身份 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!--允许程序访问CellID或WiFi热点来获取粗略的位置-->
+    <!-- 允许程序访问CellID或WiFi热点来获取粗略的位置 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <!-- 读取 -->
@@ -37,10 +38,9 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="26014d4e525d106d54929b790aa25ec3"/>
+            android:value="26014d4e525d106d54929b790aa25ec3" />
 
         <service android:name="com.amap.api.location.APSService" />
-
 
         <activity
             android:name=".LoginActivity"
@@ -57,17 +57,18 @@
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".pages.ResetPasswordActivity" />
-        <activity android:name=".pages.UserInformationActivity"/>
+        <activity android:name=".pages.UserInformationActivity" />
         <activity android:name=".pages.PublishTaskStepOneActivity" />
         <activity android:name=".pages.PublishTaskStepTwoActivity" />
         <activity android:name=".pages.PublishTaskStepThreeActivity" />
         <activity android:name=".pages.MyPublishTaskActivity" />
         <activity android:name=".pages.MyAcceptTaskActivity" />
         <activity android:name=".pages.NearbyTaskActivity" />
-        <activity android:name=".CheckPermissionsActivity"/>
-        <activity android:name=".pages.UsernameModifyActivity"/>
-        <activity android:name=".pages.UserBioModifyActivity"/>
+        <activity android:name=".CheckPermissionsActivity" />
+        <activity android:name=".pages.UsernameModifyActivity" />
+        <activity android:name=".pages.UserBioModifyActivity" />
+        <activity android:name=".pages.MyPublishTaskDetail" />
+        <activity android:name=".pages.MyAcceptTaskDetail"></activity>
     </application>
-
 
 </manifest>

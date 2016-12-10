@@ -23,8 +23,13 @@ public enum StatusType {
         return name;
     }
 
-
-
-
-
+    public static String getTypeBySexId(int statusId){
+        StatusType[] statusTypes = StatusType.values();
+        for(StatusType status : statusTypes){
+            if(status.getCode() == statusId){
+                return status.getName();
+            }
+        }
+        return "未知状态";
+    }
 }

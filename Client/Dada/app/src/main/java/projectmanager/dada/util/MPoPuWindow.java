@@ -15,23 +15,17 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-
 import java.io.File;
-
 import projectmanager.dada.R;
 import projectmanager.dada.pages.UserInformationActivity.Type;
 
 public class MPoPuWindow extends PopupWindow implements OnClickListener {
 
 	public Context mContext;
-
 	private Type type;
-
 	public Activity mActivity;
-
 	private File file;
 	private Uri ImgUri;
-
 	private TextView mTakePhoto, mAlbumPhoto, mCancel;
 
 	public MPoPuWindow(Context context, Activity mActivity) {
@@ -41,8 +35,7 @@ public class MPoPuWindow extends PopupWindow implements OnClickListener {
 
 	private void initView(Context mContext) {
 		this.mContext = mContext;
-		View v = LayoutInflater.from(mContext).inflate(R.layout.activity_popu,
-				null);
+		View v = LayoutInflater.from(mContext).inflate(R.layout.activity_popu, null);
 		setContentView(v);
 
 		mTakePhoto = (TextView) v.findViewById(R.id.photo_take);
@@ -74,7 +67,6 @@ public class MPoPuWindow extends PopupWindow implements OnClickListener {
 	}
 
 	public void showPopupWindow(View parent) {
-
 		if (!this.isShowing()) {
 			this.showAtLocation(parent, Gravity.BOTTOM, 0, 0);
 		} else {
@@ -121,10 +113,8 @@ public class MPoPuWindow extends PopupWindow implements OnClickListener {
 
 	public void onPhoto(Uri uri, int outputX, int outputY) {
 		Intent intent = null;
-
 		intent = new Intent("com.android.camera.action.CROP");
 		intent.setDataAndType(uri, "image/*");
-
 		intent.putExtra("crop", "true");
 		intent.putExtra("aspectX", 1);
 		intent.putExtra("aspectY", 1);

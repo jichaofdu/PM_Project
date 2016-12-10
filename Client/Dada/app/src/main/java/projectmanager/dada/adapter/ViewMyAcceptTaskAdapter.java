@@ -6,8 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
 import java.util.List;
 import projectmanager.dada.R;
+import projectmanager.dada.model.StatusType;
 import projectmanager.dada.model.Task;
 
 /**
@@ -26,7 +29,6 @@ public class ViewMyAcceptTaskAdapter extends ArrayAdapter<Task> {
      */
     public ViewMyAcceptTaskAdapter(Context context, int textViewResourceId, List<Task> tasks){
         super(context,textViewResourceId,tasks);
-        System.out.println("Adapter构建成功");
         resourceId = textViewResourceId;
     }
 
@@ -37,20 +39,21 @@ public class ViewMyAcceptTaskAdapter extends ArrayAdapter<Task> {
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        System.out.println("Get View方法进入");
-        Task task = getItem(position);//获得当前项的Task实例
-        //为子项动态加载布局
+        Task task = getItem(position);
+
         View view = LayoutInflater.from(getContext()).inflate(resourceId, null);//子项的view
         TextView titleView = (TextView) view.findViewById(R.id.my_accept_task_title);
-        titleView.setText(task.getTitle());
         TextView descriptionView = (TextView)view.findViewById(R.id.my_accept_task_content);
+        TextView deadlineView = (TextView)view.findViewById(R.id.my_accept_task_deadline);
+        TextView statusView = (TextView)view.findViewById(R.id.my_accept_task_status);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String deadlineString = sdf.format(task.getDeadline());
+
+        titleView.setText(task.getTitle());
         descriptionView.setText(task.getDescription());
-//        TextView publisherView;
-//        TextView publishTimeView;
-//        TextView deadlineView;
-//        TextView locationView;
-//        TextView statusView;
-//        TextView creditView;
+        deadlineView.setText(deadlineString);
+        statusView.setText(StatusType.getTypeBySexId(task.getStatus()));
         return view;
     }
 

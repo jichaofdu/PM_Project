@@ -6,9 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import projectmanager.dada.R;
+import projectmanager.dada.model.StatusType;
 import projectmanager.dada.model.Task;
+import projectmanager.dada.util.DataManager;
 
 /**
  * jichao at 2016/12/03
@@ -36,22 +39,22 @@ public class ViewMyPublishTaskAdapter extends ArrayAdapter<Task> {
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Task task = getItem(position);//获得当前项的Task实例
-        //为子项动态加载布局
+        Task task = getItem(position);
+
         View view = LayoutInflater.from(getContext()).inflate(resourceId, null);//子项的view
         TextView titleView = (TextView) view.findViewById(R.id.my_publish_task_title);
-        titleView.setText(task.getTitle());
         TextView descriptionView = (TextView)view.findViewById(R.id.my_publish_task_content);
+        TextView deadlineView = (TextView)view.findViewById(R.id.my_publish_task_deadline);
+        TextView statusView = (TextView)view.findViewById(R.id.my_publish_task_status);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String deadlineString = sdf.format(task.getDeadline());
+
+        titleView.setText(task.getTitle());
         descriptionView.setText(task.getDescription());
-//        TextView publishTimeView;
-//        TextView deadlineView;
-//        TextView locationView;
-//        TextView statusView;
-//        TextView creditView;
-//        TextView accepterView;
+        deadlineView.setText(deadlineString);
+        statusView.setText(StatusType.getTypeBySexId(task.getStatus()));
+
         return view;
     }
-
-
-
 }

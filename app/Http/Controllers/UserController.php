@@ -45,7 +45,7 @@ class UserController extends Controller
         $user->phone = $phone;
         $user->username = $username;
         $user->password = Crypt::encrypt($password);
-        $user->credit = 0;
+        $user->credit = 5;
         $user->sex = 0;
         $user->avatar = "";
         $user->bio = "好像没有什么想说的";

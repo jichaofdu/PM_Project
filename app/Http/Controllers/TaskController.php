@@ -38,7 +38,8 @@ class TaskController extends Controller
         $longitude = $request->input('longitude');
         $latitude = $request->input('latitude');
         $locationDscp = $request->input('locationDscp');
-        $tags = json_decode($request->input('tags'));
+        $tags = $request->input('tags');
+
         $credit = $request->input('credit', 1);
 
         if (empty($title) || empty($description) || empty($userId)) {
@@ -68,6 +69,7 @@ class TaskController extends Controller
             $task->save();
 
             if (!empty($tags)) {
+                $tags = json_decode($tags);
                 foreach ($tags as $tagItem) {
                     $tag = new Tag;
                     $tag->task_id = $task->task_id;
@@ -267,24 +269,5 @@ class TaskController extends Controller
         }
     }
 
-    public function getTasksAround(Request $request){
-        try {
-            $lon = floatval($request->input('lon'));
-            $lat = floatval($request->input('lat'));
-            $coordRadius = floatval($request->input('radius'))/111321;
-        }catch (Exception $e){
-            $result = FAILED;
-            $error = 'Invalid request: not numbers';
-            return new Response(['result' => $result, 'error' => $error]);
-        }
-        if (empty($lon) || empty($lat) || empty($coordRadius)) {
-            abort(400);
-        }
 
-        $Task=new Task;
-        $tasks=$Task->getTasksAroundLocation($lat, $lon, $coordRadius);
-
-        $result = SUCCEED;
-        return new Response(['result' => $result, 'tasks' => $tasks]);
-    }
 }

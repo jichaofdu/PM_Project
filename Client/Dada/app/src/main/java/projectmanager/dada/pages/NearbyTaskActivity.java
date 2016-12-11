@@ -1,5 +1,6 @@
 package projectmanager.dada.pages;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -12,7 +13,9 @@ import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.LocationSource;
 import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.UiSettings;
+import com.amap.api.maps2d.model.CircleOptions;
 import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.MyLocationStyle;
 
 import projectmanager.dada.R;
 
@@ -47,7 +50,13 @@ public class NearbyTaskActivity extends AppCompatActivity implements LocationSou
         // 是否可触发定位并显示定位层
         aMap.setMyLocationEnabled(true);
 
+        MyLocationStyle myLocationStyle = new MyLocationStyle();
+        myLocationStyle.strokeColor(Color.argb(0,0,0,0));
+        myLocationStyle.radiusFillColor(Color.argb(0,0,0,0));
+        aMap.setMyLocationStyle(myLocationStyle);
         initLoc();
+
+
     }
 
     //定位
@@ -125,6 +134,8 @@ public class NearbyTaskActivity extends AppCompatActivity implements LocationSou
                     aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
                     mapListener.onLocationChanged(aMapLocation);
                     isFirstLoc = false;
+                    aMap.addCircle(new CircleOptions().center(new LatLng(aMap.getMyLocation().getLatitude(), aMap.getMyLocation().getLongitude())).fillColor(Color.argb(127, 0, 0, 255)).strokeColor(Color.BLACK).strokeWidth(5).radius(300));
+
                 }
             }
         }

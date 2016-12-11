@@ -268,15 +268,22 @@ class TaskController extends Controller
     }
 
     public function getTasksAround(Request $request){
-        $lon = floatval($request->input('lon'));
-        $lat = floatval($request->input('lat'));
-        $coordOffset = floatval($request->input('offset'));
-        if (empty($lon) || empty($lat) || empty($coordOffset)) {
+        try {
+            $lon = floatval($request->input('lon'));
+            $lat = floatval($request->input('lat'));
+            $coordRadius = floatval($request->input('radius'))/111321;
+        }catch (Exception $e){
+            $result = FAILED;
+            $error = 'Invalid request: not numbers';
+            return new Response(['result' => $result, 'error' => $error]);
+        }
+        if (empty($lon) || empty($lat) || empty($coordRadius)) {
             abort(400);
         }
 
         $Task=new Task;
-        $tasks=$Task->getTasksAroundLocation($lat, $lon, $coordOffset);
+        $tasks=$Task->getTasksAroundLocation($lat, $lon, $coordRadius);
+
         $result = SUCCEED;
         return new Response(['result' => $result, 'tasks' => $tasks]);
     }

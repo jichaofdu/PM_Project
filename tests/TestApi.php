@@ -81,7 +81,7 @@ class TestApi extends TestCase
         $this->call('POST', '/publishTask', ['title' => 'test', 'description' => 'test', 'userId' => '2',
             'deadline' => "2016-12-01 00:00:00", 'longitude' => '116.00000', 'latitude' => '39.00000', 'locationDscp' => 'test',
             'tags' => '["haha", "yoyo"]']);*/
-        $response = $this->call('GET', '/getTasksAround', ['lon' => '116.5', 'lat' => '39.5', 'offset' => '0.3']);
+        $response = $this->call('GET', '/getTasksAround', ['lon' => '116.5', 'lat' => '39.5', 'radius' => '33396']);
         echo $response;
     }
 

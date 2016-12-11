@@ -3,9 +3,9 @@ package projectmanager.dada.pages;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -14,7 +14,7 @@ import projectmanager.dada.model.Task;
 import projectmanager.dada.util.ApiManager;
 import projectmanager.dada.util.DataManager;
 
-public class MyAcceptTaskDetail extends AppCompatActivity {
+public class MyAcceptTaskDetailActivity extends Activity {
 
     private Task thisSelectTask;
     private View myAcceptTaskDetailView;
@@ -78,16 +78,16 @@ public class MyAcceptTaskDetail extends AppCompatActivity {
         protected void onPostExecute(final Boolean success) {
             showProgress(false);
             if(success == true){
-                Toast.makeText(MyAcceptTaskDetail.this, "操作成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyAcceptTaskDetailActivity.this, "操作成功", Toast.LENGTH_SHORT).show();
                 finish();
             }else{
-                Toast.makeText(MyAcceptTaskDetail.this, "操作失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyAcceptTaskDetailActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
             }
         }
         @Override
         protected void onCancelled() {
             showProgress(false);
-            Toast.makeText(MyAcceptTaskDetail.this, "你取消了本次操作", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MyAcceptTaskDetailActivity.this, "你取消了本次操作", Toast.LENGTH_SHORT).show();
         }
     }
 

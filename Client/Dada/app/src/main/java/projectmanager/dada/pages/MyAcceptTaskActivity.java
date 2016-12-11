@@ -3,11 +3,13 @@ package projectmanager.dada.pages;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import java.util.ArrayList;
 import projectmanager.dada.R;
@@ -109,10 +111,18 @@ public class MyAcceptTaskActivity extends AppCompatActivity {
                 myAcceptTaskAdapter = new ViewMyAcceptTaskAdapter(MyAcceptTaskActivity.this,
                         R.layout.my_accept_task_view,myAcceptTaskList);
                 myAcceptListView.setAdapter(myAcceptTaskAdapter);
+                myAcceptListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                        Task clickTask = myAcceptTaskList.get(position);
+                        Intent nextPage = new Intent(MyAcceptTaskActivity.this,MyAcceptTaskDetailActivity.class);
+                        startActivity(nextPage);
+
+
+                    }
+                });
                 myAcceptTaskAdapter.notifyDataSetChanged();
                 //todo 更改显示在图中的数据
-            } else {
-                //todo  图中不现实任何东西
             }
         }
 

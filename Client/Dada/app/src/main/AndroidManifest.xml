@@ -67,9 +67,9 @@
         <activity android:name=".CheckPermissionsActivity" />
         <activity android:name=".pages.UsernameModifyActivity" />
         <activity android:name=".pages.UserBioModifyActivity" />
-        <activity android:name=".pages.MyPublishTaskDetail" />
-        <activity android:name=".pages.MyAcceptTaskDetail"/>
         <activity android:name=".pages.TaskDetailActivity"/>
+        <activity android:name=".pages.MyPublishTaskDetailActivity" />
+        <activity android:name=".pages.MyAcceptTaskDetailActivity"></activity>
     </application>
 
 </manifest>

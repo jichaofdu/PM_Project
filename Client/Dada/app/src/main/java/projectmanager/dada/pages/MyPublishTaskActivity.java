@@ -3,11 +3,13 @@ package projectmanager.dada.pages;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import java.util.ArrayList;
 import projectmanager.dada.R;
@@ -116,6 +118,17 @@ public class MyPublishTaskActivity extends AppCompatActivity {
                 myPublishTaskAdapter = new ViewMyPublishTaskAdapter(MyPublishTaskActivity.this,
                         R.layout.my_publish_task_view,myPublishTaskList);
                 myPublishListView.setAdapter(myPublishTaskAdapter);
+                myPublishListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                        Task clickTask = myPublishTaskList.get(position);
+
+                        Intent nextPage = new Intent(MyPublishTaskActivity.this,MyPublishTaskDetailActivity.class);
+                        startActivity(nextPage);
+
+                    }
+                });
+
                 myPublishTaskAdapter.notifyDataSetChanged();
             }
         }

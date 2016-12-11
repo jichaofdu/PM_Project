@@ -361,6 +361,57 @@ public class ApiManager {
     }
 
     /**
+     * 获取坐标location附近radius范围内的未被接受的任务。这个方法还没写完
+     * @param location 用户选中的坐标
+     * @param radius   坐标radius范围内的点
+     * @return 从服务器返回的任务list
+     */
+    public ArrayList<Task> handleGetNearbyTasks(Location location,double radius){
+        try{
+            HttpClient client = new DefaultHttpClient();
+            HttpPost request = new HttpPost("https://relay.nxtsysx.net/");
+            List<NameValuePair> postParameters = new ArrayList<>();
+            postParameters.add(new BasicNameValuePair("latitude", "" + location.getLatitude()));
+            postParameters.add(new BasicNameValuePair("longitude", "" + location.getLongitude()));
+            postParameters.add(new BasicNameValuePair("radius", "" + radius));
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters,HTTP.UTF_8);
+            request.setEntity(formEntity);
+            HttpResponse response = client.execute(request);
+            if (response.getStatusLine().getStatusCode() == 200) {
+                InputStream is = response.getEntity().getContent();
+                String str = convertStreamToString(is);
+                JSONObject jsonObj = new JSONObject(str);
+                String result = jsonObj.getString("result");
+                if(result.equals("succeed")){
+                    String tasksString = jsonObj.getString("tasks");
+                    JSONArray taskJsonArray = new JSONArray(tasksString);
+                    ArrayList<Task> rtResultList = new ArrayList<>();
+                    for(int i = 0;i < taskJsonArray.length();i++){
+                        JSONObject taskJson = (JSONObject)taskJsonArray.get(i);
+                        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm").create();
+                        Task tempTask = gson.fromJson(taskJson.toString(), Task.class);
+                        rtResultList.add(tempTask);
+                    }
+                    return rtResultList;
+                }else{
+                    System.out.println("[Error] Get My Accept Task Process Fail. Error:" + jsonObj.getString("error"));
+                    return null;
+                }
+            }else{
+                System.out.println("[Error] Get nearby Task Process. Status Code:"
+                        + response.getStatusLine().getStatusCode());
+                return null;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
+
+
+    }
+
+    /**
      * 发布新任务的接口
      * @param task   发布的任务
      * @return             返回新创建的任务对象本身
@@ -409,6 +460,8 @@ public class ApiManager {
             return null;
         }
     }
+
+
 
     /**
      * 根据id来获取对应的Task对象

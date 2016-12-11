@@ -369,10 +369,10 @@ public class ApiManager {
     public ArrayList<Task> handleGetNearbyTasks(Location location,double radius){
         try{
             HttpClient client = new DefaultHttpClient();
-            HttpPost request = new HttpPost("https://relay.nxtsysx.net/");
+            HttpPost request = new HttpPost("https://relay.nxtsysx.net/getTasksAround/");
             List<NameValuePair> postParameters = new ArrayList<>();
-            postParameters.add(new BasicNameValuePair("latitude", "" + location.getLatitude()));
-            postParameters.add(new BasicNameValuePair("longitude", "" + location.getLongitude()));
+            postParameters.add(new BasicNameValuePair("lat", "" + location.getLatitude()));
+            postParameters.add(new BasicNameValuePair("lon", "" + location.getLongitude()));
             postParameters.add(new BasicNameValuePair("radius", "" + radius));
             UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters,HTTP.UTF_8);
             request.setEntity(formEntity);

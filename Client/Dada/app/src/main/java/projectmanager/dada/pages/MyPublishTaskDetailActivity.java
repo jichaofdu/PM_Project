@@ -3,9 +3,9 @@ package projectmanager.dada.pages;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -14,7 +14,7 @@ import projectmanager.dada.model.Task;
 import projectmanager.dada.util.ApiManager;
 import projectmanager.dada.util.DataManager;
 
-public class MyPublishTaskDetailActivity extends AppCompatActivity {
+public class MyPublishTaskDetailActivity extends Activity {
 
     private Task thisSelectTask;
     private View myPublishTaskDetailView;

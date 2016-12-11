@@ -37,7 +37,16 @@ class Task extends CamelModel
         return $this->formatTask($task, new User, new Tag);
     }
 
-    public function formatTask($taskItem, $User, $Tag)
+    public function getTasksAroundLocation(float $lat, float $lon, float $coordOffset)
+    {
+        $tasks = Task::query()->whereBetween("latitude", [$lat-$coordOffset, $lat+$coordOffset])->whereBetween("longitude", [$lon-$coordOffset, $lon+$coordOffset])->get();
+        $ret=[];
+        foreach ($tasks as $task)
+            $ret[]=$this->formatTask($task, new User, new Tag);
+        return $ret;
+    }
+
+    public static function formatTask($taskItem, $User, $Tag)
     {
 
         $task['taskId'] = $taskItem->task_id;

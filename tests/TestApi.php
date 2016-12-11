@@ -50,6 +50,41 @@ class TestApi extends TestCase
         echo $response;
     }
 
+    public function testGetTasksAround(){
+        /*$this->call('POST', '/publishTask', ['title' => 'test', 'description' => 'test', 'userId' => '2',
+            'deadline' => "2016-12-01 00:00:00", 'longitude' => '116.11111', 'latitude' => '39.11111', 'locationDscp' => 'test',
+            'tags' => '["haha", "yoyo"]']);
+        $this->call('POST', '/publishTask', ['title' => 'test', 'description' => 'test', 'userId' => '2',
+            'deadline' => "2016-12-01 00:00:00", 'longitude' => '115.22222', 'latitude' => '39.22222', 'locationDscp' => 'test',
+            'tags' => '["haha", "yoyo"]']);
+        $this->call('POST', '/publishTask', ['title' => 'test', 'description' => 'test', 'userId' => '2',
+            'deadline' => "2016-12-01 00:00:00", 'longitude' => '116.33333', 'latitude' => '39.33333', 'locationDscp' => 'test',
+            'tags' => '["haha", "yoyo"]']);
+        $this->call('POST', '/publishTask', ['title' => 'test', 'description' => 'test', 'userId' => '2',
+            'deadline' => "2016-12-01 00:00:00", 'longitude' => '116.44444', 'latitude' => '38.44444', 'locationDscp' => 'test',
+            'tags' => '["haha", "yoyo"]']);
+        $this->call('POST', '/publishTask', ['title' => 'test', 'description' => 'test', 'userId' => '2',
+            'deadline' => "2016-12-01 00:00:00", 'longitude' => '116.55555', 'latitude' => '39.55555', 'locationDscp' => 'test',
+            'tags' => '["haha", "yoyo"]']);
+        $this->call('POST', '/publishTask', ['title' => 'test', 'description' => 'test', 'userId' => '2',
+            'deadline' => "2016-12-01 00:00:00", 'longitude' => '116.66666', 'latitude' => '39.66666', 'locationDscp' => 'test',
+            'tags' => '["haha", "yoyo"]']);
+        $this->call('POST', '/publishTask', ['title' => 'test', 'description' => 'test', 'userId' => '2',
+            'deadline' => "2016-12-01 00:00:00", 'longitude' => '116.77777', 'latitude' => '39.77777', 'locationDscp' => 'test',
+            'tags' => '["haha", "yoyo"]']);
+        $this->call('POST', '/publishTask', ['title' => 'test', 'description' => 'test', 'userId' => '2',
+            'deadline' => "2016-12-01 00:00:00", 'longitude' => '116.88888', 'latitude' => '39.88888', 'locationDscp' => 'test',
+            'tags' => '["haha", "yoyo"]']);
+        $this->call('POST', '/publishTask', ['title' => 'test', 'description' => 'test', 'userId' => '2',
+            'deadline' => "2016-12-01 00:00:00", 'longitude' => '116.99999', 'latitude' => '39.99999', 'locationDscp' => 'test',
+            'tags' => '["haha", "yoyo"]']);
+        $this->call('POST', '/publishTask', ['title' => 'test', 'description' => 'test', 'userId' => '2',
+            'deadline' => "2016-12-01 00:00:00", 'longitude' => '116.00000', 'latitude' => '39.00000', 'locationDscp' => 'test',
+            'tags' => '["haha", "yoyo"]']);*/
+        $response = $this->call('GET', '/getTasksAround', ['lon' => '116.5', 'lat' => '39.5', 'offset' => '0.3']);
+        echo $response;
+    }
+
     public function testPublishTask()
     {
         $response = $this->call('POST', '/publishTask', ['title' => 'test', 'description' => 'test', 'userId' => '2',

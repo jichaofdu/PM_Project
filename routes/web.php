@@ -29,6 +29,8 @@ $app->post('/updateProfile', 'UserController@updateProfile');
 $app->get('/getAcceptedTasks', 'UserController@getAcceptedTasks');
 //Get tasks by publisher_id
 $app->get('/getPublishedTasks', 'UserController@getPublishedTasks');
+//Get tasks around a coordinate
+$app->get('/getTasksAround', 'TaskController@getTasksAround');
 //Publish task
 $app->post('/publishTask', 'TaskController@publishTask');
 //View a task

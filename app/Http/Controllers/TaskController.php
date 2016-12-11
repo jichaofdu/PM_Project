@@ -38,11 +38,7 @@ class TaskController extends Controller
         $longitude = $request->input('longitude');
         $latitude = $request->input('latitude');
         $locationDscp = $request->input('locationDscp');
-        $tags = $request->input('tags');
-
-        $tags = json_decode($tags);
-        //var_dump($tags);
-
+        $tags = json_decode($request->input('tags'));
         $credit = $request->input('credit', 1);
 
         if (empty($title) || empty($description) || empty($userId)) {
@@ -271,5 +267,17 @@ class TaskController extends Controller
         }
     }
 
+    public function getTasksAround(Request $request){
+        $lon = floatval($request->input('lon'));
+        $lat = floatval($request->input('lat'));
+        $coordOffset = floatval($request->input('offset'));
+        if (empty($lon) || empty($lat) || empty($coordOffset)) {
+            abort(400);
+        }
 
+        $Task=new Task;
+        $tasks=$Task->getTasksAroundLocation($lat, $lon, $coordOffset);
+        $result = SUCCEED;
+        return new Response(['result' => $result, 'tasks' => $tasks]);
+    }
 }

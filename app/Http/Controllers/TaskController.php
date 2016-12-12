@@ -81,8 +81,7 @@ class TaskController extends Controller
 
             $result = SUCCEED;
             return new Response(['result' => $result, 'task' => $task->formatTask($task, $User, $Tag)]);
-        }
-        catch (Exception $exception){
+        } catch (Exception $exception) {
             DB::rollback();
             $result = FAILED;
             return new Response(['result' => $result, 'error' => $exception]);
@@ -141,7 +140,6 @@ class TaskController extends Controller
         $tags = $request->input('tags', json_encode($originTags));
 
     }
-
 
 
     /**
@@ -267,6 +265,27 @@ class TaskController extends Controller
             $error = $exception;
             return new Response(['result' => $result, 'error' => $error]);
         }
+    }
+
+    public function getTasksAround(Request $request)
+    {
+        try {
+            $lon = floatval($request->input('lon'));
+            $lat = floatval($request->input('lat'));
+            $coordRadius = floatval($request->input('radius')) / 111321;
+        } catch (Exception $e) {
+            $result = FAILED;
+            $error = 'Invalid request: not numbers';
+            return new Response(['result' => $result, 'error' => $error]);
+        }
+        if (empty($lon) || empty($lat) || empty($coordRadius)) {
+            abort(400);
+        }
+
+        $Task = new Task;
+        $tasks = $Task->getTasksAroundLocation($lat, $lon, $coordRadius);
+        $result = SUCCEED;
+        return new Response(['result' => $result, 'tasks' => $tasks]);
     }
 
 

@@ -2,11 +2,17 @@ package projectmanager.dada.pages;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupWindow;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -21,9 +27,23 @@ import com.amap.api.maps2d.UiSettings;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
+import com.amap.api.maps2d.overlay.PoiOverlay;
+import com.amap.api.services.core.PoiItem;
+import com.amap.api.services.core.SuggestionCity;
+import com.amap.api.services.help.Inputtips;
+import com.amap.api.services.help.InputtipsQuery;
+import com.amap.api.services.help.Tip;
+import com.amap.api.services.poisearch.PoiResult;
+import com.amap.api.services.poisearch.PoiSearch;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import projectmanager.dada.CheckPermissionsActivity;
 import projectmanager.dada.R;
+import projectmanager.dada.adapter.LocationAdapter;
+import projectmanager.dada.adapter.LocationSearchedAdapter;
 import projectmanager.dada.model.Location;
 import projectmanager.dada.model.Task;
 import projectmanager.dada.util.DataManager;
@@ -32,7 +52,7 @@ import projectmanager.dada.util.DataManager;
 /**
  * 发布任务步骤一
  */
-public class PublishTaskStepOneActivity extends CheckPermissionsActivity implements LocationSource, AMapLocationListener {
+public class PublishTaskStepOneActivity extends CheckPermissionsActivity implements LocationSource, AMapLocationListener, Inputtips.InputtipsListener, PoiSearch.OnPoiSearchListener {
 
     private Button stepOneFinishButton;
     private AMap mMap;
@@ -45,7 +65,9 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
     private boolean isFirstLoc = true;//是否是第一次定位
     private Marker marker;//选择任务地点的标记
     private LatLng myLatLng = null;//当前位置经纬度，用于resume后恢复位置
-    private EditText search;
+    private AutoCompleteTextView search;
+    private LocationSearchedAdapter adapter;
+    private PoiSearch.Query query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,14 +98,33 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
                 DataManager.getInstance().setNewTask(task);
             }
         });
-        search = (EditText) findViewById(R.id.first_step_search);
-        search.setOnClickListener(new View.OnClickListener() {
+        search = (AutoCompleteTextView) findViewById(R.id.search);
+        search.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                search.setHint(null);
-//                PopupWindow popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,true);
-//                popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.tag_bg));
-//                popupWindow.showAsDropDown(view);
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                String keyword = charSequence.toString().trim();
+                query = new PoiSearch.Query(keyword, "", "");
+                PoiSearch poiSearch = new PoiSearch(PublishTaskStepOneActivity.this, query);
+                poiSearch.setOnPoiSearchListener(PublishTaskStepOneActivity.this);
+                poiSearch.searchPOIAsyn();
+//                InputtipsQuery inputquery = new InputtipsQuery(keyword,"");
+//                inputquery.setCityLimit(true);
+//
+//
+//                Inputtips inputTips = new Inputtips(PublishTaskStepOneActivity.this, inputquery);
+//                inputTips.setInputtipsListener(PublishTaskStepOneActivity.this);
+//                inputTips.requestInputtipsAsyn();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
 
@@ -201,4 +242,104 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
     }
 
 
+    @Override
+    public void onGetInputtips(List<Tip> tipList, int rCode) {
+        if (rCode == 1000) {
+//            List<HashMap<String, String>> listString = new ArrayList<HashMap<String, String>>();
+//            for (int i = 0; i < tipList.size(); i++) {
+//                HashMap<String, String> map = new HashMap<String, String>();
+//                map.put("name", tipList.get(i).getName());
+//                map.put("address", tipList.get(i).getDistrict());
+//                listString.add(map);
+//            }
+//            SimpleAdapter aAdapter = new SimpleAdapter(getApplicationContext(), listString, R.layout.item_layout,
+//                    new String[] {"name","address"}, new int[] {R.id.poi_field_id, R.id.poi_value_id});
+//
+//            search.setAdapter(aAdapter);
+//            aAdapter.notifyDataSetChanged();
+//            Toast.makeText(PublishTaskStepOneActivity.this, "tips", Toast.LENGTH_SHORT).show();
+//            List<String> listString = new ArrayList<String>();
+//            for (int i = 0; i < tipList.size(); i++) {
+//                listString.add(tipList.get(i).getName());
+//            }
+//            ArrayAdapter<String> aAdapter = new ArrayAdapter<String>(
+//                    getApplicationContext(),
+//                    R.layout.tiplist, listString);
+//            search.setAdapter(aAdapter);
+//            aAdapter.notifyDataSetChanged();
+            adapter = new LocationSearchedAdapter(PublishTaskStepOneActivity.this, R.layout.tiplist, tipList);
+            search.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+            search.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Tip tip = adapter.getItem(i);
+                    LatLng latLng = new LatLng(tip.getPoint().getLatitude(), tip.getPoint().getLongitude());
+                    if (marker == null) {
+                        marker = mMap.addMarker(new MarkerOptions().position(latLng));
+                    } else {
+                        marker.setPosition(latLng);
+                    }
+                    search.setText(tip.getName());
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+
+                }
+            });
+
+
+        }
+    }
+
+    @Override
+    public void onPoiSearched(PoiResult result, int rCode) {
+        if (rCode == 1000) {
+            if (result != null && result.getQuery() != null) {// 搜索poi的结果
+                if (result.getQuery().equals(query)) {// 是否是同一条
+
+                    // 取得搜索到的poiitems有多少页
+                    List<PoiItem> poiItems = result.getPois();// 取得第一页的poiitem数据，页数从数字0开始
+//                    List<SuggestionCity> suggestionCities = result
+//                            .getSearchSuggestionCitys();// 当搜索不到poiitem数据时，会返回含有搜索关键字的城市信息
+//
+//                    if (poiItems != null && poiItems.size() > 0) {
+//                        mMap.clear();// 清理之前的图标
+//                        PoiOverlay poiOverlay = new PoiOverlay(mMap, poiItems);
+//                        poiOverlay.removeFromMap();
+//                        poiOverlay.addToMap();
+//                        poiOverlay.zoomToSpan();
+//                    } else if (suggestionCities != null
+//                            && suggestionCities.size() > 0) {
+////                        showSuggestCity(suggestionCities);
+//                    } else {
+////                        ToastUtil.show(PoiKeywordSearchActivity.this,
+////                                R.string.no_result);
+//                    }
+                    final LocationAdapter adapter2 = new LocationAdapter(PublishTaskStepOneActivity.this, R.layout.tiplist, poiItems);
+                    search.setAdapter(adapter2);
+                    adapter2.notifyDataSetChanged();
+                    search.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            PoiItem poi = adapter2.getItem(i);
+                            LatLng latLng = new LatLng(poi.getLatLonPoint().getLatitude(), poi.getLatLonPoint().getLongitude());
+                            if (marker == null) {
+                                marker = mMap.addMarker(new MarkerOptions().position(latLng));
+                            } else {
+                                marker.setPosition(latLng);
+                            }
+//                            search.setText(tip.getName());
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+
+                        }
+                    });
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public void onPoiItemSearched(PoiItem poiItem, int i) {
+
+    }
 }

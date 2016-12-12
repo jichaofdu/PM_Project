@@ -438,6 +438,7 @@ public class ApiManager {
             if (response.getStatusLine().getStatusCode() == 200) {
                 InputStream is = response.getEntity().getContent();
                 String str = convertStreamToString(is);
+                System.out.println(str);
                 Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm").create();
                 JsonReader jsonReader = new JsonReader(new StringReader(str));
                 jsonReader.setLenient(true);

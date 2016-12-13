@@ -1,9 +1,10 @@
 package projectmanager.dada.model;
 
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Task {
+public class Task implements Serializable{
 
     private int      taskId;
     private String   title;

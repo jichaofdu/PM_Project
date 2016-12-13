@@ -1,22 +1,28 @@
 package projectmanager.dada.util;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
+
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
-import org.json.JSONObject;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ClientConnectionRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,6 +31,7 @@ import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
 import projectmanager.dada.model.Location;
 import projectmanager.dada.model.Task;
 import projectmanager.dada.model.User;
@@ -368,16 +375,20 @@ public class ApiManager {
      */
     public ArrayList<Task> handleGetNearbyTasks(Location location,double radius){
         try{
+            Log.i("xwk", location.getLatitude() + " " + location.getLongitude() + " " + radius);
             HttpClient client = new DefaultHttpClient();
-            HttpPost request = new HttpPost("https://relay.nxtsysx.net/getTasksAround/");
-            List<NameValuePair> postParameters = new ArrayList<>();
+            HttpGet request = new HttpGet("https://relay.nxtsysx.net/getTasksAround?lat=" + location.getLatitude() + "&lon=" + location.getLongitude() + "&radius=" + radius);
+         /*   List<NameValuePair> postParameters = new ArrayList<>();
             postParameters.add(new BasicNameValuePair("lat", "" + location.getLatitude()));
             postParameters.add(new BasicNameValuePair("lon", "" + location.getLongitude()));
             postParameters.add(new BasicNameValuePair("radius", "" + radius));
             UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters,HTTP.UTF_8);
-            request.setEntity(formEntity);
+     //       request.setEntity(formEntity);
+            request.setConnectionRequest((ClientConnectionRequest) formEntity);*/
             HttpResponse response = client.execute(request);
+            Log.i("xwk", response.getStatusLine().getStatusCode() + "");
             if (response.getStatusLine().getStatusCode() == 200) {
+                Log.i("xwk", "come in");
                 InputStream is = response.getEntity().getContent();
                 String str = convertStreamToString(is);
                 JSONObject jsonObj = new JSONObject(str);
@@ -398,6 +409,7 @@ public class ApiManager {
                     return null;
                 }
             }else{
+                Log.i("xwk", "not come in");
                 System.out.println("[Error] Get nearby Task Process. Status Code:"
                         + response.getStatusLine().getStatusCode());
                 return null;

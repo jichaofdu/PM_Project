@@ -1,6 +1,8 @@
 package projectmanager.dada.model;
 
-public class Location {
+import java.io.Serializable;
+
+public class Location implements Serializable {
 
     private int    locationId;
     private double longitude;

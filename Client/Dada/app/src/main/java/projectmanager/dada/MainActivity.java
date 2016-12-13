@@ -14,9 +14,9 @@ import android.view.WindowManager;
 
 import projectmanager.dada.pages.MyAcceptTaskActivity;
 import projectmanager.dada.pages.MyPublishTaskActivity;
+import projectmanager.dada.pages.NearbyTaskActivity;
 import projectmanager.dada.pages.PublishTaskStepOneActivity;
 import projectmanager.dada.pages.ResetPasswordActivity;
-import projectmanager.dada.pages.TaskDetailActivity;
 import projectmanager.dada.pages.UserInformationActivity;
 import projectmanager.dada.util.DataManager;
 
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity
             Intent nextPage = new Intent(MainActivity.this, MyAcceptTaskActivity.class);
             startActivity(nextPage);
         } else if (id == R.id.main_nearby_task) {
-            Intent nextPage = new Intent(MainActivity.this, TaskDetailActivity.class);
+            Intent nextPage = new Intent(MainActivity.this, NearbyTaskActivity.class);
             startActivity(nextPage);
         } else if (id == R.id.main_user_info_setting) {
             Intent nextPage = new Intent(MainActivity.this, UserInformationActivity.class);

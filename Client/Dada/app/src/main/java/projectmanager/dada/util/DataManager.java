@@ -1,6 +1,8 @@
 package projectmanager.dada.util;
 
 import java.util.HashMap;
+import java.util.List;
+
 import projectmanager.dada.model.Task;
 import projectmanager.dada.model.User;
 
@@ -28,6 +30,8 @@ public class DataManager {
 
     //用户附近的任务列表。Entry中Integer是taskId。
     private HashMap<Integer,Task> myNearbyList;
+
+    private List<Task> nearbyList;
 
     //新任务
     private Task newTask;
@@ -73,5 +77,21 @@ public class DataManager {
 
     public void setNewTask(Task newTask) {
         this.newTask = newTask;
+    }
+
+    public HashMap<Integer, Task> getMyNearbyList() {
+        return myNearbyList;
+    }
+
+    public void setMyNearbyList(HashMap<Integer, Task> myNearbyList) {
+        this.myNearbyList = myNearbyList;
+    }
+
+    public List<Task> getNearbyList() {
+        return nearbyList;
+    }
+
+    public void setNearbyList(List<Task> nearbyList) {
+        this.nearbyList = nearbyList;
     }
 }

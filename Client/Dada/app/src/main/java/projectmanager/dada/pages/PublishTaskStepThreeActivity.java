@@ -3,7 +3,6 @@ package projectmanager.dada.pages;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -20,7 +19,6 @@ import projectmanager.dada.model.Tag;
 import projectmanager.dada.model.TagListView;
 import projectmanager.dada.model.TagView;
 import projectmanager.dada.model.Task;
-import projectmanager.dada.model.User;
 import projectmanager.dada.util.ApiManager;
 import projectmanager.dada.util.DataManager;
 
@@ -120,8 +118,9 @@ public class PublishTaskStepThreeActivity extends Activity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            ApiManager apiManager = new ApiManager();
-            Task t = apiManager.handlePublishTask(task);
+//            ApiManager apiManager = new ApiManager();
+//            Task t = apiManager.handlePublishTask(task);
+            Task t = ApiManager.getInstance().handlePublishTask(task);
             if(t == null){
                 System.out.println("[Tip] Publish New Task Fail.");
                 return false;

@@ -9,7 +9,10 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <!-- 允许程序打开网络套接字 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 允许程序设置内置sd卡的写权限 -->
@@ -38,7 +41,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="2265f95d4fa3808fcd475be483b8d7f1" />
+            android:value="26014d4e525d106d54929b790aa25ec3" />
 
         <service android:name="com.amap.api.location.APSService" />
 
@@ -69,7 +72,7 @@
         <activity android:name=".pages.UserBioModifyActivity" />
         <activity android:name=".pages.TaskDetailActivity"/>
         <activity android:name=".pages.MyPublishTaskDetailActivity" />
-        <activity android:name=".pages.MyAcceptTaskDetailActivity"></activity>
+        <activity android:name=".pages.MyAcceptTaskDetailActivity"/>
     </application>
 
 </manifest>

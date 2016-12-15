@@ -1,8 +1,13 @@
 package projectmanager.dada.pages;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.Toast;
+
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -14,11 +19,20 @@ import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.UiSettings;
 import com.amap.api.maps2d.model.CircleOptions;
 import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.Marker;
+import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.MyLocationStyle;
 
-import projectmanager.dada.R;
+import java.util.ArrayList;
+import java.util.List;
 
-public class NearbyTaskActivity extends AppCompatActivity implements LocationSource, AMapLocationListener {
+import projectmanager.dada.R;
+import projectmanager.dada.model.Location;
+import projectmanager.dada.model.Task;
+import projectmanager.dada.util.ApiManager;
+import projectmanager.dada.util.DataManager;
+
+public class NearbyTaskActivity extends AppCompatActivity implements LocationSource, AMapLocationListener, AMap.OnMarkerClickListener {
 
     private MapView mapView;
     private AMap aMap;
@@ -53,9 +67,10 @@ public class NearbyTaskActivity extends AppCompatActivity implements LocationSou
         myLocationStyle.strokeColor(Color.argb(0,0,0,0));
         myLocationStyle.radiusFillColor(Color.argb(0,0,0,0));
         aMap.setMyLocationStyle(myLocationStyle);
+        aMap.setOnMarkerClickListener(this);
         initLoc();
 
-
+        Toast.makeText(this, "我也执行了", Toast.LENGTH_SHORT).show();
     }
 
     //定位
@@ -96,6 +111,8 @@ public class NearbyTaskActivity extends AppCompatActivity implements LocationSou
         super.onResume();
         //在activity执行onResume时执行mMapView.onResume ()，实现地图生命周期管理
         mapView.onResume();
+
+
     }
     @Override
     protected void onPause() {
@@ -134,9 +151,81 @@ public class NearbyTaskActivity extends AppCompatActivity implements LocationSou
                     mapListener.onLocationChanged(aMapLocation);
                     isFirstLoc = false;
                     aMap.addCircle(new CircleOptions().center(new LatLng(aMap.getMyLocation().getLatitude(), aMap.getMyLocation().getLongitude())).fillColor(Color.argb(127, 0, 0, 255)).strokeColor(Color.BLACK).strokeWidth(5).radius(300));
-
+                    Location location = new Location(0, aMap.getMyLocation().getLongitude(), aMap.getMyLocation().getLatitude(), "");
+                    NearbyTask nearbyTask = new NearbyTask(location, 300);
+                    nearbyTask.execute((Void) null);
                 }
             }
         }
     }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        if(marker.getPosition().longitude == aMap.getMyLocation().getLongitude() && marker.getPosition().latitude == aMap.getMyLocation().getLatitude()){
+            return false;
+        }else {
+            List<Task> tasks = DataManager.getInstance().getNearbyList();
+            Intent intent = new Intent(this, TaskDetailActivity.class);
+            Bundle bundle = new Bundle();
+            for(Task task : tasks){
+                if (task.getLocation().getLongitude() == marker.getPosition().longitude && task.getLocation().getLatitude() == marker.getPosition().latitude){
+                    bundle.putSerializable("task", task);
+                    intent.putExtras(bundle);
+                }
+            }
+
+            startActivity(intent);
+            return false;
+        }
+
+    }
+
+    public class NearbyTask extends AsyncTask<Void, Void, Boolean> {
+        private Location location;
+        private double radius;
+        private List<Task> taskList = new ArrayList<>();
+
+        NearbyTask(Location location, double radius) {
+            this.location = location;
+            this.radius = radius;
+
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            taskList = ApiManager.getInstance().handleGetNearbyTasks(location, radius);
+            DataManager.getInstance().setNearbyList(taskList);
+            if(taskList == null){
+                System.out.println("[Tip] get nearby tasks failed.");
+       //         Toast.makeText(NearbyTaskActivity.this, "get nearby tasks failed", Toast.LENGTH_SHORT).show();
+                Log.i("xwk", "get nearby task failed");
+                return false;
+            }else{
+                Log.i("xwk", taskList.size() + "");
+                return true;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if(success){
+                for(Task task : taskList){
+                    LatLng latLng = new LatLng(task.getLocation().getLatitude(), task.getLocation().getLongitude());
+                    Marker marker = aMap.addMarker(new MarkerOptions().position(latLng));
+                }
+
+            }else {
+                Toast.makeText(NearbyTaskActivity.this, "failed", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        @Override
+        protected void onCancelled() {
+        }
+    }
+
+//    private Location getLocationByLngLat(double latitude, double longitude){
+//        return new Location(0, longitude, latitude, "");
+//    }
 }

@@ -64,7 +64,9 @@ public class PublishTaskStepThreeActivity extends Activity {
                 String tag = inputTag.getText().toString();
                 if (TextUtils.isEmpty(tag)){
                     inputTag.setError(getString(R.string.error_field_required));
-                }else {
+                } else if (hasTag(tag)) {
+                    inputTag.setError("标签已存在");
+                } else {
                     Tag t = new Tag();
                     t.setId(mTags.size());
                     t.setChecked(false);
@@ -106,6 +108,15 @@ public class PublishTaskStepThreeActivity extends Activity {
             tag.setTitle(titles[i]);
             mTags.add(tag);
         }
+    }
+
+    private boolean hasTag(String title) {
+        for (Tag t : mTags) {
+            if (t.getTitle().equals(title)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public class PublishTask extends AsyncTask<Void, Void, Boolean> {

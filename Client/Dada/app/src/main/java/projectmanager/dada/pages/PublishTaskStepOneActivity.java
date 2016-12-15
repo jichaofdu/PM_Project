@@ -90,12 +90,6 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
                 } else {
                     marker.setPosition(latLng);
                 }
-                Location location = new Location();
-                location.setLatitude(latLng.latitude);
-                location.setLongitude(latLng.longitude);
-                Task task = new Task();
-                task.setLocation(location);
-                DataManager.getInstance().setNewTask(task);
             }
         });
         search = (AutoCompleteTextView) findViewById(R.id.search);
@@ -137,8 +131,13 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
                 //// TODO: 2016/11/27
                 //  将从地图上选到的地址信息，存放在DataManager中。留作后用。
                 //然后跳转到第二步的页面中
-                if (DataManager.getInstance().getNewTask().getLocation() != null) {
-
+                if (marker.getPosition() != null) {
+                    Location location = new Location();
+                    location.setLatitude(marker.getPosition().latitude);
+                    location.setLongitude(marker.getPosition().longitude);
+                    Task task = new Task();
+                    task.setLocation(location);
+                    DataManager.getInstance().setNewTask(task);
 //                    finish();
                     Intent nextPage = new Intent(PublishTaskStepOneActivity.this, PublishTaskStepTwoActivity.class);
                     startActivity(nextPage);
@@ -280,6 +279,7 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
                     } else {
                         marker.setPosition(latLng);
                     }
+
                     search.setText(tip.getName());
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
 

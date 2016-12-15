@@ -32,6 +32,9 @@ public class DataManager {
     //新任务
     private Task newTask;
 
+    //用户点选的自己发布的任务
+    private Task selectedMyPublishTask;
+
     private DataManager(){
         currentUser = null;
     }
@@ -73,5 +76,13 @@ public class DataManager {
 
     public void setNewTask(Task newTask) {
         this.newTask = newTask;
+    }
+
+    public Task getSelectedMyPublishTask() {
+        return selectedMyPublishTask;
+    }
+
+    public void setSelectedMyPublishTask(Task selectedMyPublishTask) {
+        this.selectedMyPublishTask = selectedMyPublishTask;
     }
 }

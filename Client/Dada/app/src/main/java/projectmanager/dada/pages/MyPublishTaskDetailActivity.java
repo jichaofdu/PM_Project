@@ -8,8 +8,18 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
 import projectmanager.dada.R;
+import projectmanager.dada.model.StatusType;
+import projectmanager.dada.model.Tag;
+import projectmanager.dada.model.TagListView;
+import projectmanager.dada.model.TagView;
 import projectmanager.dada.model.Task;
 import projectmanager.dada.util.ApiManager;
 import projectmanager.dada.util.DataManager;
@@ -19,12 +29,49 @@ public class MyPublishTaskDetailActivity extends Activity {
     private Task thisSelectTask;
     private View myPublishTaskDetailView;
     private View progressView;
+    private Task selectedTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        selectedTask = DataManager.getInstance().getSelectedMyPublishTask();
         setContentView(R.layout.activity_my_publish_task_detail);
-    }
+
+        myPublishTaskDetailView = findViewById(R.id.activity_my_publish_task_detail);
+        progressView = findViewById(R.id.get_my_accept_task_progress);
+
+        TextView titleView = (TextView)myPublishTaskDetailView.findViewById(R.id.my_publish_detail_title);
+        titleView.setText(selectedTask.getTitle());
+        TextView publishTimeView = (TextView)myPublishTaskDetailView.findViewById(R.id.my_publish_detail_publish_time);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        publishTimeView.setText(sdf.format(selectedTask.getPublishedTime()));
+        TextView deadlineView = (TextView)myPublishTaskDetailView.findViewById(R.id.my_publish_detail_deadline);
+        deadlineView.setText(sdf.format(selectedTask.getDeadline()));
+        TextView descriptionView = (TextView)myPublishTaskDetailView.findViewById(R.id.my_publish_detail_description);
+        descriptionView.setText(selectedTask.getDescription());
+        TextView statusView = (TextView)myPublishTaskDetailView.findViewById(R.id.my_publish_detail_status);
+        statusView.setText(StatusType.getTypeBySexId(selectedTask.getStatus()));
+        TextView accepterView = (TextView)myPublishTaskDetailView.findViewById(R.id.my_publish_detail_acceptor);
+        if(selectedTask.getAccepter() == null){
+            accepterView.setText("尚无人接受任务");
+        }else{
+            accepterView.setText(selectedTask.getAccepter().getUsername());
+        }
+
+        TextView creditView = (TextView)myPublishTaskDetailView.findViewById(R.id.my_publish_detail_spend_credit);
+        creditView.setText("" + selectedTask.getCredit());
+
+        TagListView mTagListView = (TagListView) findViewById(R.id.my_publish_detail_tag_view);
+        List<Tag> mTags = new ArrayList<Tag>();
+        for (int i = 0; i < selectedTask.getTags().length; i++) {
+            Tag tag = new Tag();
+            tag.setId(i);
+            tag.setChecked(false);
+            tag.setTitle(selectedTask.getTags()[i]);
+            mTags.add(tag);
+        }
+        mTagListView.setTags(mTags);
+}
 
 
     /**

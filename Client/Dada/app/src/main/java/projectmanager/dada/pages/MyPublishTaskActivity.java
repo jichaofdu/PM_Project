@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -122,7 +123,7 @@ public class MyPublishTaskActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                         Task clickTask = myPublishTaskList.get(position);
-
+                        DataManager.getInstance().setSelectedMyPublishTask(clickTask);
                         Intent nextPage = new Intent(MyPublishTaskActivity.this,MyPublishTaskDetailActivity.class);
                         startActivity(nextPage);
 

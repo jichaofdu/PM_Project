@@ -8,6 +8,7 @@
 
 namespace App\Models;
 
+require '../Http/Controllers/constants.php';
 
 class Task extends CamelModel
 {
@@ -39,7 +40,10 @@ class Task extends CamelModel
 
     public function getTasksAroundLocation($lat, $lon, $coordRadius)
     {
-        $tasks = Task::query()->whereBetween("latitude", [$lat-$coordRadius, $lat+$coordRadius])->whereBetween("longitude", [$lon-$coordRadius, $lon+$coordRadius])->get();
+        $tasks = Task::query()->whereBetween("latitude", [$lat - $coordRadius, $lat + $coordRadius])
+            ->whereBetween("longitude", [$lon - $coordRadius, $lon + $coordRadius])
+            ->where('status', STATUS_PENDING)
+            ->get();
         foreach ($tasks as $i => $task){
             if (sqrt(pow($task->latitude-$lat, 2)+pow($task->longitude-$lon, 2))>$coordRadius)
                 unset($tasks[$i]);

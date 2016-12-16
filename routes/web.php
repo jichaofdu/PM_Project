@@ -39,8 +39,12 @@ $app->get('/viewTask', 'TaskController@viewTask');
 $app->post('/acceptTask', 'TaskController@acceptTask');
 //Done a task
 $app->post('/doneTask', 'TaskController@doneTask');
+//Confirm a task
+$app->post('/confirmTask', 'TaskController@confirmTask');
 //Cancel a task
 $app->post('/cancelTask', 'TaskController@cancelTask');
+//Quit a task
+$app->post('/quitTask', 'TaskController@quitTask');
 
 
 

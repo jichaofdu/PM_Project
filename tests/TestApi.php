@@ -10,7 +10,7 @@ class TestApi extends TestCase
 {
     public function testRegister()
     {
-        $response = $this->call('POST', '/register', ['phone' => '1234', 'username' => 'test', 'password' => 'test']);
+        $response = $this->call('POST', '/register', ['phone' => '12345672', 'username' => 'test', 'password' => 'test']);
         echo $response;
     }
 
@@ -87,7 +87,7 @@ class TestApi extends TestCase
 
     public function testPublishTask()
     {
-        $response = $this->call('POST', '/publishTask', ['title' => 'test', 'description' => 'test', 'userId' => '2',
+        $response = $this->call('POST', '/publishTask', ['title' => 'test', 'description' => 'test', 'userId' => '35',
             'deadline' => "2016-12-01 00:00:00", 'longitude' => '0', 'latitude' => '0', 'locationDscp' => 'test',
             'tags' => '["xx","yy"]']);
         echo $response;
@@ -113,7 +113,7 @@ class TestApi extends TestCase
 
     public function testCancelTask()
     {
-        $response = $this->call('POST', '/cancelTask', ['taskId' => 1, 'userId' => 2]);
+        $response = $this->call('POST', '/cancelTask', ['taskId' => 39, 'userId' => 35]);
         echo $response;
     }
 

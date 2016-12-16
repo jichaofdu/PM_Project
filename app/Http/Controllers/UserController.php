@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Crypt;
 
-require 'messageConstants.php';
+require 'constants.php';
 
 class UserController extends Controller
 {
@@ -45,10 +45,10 @@ class UserController extends Controller
         $user->phone = $phone;
         $user->username = $username;
         $user->password = Crypt::encrypt($password);
-        $user->credit = 5;
-        $user->sex = 0;
-        $user->avatar = "";
-        $user->bio = "好像没有什么想说的";
+        $user->credit = DEFAULT_USER_CREDIT;
+        $user->sex = DEFAULT_USER_SEX;
+        $user->avatar = DEFAULT_USER_AVATAR;
+        $user->bio = DEFAULT_USER_BIO;
 
         try {
             $user->save();

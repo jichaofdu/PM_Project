@@ -164,7 +164,7 @@ bio | string | | optional
 ```
 ---
 
-### 获取某个用户接受的任务列表（全部/进行中/待确认/已完成/取消）
+### 获取某个用户接受的任务列表（全部/进行中/已完成/确认/取消）
 #### 请求方法：GET
 #### 请求url: /getAcceptedTasks
 #### 请求参数
@@ -172,7 +172,7 @@ bio | string | | optional
 name | type | description | note 
 ---|---|---|---
 userId | integer | | required
-status | integer | 不填写或填写0表示[全部],2表示[进行中],3表示[待确认],4表示[已完成],-1表示[取消]| optional
+status | integer | 不填写或填写0表示[全部],2表示[进行中],3表示[已完成],4表示[已确认],-1表示[取消]| optional
 limit | integer | 限制获取的任务个数 | optional
 
 #### 返回示例
@@ -227,7 +227,7 @@ limit | integer | 限制获取的任务个数 | optional
 
 ---
 
-### 获取某个用户发布的任务列表（全部/待接受/进行中/待确认/已完成/取消）
+### 获取某个用户发布的任务列表（全部/待接受/进行中/已完成/已确认/取消）
 #### 请求方法：GET
 #### 请求url: /getPublishedTasks
 #### 请求参数
@@ -235,7 +235,7 @@ limit | integer | 限制获取的任务个数 | optional
 name | type | description | note 
 ---|---|---|---
 userId | integer | | required
-status | integer | 不填写或填写0表示[全部],1表示[待接受],2表示[进行中],3表示[待确认],4表示[已完成],-1表示[取消]| optional
+status | integer | 不填写或填写0表示[全部],1表示[待接受],2表示[进行中],3表示[已完成],4表示[已确认],-1表示[取消]| optional
 limit | integer | 限制获取的任务个数 | optional
 
 #### 返回示例
@@ -511,6 +511,34 @@ name | type | description | note
 ---|---|---|---
 taskId | integer | 已接受的任务id | required
 userId | integer | 接受任务的用户id | required
+
+#### 返回示例
+
+```
+//成功：
+{
+    "result":"succeed",
+}
+
+//失败：
+{
+    "result":"failed",
+    "error":"Something happened"
+}
+
+```
+
+---
+
+### 确认任务
+#### 请求方法：POST  
+#### 请求url: /confirmTask
+#### 请求参数
+
+name | type | description | note 
+---|---|---|---
+taskId | integer | 要确认的任务id | required
+userId | integer | 发起者的用户id | required
 
 #### 返回示例
 

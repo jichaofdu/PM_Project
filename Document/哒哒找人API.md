@@ -583,3 +583,31 @@ userId | integer | 发起者的用户id | required
 }
 
 ```
+
+---
+
+### 放弃任务
+#### 请求方法：POST  
+#### 请求url: /quitTask
+#### 请求参数
+
+name | type | description | note 
+---|---|---|---
+taskId | integer | 要放弃的任务id | required
+userId | integer | 接受者的用户id | required
+
+#### 返回示例
+
+```
+//成功：
+{
+    "result":"succeed",
+}
+
+//失败：
+{
+    "result":"failed",
+    "error":"Something happened"
+}
+
+```

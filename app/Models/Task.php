@@ -8,8 +8,6 @@
 
 namespace App\Models;
 
-require '../Http/Controllers/constants.php';
-
 class Task extends CamelModel
 {
     protected $primaryKey = 'task_id';

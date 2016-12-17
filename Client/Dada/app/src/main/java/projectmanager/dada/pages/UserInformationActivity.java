@@ -2,13 +2,18 @@ package projectmanager.dada.pages;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,6 +27,7 @@ import projectmanager.dada.model.SexType;
 import projectmanager.dada.model.User;
 import projectmanager.dada.util.ApiManager;
 import projectmanager.dada.util.DataManager;
+import projectmanager.dada.util.FileImageUpload;
 import projectmanager.dada.util.MPoPuWindow;
 
 /**
@@ -38,6 +44,8 @@ public class UserInformationActivity extends Activity {
     private MPoPuWindow puWindow;
     private File file;
     private Uri ImgUri;
+    private String picPath = null;
+    private Uri temp;
 
     public enum Type {
         PHONE, CAMERA
@@ -221,21 +229,76 @@ public class UserInformationActivity extends Activity {
         } else if (requestCode == 2) {
             if (data != null) {
                 Uri uri = data.getData();
+                temp = uri;
+        //        Log.i("xwk", data.toString());
+
                 puWindow.onPhoto(uri, 300, 300);
             }
         } else if (requestCode == 3) {
             if (type == Type.PHONE) {
                 if (data != null) {
-                    Bundle extras = data.getExtras();
+//                    Bundle bundle = data.getExtras();
+//                    Uri uri= bundle.getParcelable(MediaStore.EXTRA_OUTPUT);
+//                    Log.i("xwk", bundle.toString());
+////                    Uri uri = data.getParcelableExtra(MediaStore.EXTRA_OUTPUT);
+//                    Log.i("xwk", String.valueOf(uri));
+
+                    try{
+                        String[] pojo = {MediaStore.Images.Media.DATA};
+                        Log.i("xwk", String.valueOf(temp));
+                        Cursor cursor = managedQuery(temp, pojo, null, null, null);
+                        if(cursor != null){
+                            ContentResolver cr = this.getContentResolver();
+                            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                            cursor.moveToFirst();
+                            String path = cursor.getString(column_index);
+
+                            if(path.endsWith("jpg") || path.endsWith("png")){
+                                picPath = path;
+                                Log.i("xwk", picPath);
+                                UploadFileTask uploadFileTask = new UploadFileTask(this);
+                                uploadFileTask.execute(picPath);
+                                Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(temp));
+                                if(bitmap != null){
+                                    avatar.setImageBitmap(bitmap);
+                                }
+                            }else {
+                                alert();
+                            }
+                        }else {
+                            alert();
+                        }
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+              /*      Bundle extras = data.getExtras();
                     Bitmap bitmap = (Bitmap) extras.get("data");
                     if (bitmap != null) {
                         avatar.setImageBitmap(bitmap);
-                    }
+                    }*/
                 }
             } else if (type == Type.CAMERA) {
                 avatar.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
+                Log.i("xwk", file.getPath());
+//                UploadFileTask uploadFileTask = new UploadFileTask(this);
+//                uploadFileTask.execute(file.getPath());
             }
         }
+    }
+
+    private void alert()
+    {
+        Dialog dialog = new AlertDialog.Builder(this)
+                .setTitle("提示")
+                .setMessage("您选择的不是有效的图片")
+                .setPositiveButton("确定",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                picPath = null;
+                            }
+                        })
+                .create();
+        dialog.show();
     }
 
     public class UserInfoTask extends AsyncTask<Void, Void, Boolean> {
@@ -274,6 +337,33 @@ public class UserInformationActivity extends Activity {
 
         @Override
         protected void onCancelled() {
+        }
+    }
+
+    public class UploadFileTask extends AsyncTask<String, Void, String>{
+        public static final String requestURL="http://192.168.208.13:8080/AndroidUploadFileWeb/FileImageUploadServlet";
+        private ProgressDialog progressDialog;
+        private Activity context = null;
+
+        public UploadFileTask(Activity context){
+            this.context = context;
+            progressDialog = ProgressDialog.show(context, "正在加载...", "系统正在处理您的请求");
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            File file = new File(strings[0]);
+            return FileImageUpload.uploadFile(file, requestURL);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            progressDialog.dismiss();
+            if(FileImageUpload.SUCCESS.equalsIgnoreCase(s)){
+                Toast.makeText(context, "上传成功", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(context, "上传失败", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

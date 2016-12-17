@@ -53,7 +53,7 @@ public class ViewMyPublishTaskAdapter extends ArrayAdapter<Task> {
         titleView.setText(task.getTitle());
         descriptionView.setText(task.getDescription());
         deadlineView.setText(deadlineString);
-        statusView.setText(StatusType.getTypeBySexId(task.getStatus()));
+        statusView.setText(StatusType.getTypeByStatusId(task.getStatus()));
 
         return view;
     }

@@ -2,10 +2,11 @@ package projectmanager.dada.model;
 
 public enum StatusType {
 
-    CLOSED   (-1,   "已取消"),
-    OPEN     (1,    "开放申请"),
-    GOINGON  (2,    "进行中"),
-    FINISHED (3,    "已完成");
+    CLOSED      (-1,   "已取消"),
+    OPEN        (1,    "开放申请"),
+    GOINGON     (2,    "进行中"),
+    WAITCONFIRM (3,  "待确认"),
+    FINISHED    (4,    "已完成");
 
     private int code;
     private String name;
@@ -23,7 +24,7 @@ public enum StatusType {
         return name;
     }
 
-    public static String getTypeBySexId(int statusId){
+    public static String getTypeByStatusId(int statusId){
         StatusType[] statusTypes = StatusType.values();
         for(StatusType status : statusTypes){
             if(status.getCode() == statusId){

@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.text.SimpleDateFormat;
@@ -46,7 +47,7 @@ public class MyPublishTaskDetailActivity extends Activity {
         TextView descriptionView = (TextView)myPublishTaskDetailView.findViewById(R.id.my_publish_detail_description);
         descriptionView.setText(selectedTask.getDescription());
         TextView statusView = (TextView)myPublishTaskDetailView.findViewById(R.id.my_publish_detail_status);
-        statusView.setText(StatusType.getTypeBySexId(selectedTask.getStatus()));
+        statusView.setText(StatusType.getTypeByStatusId(selectedTask.getStatus()));
         TextView accepterView = (TextView)myPublishTaskDetailView.findViewById(R.id.my_publish_detail_acceptor);
         if(selectedTask.getAccepter() == null){
             accepterView.setText("尚无人接受任务");
@@ -65,7 +66,40 @@ public class MyPublishTaskDetailActivity extends Activity {
             mTags.add(tag);
         }
         mTagListView.setTags(mTags);
-}
+
+        Button cancelButton = (Button)findViewById(R.id.my_publish_detail_cancel_task);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clickCancelButton();
+            }
+        });
+        if(selectedTask.getStatus() != StatusType.CLOSED.getCode()){
+            cancelButton.setVisibility(View.VISIBLE);
+        }
+
+        Button confirmButton = (Button)findViewById(R.id.my_publish_detail_confirm_task);
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println();
+            }
+        });
+        if(selectedTask.getStatus() == StatusType.WAITCONFIRM.getCode()){
+            confirmButton.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    private void clickCancelButton(){
+
+    }
+
+    private void clickComfirmButton(){
+
+    }
+
+
 
 
     /**

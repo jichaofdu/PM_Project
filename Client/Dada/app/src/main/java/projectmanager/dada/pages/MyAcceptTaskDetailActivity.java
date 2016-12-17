@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.text.SimpleDateFormat;
@@ -48,7 +49,7 @@ public class MyAcceptTaskDetailActivity extends Activity {
         TextView descriptionView = (TextView)myAcceptTaskDetailView.findViewById(R.id.my_accept_detail_description);
         descriptionView.setText(selectedTask.getDescription());
         TextView statusView = (TextView)myAcceptTaskDetailView.findViewById(R.id.my_accept_detail_status);
-        statusView.setText(StatusType.getTypeBySexId(selectedTask.getStatus()));
+        statusView.setText(StatusType.getTypeByStatusId(selectedTask.getStatus()));
         TextView creditView = (TextView)myAcceptTaskDetailView.findViewById(R.id.my_accept_detail_spend_credit);
         creditView.setText("" + selectedTask.getCredit());
         TagListView mTagListView = (TagListView) findViewById(R.id.my_accept_detail_tag_view);
@@ -61,6 +62,37 @@ public class MyAcceptTaskDetailActivity extends Activity {
             mTags.add(tag);
         }
         mTagListView.setTags(mTags);
+
+        Button finishButton = (Button)findViewById(R.id.my_accept_detail_finish_task);
+        finishButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               clickFinishButton();
+            }
+        });
+        if(selectedTask.getStatus() == StatusType.GOINGON.getCode()){
+            finishButton.setVisibility(View.VISIBLE);
+        }
+
+        Button quitButton = (Button)findViewById(R.id.my_accept_detail_quit_task);
+        quitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clickQuitButton();
+            }
+        });
+        if(selectedTask.getStatus() == StatusType.GOINGON.getCode()
+                || selectedTask.getStatus() == StatusType.WAITCONFIRM.getCode()){
+            quitButton.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void clickFinishButton(){
+
+    }
+
+    private void clickQuitButton(){
+
     }
 
     /**

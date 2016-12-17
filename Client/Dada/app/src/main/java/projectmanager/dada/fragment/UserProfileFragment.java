@@ -1,4 +1,4 @@
-package projectmanager.dada.pages;
+package projectmanager.dada.fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,8 +14,12 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,15 +29,19 @@ import java.io.File;
 import projectmanager.dada.R;
 import projectmanager.dada.model.SexType;
 import projectmanager.dada.model.User;
+import projectmanager.dada.pages.UserBioModifyActivity;
+import projectmanager.dada.pages.UsernameModifyActivity;
 import projectmanager.dada.util.ApiManager;
 import projectmanager.dada.util.DataManager;
 import projectmanager.dada.util.FileImageUpload;
 import projectmanager.dada.util.MPoPuWindow;
 
 /**
- * Created by JScarlet on 2016/12/6.
+ * Created by tao on 2016/12/17.
  */
-public class UserInformationActivity extends Activity {
+
+public class UserProfileFragment extends Fragment {
+
     private User currentUser;
     private ImageView avatar;
     private TextView username;
@@ -50,18 +58,15 @@ public class UserInformationActivity extends Activity {
     public enum Type {
         PHONE, CAMERA
     }
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_information);
-
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_user_information, container, false);
         currentUser = DataManager.getInstance().getCurrentUser();
-        avatar = (ImageView) findViewById(R.id.avatar);
-        username = (TextView) findViewById(R.id.username);
-        sex = (TextView) findViewById(R.id.sex);
-        phone = (TextView) findViewById(R.id.phone);
-        bio = (TextView) findViewById(R.id.bio);
+        avatar = (ImageView) view.findViewById(R.id.avatar);
+        username = (TextView) view.findViewById(R.id.username);
+        sex = (TextView) view.findViewById(R.id.sex);
+        phone = (TextView) view.findViewById(R.id.phone);
+        bio = (TextView) view.findViewById(R.id.bio);
         if(currentUser != null){
             if(currentUser.getUsername() != null && !currentUser.getUsername().equals("")){
                 username.setText(currentUser.getUsername());
@@ -70,7 +75,6 @@ public class UserInformationActivity extends Activity {
             }
 
             if(currentUser.getSex() <= 3) {
-                Toast.makeText(this, currentUser.getSex() + " ", Toast.LENGTH_SHORT).show();
                 sex.setText(SexType.getTypeBySexId(currentUser.getSex()));
             }else {
                 sex.setText(SexType.getTypeBySexId(0));
@@ -89,48 +93,45 @@ public class UserInformationActivity extends Activity {
             }
         }
 
-        View avatarView = findViewById(R.id.avatarLayout);
+        View avatarView = view.findViewById(R.id.avatarLayout);
         avatarView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(UserInformationActivity.this, "click the avatar view", Toast.LENGTH_SHORT).show();
-                puWindow = new MPoPuWindow(UserInformationActivity.this, UserInformationActivity.this);
-                puWindow.showPopupWindow(findViewById(R.id.avatarLayout));
+                puWindow = new MPoPuWindow(getActivity(), getActivity());
+                puWindow.showPopupWindow(view.findViewById(R.id.avatarLayout));
                 puWindow.setOnGetTypeClckListener(new MPoPuWindow.onGetTypeClckListener() {
 
                     @Override
                     public void getType(Type type) {
-                        UserInformationActivity.this.type = type;
+                        UserProfileFragment.this.type = type;
                     }
 
 
                     @Override
                     public void getImgUri(Uri ImgUri, File file) {
-                        UserInformationActivity.this.ImgUri = ImgUri;
-                        UserInformationActivity.this.file = file;
+                        UserProfileFragment.this.ImgUri = ImgUri;
+                        UserProfileFragment.this.file = file;
                     }
                 });
 
             }
         });
 
-        View usernameView = findViewById(R.id.usernameLayout);
+        View usernameView = view.findViewById(R.id.usernameLayout);
         usernameView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(UserInformationActivity.this, "click the username view", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(UserInformationActivity.this, UsernameModifyActivity.class);
+                Intent intent = new Intent(getActivity(), UsernameModifyActivity.class);
                 startActivity(intent);
             }
         });
 
-        View sexView = findViewById(R.id.sexLayout);
+        View sexView = view.findViewById(R.id.sexLayout);
         sexView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(UserInformationActivity.this, "click the sex view", Toast.LENGTH_SHORT).show();
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(UserInformationActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("请选择性别");
                 final String[] sexStrs = new String[]{"男", "女", "其他"};
 
@@ -141,7 +142,6 @@ public class UserInformationActivity extends Activity {
                 builder.setSingleChoiceItems(sexStrs, tempSex - 1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(UserInformationActivity.this, "性别为" + sexStrs[i], Toast.LENGTH_SHORT).show();
                         currentUser.setSex(i + 1);
 
                     }
@@ -151,7 +151,7 @@ public class UserInformationActivity extends Activity {
 
                         UserInfoTask userInfoTask = new UserInfoTask(currentUser.getUsername(), currentUser.getSex(), currentUser.getBio());
                         userInfoTask.execute((Void) null);
-                 }
+                    }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -161,34 +161,30 @@ public class UserInformationActivity extends Activity {
             }
         });
 
-        View phoneView = findViewById(R.id.phoneLayout);
+        View phoneView = view.findViewById(R.id.phoneLayout);
         phoneView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(UserInformationActivity.this, "click the phone view", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "click the phone view", Toast.LENGTH_SHORT).show();
             }
         });
 
-        View bioView = findViewById(R.id.bioLayout);
+        View bioView = view.findViewById(R.id.bioLayout);
         bioView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(UserInformationActivity.this, "click the bio view", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(UserInformationActivity.this, UserBioModifyActivity.class);
+
+                Intent intent = new Intent(getActivity(), UserBioModifyActivity.class);
                 startActivity(intent);
             }
         });
+        return view;
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         currentUser = DataManager.getInstance().getCurrentUser();
-        avatar = (ImageView) findViewById(R.id.avatar);
-        username = (TextView) findViewById(R.id.username);
-        sex = (TextView) findViewById(R.id.sex);
-        phone = (TextView) findViewById(R.id.phone);
-        bio = (TextView) findViewById(R.id.bio);
         if(currentUser != null){
             if(currentUser.getUsername() != null && !currentUser.getUsername().equals("")){
                 username.setText(currentUser.getUsername());
@@ -197,7 +193,6 @@ public class UserInformationActivity extends Activity {
             }
 
             if(currentUser.getSex() <= 3) {
-                Toast.makeText(this, currentUser.getSex() + " ", Toast.LENGTH_SHORT).show();
                 sex.setText(SexType.getTypeBySexId(currentUser.getSex()));
             }else {
                 sex.setText(SexType.getTypeBySexId(0));
@@ -218,7 +213,7 @@ public class UserInformationActivity extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
         Log.e("requestCode", type + "");
@@ -230,7 +225,7 @@ public class UserInformationActivity extends Activity {
             if (data != null) {
                 Uri uri = data.getData();
                 temp = uri;
-        //        Log.i("xwk", data.toString());
+                //        Log.i("xwk", data.toString());
 
                 puWindow.onPhoto(uri, 300, 300);
             }
@@ -246,9 +241,9 @@ public class UserInformationActivity extends Activity {
                     try{
                         String[] pojo = {MediaStore.Images.Media.DATA};
                         Log.i("xwk", String.valueOf(temp));
-                        Cursor cursor = managedQuery(temp, pojo, null, null, null);
+                        Cursor cursor = getActivity().managedQuery(temp, pojo, null, null, null);
                         if(cursor != null){
-                            ContentResolver cr = this.getContentResolver();
+                            ContentResolver cr = getActivity().getContentResolver();
                             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
                             cursor.moveToFirst();
                             String path = cursor.getString(column_index);
@@ -256,7 +251,7 @@ public class UserInformationActivity extends Activity {
                             if(path.endsWith("jpg") || path.endsWith("png")){
                                 picPath = path;
                                 Log.i("xwk", picPath);
-                                UploadFileTask uploadFileTask = new UploadFileTask(this);
+                                UploadFileTask uploadFileTask = new UploadFileTask(getActivity());
                                 uploadFileTask.execute(picPath);
                                 Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(temp));
                                 if(bitmap != null){
@@ -288,7 +283,7 @@ public class UserInformationActivity extends Activity {
 
     private void alert()
     {
-        Dialog dialog = new AlertDialog.Builder(this)
+        Dialog dialog = new AlertDialog.Builder(getContext())
                 .setTitle("提示")
                 .setMessage("您选择的不是有效的图片")
                 .setPositiveButton("确定",
@@ -330,7 +325,7 @@ public class UserInformationActivity extends Activity {
                 DataManager.getInstance().setCurrentUser(currentUser);
                 sex.setText(SexType.getTypeBySexId(currentUser.getSex()));
             }else {
-                Toast.makeText(UserInformationActivity.this, "failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "failed", Toast.LENGTH_SHORT).show();
             }
 
         }

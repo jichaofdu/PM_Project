@@ -89,7 +89,7 @@ public class PublishTaskStepTwoActivity extends AppCompatActivity {
                 task.setDeadline(date);
                 task.setCredit(credit);
                 task.getLocation().setDescription(locationDscp);
-                if (credit > DataManager.getInstance().getCurrentUser().getCredit()) {
+                if (credit+2 > DataManager.getInstance().getCurrentUser().getCredit()) {
                     inputTaskCredit.setError(getString(R.string.error_credit));
                     focus = inputTaskCredit;
                     b = true;

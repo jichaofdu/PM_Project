@@ -1,4 +1,4 @@
-package projectmanager.dada.pages;
+package projectmanager.dada.fragment;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -7,58 +7,60 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import java.util.ArrayList;
+
 import projectmanager.dada.R;
-import projectmanager.dada.adapter.ViewMyPublishTaskAdapter;
+import projectmanager.dada.adapter.ViewMyAcceptTaskAdapter;
 import projectmanager.dada.model.Task;
 import projectmanager.dada.model.User;
+import projectmanager.dada.pages.MyAcceptTaskDetailActivity;
 import projectmanager.dada.util.ApiManager;
 import projectmanager.dada.util.DataManager;
 
-public class MyPublishTaskActivity extends AppCompatActivity {
+/**
+ * Created by tao on 2016/12/17.
+ */
 
-    private GetMyPublishTaskSetTask  getMyPublishSetTask;
-    private ListView                 myPublishListView;
-    private View                     progressView;
-    private ArrayList<Task>          myPublishTaskList;
-    private ViewMyPublishTaskAdapter myPublishTaskAdapter;
+public class AcceptedTaskFragment extends Fragment {
+    private GetMyAcceptTaskSetTask getMyAcceptSetTask;
+    private View progressView;
+    private ListView myAcceptListView;
+    private ArrayList<Task> myAcceptTaskList;
+    private ViewMyAcceptTaskAdapter myAcceptTaskAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_publish_task);
-
-        myPublishListView = (ListView) findViewById(R.id.my_publish_task_list_view);
-        progressView = findViewById(R.id.get_my_publish_task_progress);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_my_accept_task, container, false);
+        myAcceptListView = (ListView) view.findViewById(R.id.my_accept_task_list_view);
+        progressView = view.findViewById(R.id.get_my_accept_task_progress);
+        return view;
     }
 
-
     @Override
-    protected void onResume(){
+    public void onResume(){
         super.onResume();
-        myPublishTaskList = new ArrayList<>();
-        tryGetMyPublishTasks();
+        myAcceptTaskList = new ArrayList<>();
+        tryGetMyAcceptTasks();
         new UpdateUserProfile().execute();
     }
-
-
-    /**
-     * ---------------------------------------------------------------------------------------------
-     * -------------------------------------向服务器提交伪造的数据-------------------------------------
-     */
 
     /**
      * 执行从服务器获取数据的动作
      */
-    private void tryGetMyPublishTasks(){
+    private void tryGetMyAcceptTasks(){
         showProgress(true);
-        getMyPublishSetTask = new GetMyPublishTaskSetTask();
-        getMyPublishSetTask.execute((Void) null);
+        getMyAcceptSetTask = new GetMyAcceptTaskSetTask();
+        getMyAcceptSetTask.execute((Void) null);
     }
+
 
     /**
      * 在用户从服务器获取自己发布的任务的时候
@@ -68,12 +70,12 @@ public class MyPublishTaskActivity extends AppCompatActivity {
     private void showProgress(final boolean show) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-            myPublishListView.setVisibility(show ? View.GONE : View.VISIBLE);
-            myPublishListView.animate().setDuration(shortAnimTime).alpha(
+            myAcceptListView.setVisibility(show ? View.GONE : View.VISIBLE);
+            myAcceptListView.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    myPublishListView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    myAcceptListView.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
             progressView.setVisibility(show ? View.VISIBLE : View.GONE);
@@ -86,7 +88,7 @@ public class MyPublishTaskActivity extends AppCompatActivity {
             });
         } else {
             progressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            myPublishListView.setVisibility(show ? View.GONE : View.VISIBLE);
+            myAcceptListView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -94,50 +96,49 @@ public class MyPublishTaskActivity extends AppCompatActivity {
     /**
      * 从服务器获取数据的线程
      */
-    public class GetMyPublishTaskSetTask extends AsyncTask<Void, Void, Boolean>{
+    public class GetMyAcceptTaskSetTask extends AsyncTask<Void, Void, Boolean> {
         private User nowLoginUser;
-        GetMyPublishTaskSetTask(){
+        GetMyAcceptTaskSetTask(){
             nowLoginUser = DataManager.getInstance().getCurrentUser();
         }
         @Override
         protected Boolean doInBackground(Void... voids) {
             showProgress(true);
-            ArrayList<Task> acceptList = ApiManager.getInstance().handleGetPublishTasks(nowLoginUser.getUserId(),
+            ArrayList<Task> acceptList = ApiManager.getInstance().handleGetAcceptTasks(nowLoginUser.getUserId(),
                     0,10);
             if(acceptList == null || acceptList.isEmpty()){
-                System.out.println("[Tip] Get My publish task set fail. Empty Set.");
+                System.out.println("[Tip] Get My accept task set fail. Empty Set.");
                 return false;
             }else{
-                myPublishTaskList = acceptList;
-                System.out.println("[Tip]My Publish Tasks Size: " + myPublishTaskList.size());
+                myAcceptTaskList = acceptList;
                 return true;
             }
         }
         @Override
         protected void onPostExecute(final Boolean success) {
-            getMyPublishSetTask = null;
+            getMyAcceptSetTask = null;
             showProgress(false);
             if (success == true) {
-                myPublishTaskAdapter = new ViewMyPublishTaskAdapter(MyPublishTaskActivity.this,
-                        R.layout.my_publish_task_view,myPublishTaskList);
-                myPublishListView.setAdapter(myPublishTaskAdapter);
-                myPublishListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                myAcceptTaskAdapter = new ViewMyAcceptTaskAdapter(getActivity(),
+                        R.layout.my_accept_task_view,myAcceptTaskList);
+                myAcceptListView.setAdapter(myAcceptTaskAdapter);
+                myAcceptListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                        Task clickTask = myPublishTaskList.get(position);
-                        DataManager.getInstance().setSelectedMyPublishTask(clickTask);
-                        Intent nextPage = new Intent(MyPublishTaskActivity.this,MyPublishTaskDetailActivity.class);
+                        Task clickTask = myAcceptTaskList.get(position);
+                        DataManager.getInstance().setSelectedMyAcceptTask(clickTask);
+                        Intent nextPage = new Intent(getActivity(),MyAcceptTaskDetailActivity.class);
                         startActivity(nextPage);
+
 
                     }
                 });
-
-                myPublishTaskAdapter.notifyDataSetChanged();
+                myAcceptTaskAdapter.notifyDataSetChanged();
             }
         }
         @Override
         protected void onCancelled() {
-            getMyPublishSetTask = null;
+            getMyAcceptSetTask = null;
             showProgress(false);
         }
     }

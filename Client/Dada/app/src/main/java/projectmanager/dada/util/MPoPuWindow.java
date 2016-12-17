@@ -17,7 +17,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import java.io.File;
 import projectmanager.dada.R;
-import projectmanager.dada.pages.UserInformationActivity.Type;
+import projectmanager.dada.fragment.UserProfileFragment.Type;
 
 public class MPoPuWindow extends PopupWindow implements OnClickListener {
 

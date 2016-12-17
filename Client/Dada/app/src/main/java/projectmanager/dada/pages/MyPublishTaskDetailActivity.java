@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +29,8 @@ public class MyPublishTaskDetailActivity extends Activity {
     private View myPublishTaskDetailView;
     private View progressView;
     private Task selectedTask;
+    private ConfirmMyPublishTask confirmTask;
+    private CancelMyPublishTask  cancelTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,45 +96,37 @@ public class MyPublishTaskDetailActivity extends Activity {
     }
 
     private void clickCancelButton(){
-
+        new AlertDialog.Builder(this).setTitle("确认要取消这个任务吗？（可能受到信用惩罚）")
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        cancelTask = new CancelMyPublishTask();
+                        cancelTask.execute();
+                    }
+                })
+                .setNegativeButton("不取消了", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) { }
+                }).show();
     }
 
     private void clickComfirmButton(){
-
+        new AlertDialog.Builder(this).setTitle("确定此任务已完成吗？")
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        confirmTask = new ConfirmMyPublishTask();
+                        confirmTask.execute();
+                    }
+                })
+                .setNegativeButton("返回", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) { }
+                }).show();
     }
 
-
-
-
-    /**
-     * 显示进度条
-     * @param show 设定进度框显示与否
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-            myPublishTaskDetailView.setVisibility(show ? View.GONE : View.VISIBLE);
-            myPublishTaskDetailView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    myPublishTaskDetailView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-            progressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            progressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    progressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            progressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            myPublishTaskDetailView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
 
 
     /**
@@ -141,7 +137,6 @@ public class MyPublishTaskDetailActivity extends Activity {
         @Override
         protected Boolean doInBackground(Void... voids) {
             cancelResult = "";
-            showProgress(true);
             cancelResult = ApiManager.getInstance().handleCancelTask(
                     DataManager.getInstance().getSelectedMyPublishTask().getTaskId(),
                     DataManager.getInstance().getCurrentUser().getUserId());
@@ -153,19 +148,47 @@ public class MyPublishTaskDetailActivity extends Activity {
         }
         @Override
         protected void onPostExecute(final Boolean success) {
-            showProgress(false);
             if(success == true){
                 Toast.makeText(MyPublishTaskDetailActivity.this, "操作成功", Toast.LENGTH_SHORT).show();
                 finish();
             }else{
-                Toast.makeText(MyPublishTaskDetailActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyPublishTaskDetailActivity.this, cancelResult, Toast.LENGTH_SHORT).show();
             }
         }
         @Override
         protected void onCancelled() {
-            showProgress(false);
             Toast.makeText(MyPublishTaskDetailActivity.this, "你取消了本次操作", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public class ConfirmMyPublishTask extends AsyncTask<Void, Void, Boolean> {
+        private String confirmResult;
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            confirmResult = "";
+            confirmResult = ApiManager.getInstance().handleConfirmTask(
+                    DataManager.getInstance().getSelectedMyPublishTask().getTaskId(),
+                    DataManager.getInstance().getCurrentUser().getUserId());
+            if(confirmResult != null && confirmResult.equals("succeed")){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if(success == true){
+                Toast.makeText(MyPublishTaskDetailActivity.this, "操作成功", Toast.LENGTH_SHORT).show();
+                finish();
+            }else{
+                Toast.makeText(MyPublishTaskDetailActivity.this, confirmResult, Toast.LENGTH_SHORT).show();
+            }
+        }
+        @Override
+        protected void onCancelled() {
+            Toast.makeText(MyPublishTaskDetailActivity.this, "你取消了本次操作", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 }

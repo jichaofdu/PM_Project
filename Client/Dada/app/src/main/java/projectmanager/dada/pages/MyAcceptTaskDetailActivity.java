@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +29,9 @@ public class MyAcceptTaskDetailActivity extends Activity {
     private View myAcceptTaskDetailView;
     private View progressView;
     private Task selectedTask;
+    private DoneMyFinishTask doneTask;
+    private QuitMyAcceptTask quitTask;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +45,7 @@ public class MyAcceptTaskDetailActivity extends Activity {
         TextView titleView = (TextView)myAcceptTaskDetailView.findViewById(R.id.my_accept_detail_title);
         titleView.setText(selectedTask.getTitle());
         TextView publisher = (TextView)myAcceptTaskDetailView.findViewById(R.id.my_accept_detail_publisher);
-        titleView.setText(selectedTask.getPublisher().getUsername());
+        publisher.setText(selectedTask.getPublisher().getUsername());
         TextView publishTimeView = (TextView)myAcceptTaskDetailView.findViewById(R.id.my_accept_detail_publish_time);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         publishTimeView.setText(sdf.format(selectedTask.getPublishedTime()));
@@ -53,7 +58,7 @@ public class MyAcceptTaskDetailActivity extends Activity {
         TextView creditView = (TextView)myAcceptTaskDetailView.findViewById(R.id.my_accept_detail_spend_credit);
         creditView.setText("" + selectedTask.getCredit());
         TagListView mTagListView = (TagListView) findViewById(R.id.my_accept_detail_tag_view);
-        List<Tag> mTags = new ArrayList<Tag>();
+        List<Tag> mTags = new ArrayList<>();
         for (int i = 0; i < selectedTask.getTags().length; i++) {
             Tag tag = new Tag();
             tag.setId(i);
@@ -88,41 +93,35 @@ public class MyAcceptTaskDetailActivity extends Activity {
     }
 
     private void clickFinishButton(){
-
+        new AlertDialog.Builder(this).setTitle("确认你已完成此任务吗？")
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        doneTask = new DoneMyFinishTask();
+                        doneTask.execute();
+                    }
+                })
+                .setNegativeButton("没有完成", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) { }
+                }).show();
     }
 
     private void clickQuitButton(){
-
-    }
-
-    /**
-     * 显示进度条
-     * @param show 设定进度框显示与否
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-            myAcceptTaskDetailView.setVisibility(show ? View.GONE : View.VISIBLE);
-            myAcceptTaskDetailView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    myAcceptTaskDetailView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-            progressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            progressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    progressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            progressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            myAcceptTaskDetailView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
+        new AlertDialog.Builder(this).setTitle("确认要放弃这个任务吗？（可能受到信用惩罚）")
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setPositiveButton("确定放弃", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        quitTask = new QuitMyAcceptTask();
+                        quitTask.execute();
+                    }
+                })
+                .setNegativeButton("不放弃", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) { }
+                }).show();
     }
 
     /**
@@ -133,7 +132,6 @@ public class MyAcceptTaskDetailActivity extends Activity {
         @Override
         protected Boolean doInBackground(Void... voids) {
             doneResult = "";
-            showProgress(true);
             doneResult = ApiManager.getInstance().handleDoneTask(
                     selectedTask.getTaskId(),
                     DataManager.getInstance().getCurrentUser().getUserId());
@@ -145,22 +143,45 @@ public class MyAcceptTaskDetailActivity extends Activity {
         }
         @Override
         protected void onPostExecute(final Boolean success) {
-            showProgress(false);
             if(success == true){
                 Toast.makeText(MyAcceptTaskDetailActivity.this, "操作成功", Toast.LENGTH_SHORT).show();
                 finish();
             }else{
-                Toast.makeText(MyAcceptTaskDetailActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyAcceptTaskDetailActivity.this, doneResult, Toast.LENGTH_SHORT).show();
             }
         }
         @Override
         protected void onCancelled() {
-            showProgress(false);
             Toast.makeText(MyAcceptTaskDetailActivity.this, "你取消了本次操作", Toast.LENGTH_SHORT).show();
         }
     }
 
-
-
-
+    public class QuitMyAcceptTask extends AsyncTask<Void, Void, Boolean> {
+        private String quitResult;
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            quitResult = "";
+            quitResult = ApiManager.getInstance().handleQuitTask(
+                    selectedTask.getTaskId(),
+                    DataManager.getInstance().getCurrentUser().getUserId());
+            if(quitResult != null && quitResult.equals("succeed")){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if(success == true){
+                Toast.makeText(MyAcceptTaskDetailActivity.this, "操作成功", Toast.LENGTH_SHORT).show();
+                finish();
+            }else{
+                Toast.makeText(MyAcceptTaskDetailActivity.this, quitResult, Toast.LENGTH_SHORT).show();
+            }
+        }
+        @Override
+        protected void onCancelled() {
+            Toast.makeText(MyAcceptTaskDetailActivity.this, "你取消了本次操作", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

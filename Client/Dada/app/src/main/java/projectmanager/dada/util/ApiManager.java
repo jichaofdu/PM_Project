@@ -1,28 +1,23 @@
 package projectmanager.dada.util;
 
 import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
-
-import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ClientConnectionRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,7 +26,6 @@ import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
 import projectmanager.dada.model.Location;
 import projectmanager.dada.model.Task;
 import projectmanager.dada.model.User;
@@ -522,7 +516,6 @@ public class ApiManager {
         try{
             HttpClient client = new DefaultHttpClient();
             HttpPost request = new HttpPost("https://relay.nxtsysx.net/editTask/");
-
             List<NameValuePair> postParameters = new ArrayList<>();
             postParameters.add(new BasicNameValuePair("title", "" + task.getTitle()));
             postParameters.add(new BasicNameValuePair("description", task.getDescription()));
@@ -535,7 +528,6 @@ public class ApiManager {
             JSONArray tagsJsonArr = new JSONArray(task.getTags());
             postParameters.add(new BasicNameValuePair("tags", tagsJsonArr.toString()));
             postParameters.add(new BasicNameValuePair("credit", "" + task.getCredit()));
-
             UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters,HTTP.UTF_8);
             request.setEntity(formEntity);
             HttpResponse response = client.execute(request);
@@ -680,6 +672,84 @@ public class ApiManager {
                 }
             }else{
                 System.out.println("[Error] Cancel Task Process. Status Code:" +
+                        response.getStatusLine().getStatusCode());
+                return null;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 任务发布者确认任务已经完成
+     * @param taskId 要确认的任务id
+     * @param userId 发起者的用户id
+     * @return
+     */
+    public String handleConfirmTask(int taskId,int userId){
+        try{
+            HttpClient client = new DefaultHttpClient();
+            HttpPost request = new HttpPost("https://relay.nxtsysx.net/confirmTask/");
+            List<NameValuePair> postParameters = new ArrayList<>();
+            postParameters.add(new BasicNameValuePair("taskId", "" + taskId));
+            postParameters.add(new BasicNameValuePair("userId", "" + userId));
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters,HTTP.UTF_8);
+            request.setEntity(formEntity);
+            HttpResponse response = client.execute(request);
+            if (response.getStatusLine().getStatusCode() == 200) {
+                InputStream is = response.getEntity().getContent();
+                String str = convertStreamToString(is);
+                JSONObject resultJson = new JSONObject(str);
+                String result = resultJson.getString("result");
+                if(result.equals("succeed")){
+                    return "succeed";
+                }else{
+                    String error = resultJson.getString("error");
+                    System.out.println("[Error] Confirm Task process. Error Message:" + error);
+                    return error;
+                }
+            }else{
+                System.out.println("[Error] Confirm Task Process. Status Code:" +
+                        response.getStatusLine().getStatusCode());
+                return null;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 某个用户放弃了自己接受了的任务
+     * @param taskId 要放弃的任务id
+     * @param userId 接受者的用户id
+     * @return
+     */
+    public String handleQuitTask(int taskId,int userId){
+        try{
+            HttpClient client = new DefaultHttpClient();
+            HttpPost request = new HttpPost("https://relay.nxtsysx.net/quitTask/");
+            List<NameValuePair> postParameters = new ArrayList<>();
+            postParameters.add(new BasicNameValuePair("taskId", "" + taskId));
+            postParameters.add(new BasicNameValuePair("userId", "" + userId));
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters,HTTP.UTF_8);
+            request.setEntity(formEntity);
+            HttpResponse response = client.execute(request);
+            if (response.getStatusLine().getStatusCode() == 200) {
+                InputStream is = response.getEntity().getContent();
+                String str = convertStreamToString(is);
+                JSONObject resultJson = new JSONObject(str);
+                String result = resultJson.getString("result");
+                if(result.equals("succeed")){
+                    return "succeed";
+                }else{
+                    String error = resultJson.getString("error");
+                    System.out.println("[Error] Quit Task process. Error Message:" + error);
+                    return error;
+                }
+            }else{
+                System.out.println("[Error] Quit Task Process. Status Code:" +
                         response.getStatusLine().getStatusCode());
                 return null;
             }

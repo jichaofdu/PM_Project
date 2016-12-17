@@ -10,23 +10,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
 import projectmanager.dada.R;
 import projectmanager.dada.model.StatusType;
 import projectmanager.dada.model.Tag;
 import projectmanager.dada.model.TagListView;
-import projectmanager.dada.model.TagView;
 import projectmanager.dada.model.Task;
 import projectmanager.dada.util.ApiManager;
 import projectmanager.dada.util.DataManager;
 
 public class MyPublishTaskDetailActivity extends Activity {
 
-    private Task thisSelectTask;
     private View myPublishTaskDetailView;
     private View progressView;
     private Task selectedTask;
@@ -38,7 +34,7 @@ public class MyPublishTaskDetailActivity extends Activity {
         setContentView(R.layout.activity_my_publish_task_detail);
 
         myPublishTaskDetailView = findViewById(R.id.activity_my_publish_task_detail);
-        progressView = findViewById(R.id.get_my_accept_task_progress);
+        progressView = findViewById(R.id.get_my_publish_task_progress);
 
         TextView titleView = (TextView)myPublishTaskDetailView.findViewById(R.id.my_publish_detail_title);
         titleView.setText(selectedTask.getTitle());
@@ -57,10 +53,8 @@ public class MyPublishTaskDetailActivity extends Activity {
         }else{
             accepterView.setText(selectedTask.getAccepter().getUsername());
         }
-
         TextView creditView = (TextView)myPublishTaskDetailView.findViewById(R.id.my_publish_detail_spend_credit);
         creditView.setText("" + selectedTask.getCredit());
-
         TagListView mTagListView = (TagListView) findViewById(R.id.my_publish_detail_tag_view);
         List<Tag> mTags = new ArrayList<Tag>();
         for (int i = 0; i < selectedTask.getTags().length; i++) {
@@ -115,7 +109,7 @@ public class MyPublishTaskDetailActivity extends Activity {
             cancelResult = "";
             showProgress(true);
             cancelResult = ApiManager.getInstance().handleCancelTask(
-                    thisSelectTask.getTaskId(),
+                    DataManager.getInstance().getSelectedMyPublishTask().getTaskId(),
                     DataManager.getInstance().getCurrentUser().getUserId());
             if(cancelResult != null && cancelResult.equals("succeed")){
                 return true;

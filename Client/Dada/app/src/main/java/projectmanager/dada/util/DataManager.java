@@ -39,6 +39,9 @@ public class DataManager {
     //用户点选的自己发布的任务
     private Task selectedMyPublishTask;
 
+    //用户点选的自己接受的任务
+    private Task selectedMyAcceptTask;
+
     private DataManager(){
         currentUser = null;
     }
@@ -120,5 +123,13 @@ public class DataManager {
 
     public void setNearbyList(List<Task> nearbyList) {
         this.nearbyList = nearbyList;
+    }
+
+    public Task getSelectedMyAcceptTask() {
+        return selectedMyAcceptTask;
+    }
+
+    public void setSelectedMyAcceptTask(Task selectedMyAcceptTask) {
+        this.selectedMyAcceptTask = selectedMyAcceptTask;
     }
 }

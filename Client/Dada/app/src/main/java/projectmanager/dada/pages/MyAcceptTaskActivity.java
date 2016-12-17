@@ -115,6 +115,7 @@ public class MyAcceptTaskActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                         Task clickTask = myAcceptTaskList.get(position);
+                        DataManager.getInstance().setSelectedMyAcceptTask(clickTask);
                         Intent nextPage = new Intent(MyAcceptTaskActivity.this,MyAcceptTaskDetailActivity.class);
                         startActivity(nextPage);
 

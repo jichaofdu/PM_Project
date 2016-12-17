@@ -33,8 +33,15 @@ public class MyAcceptTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_accept_task);
         myAcceptListView = (ListView) findViewById(R.id.my_accept_task_list_view);
         progressView = findViewById(R.id.get_my_accept_task_progress);
+
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
         myAcceptTaskList = new ArrayList<>();
         tryGetMyAcceptTasks();
+        new UpdateUserProfile().execute();
     }
 
     /**
@@ -82,13 +89,10 @@ public class MyAcceptTaskActivity extends AppCompatActivity {
      * 从服务器获取数据的线程
      */
     public class GetMyAcceptTaskSetTask extends AsyncTask<Void, Void, Boolean> {
-
         private User nowLoginUser;
-
         GetMyAcceptTaskSetTask(){
             nowLoginUser = DataManager.getInstance().getCurrentUser();
         }
-
         @Override
         protected Boolean doInBackground(Void... voids) {
             showProgress(true);
@@ -102,7 +106,6 @@ public class MyAcceptTaskActivity extends AppCompatActivity {
                 return true;
             }
         }
-
         @Override
         protected void onPostExecute(final Boolean success) {
             getMyAcceptSetTask = null;
@@ -123,15 +126,36 @@ public class MyAcceptTaskActivity extends AppCompatActivity {
                     }
                 });
                 myAcceptTaskAdapter.notifyDataSetChanged();
-                //todo 更改显示在图中的数据
             }
         }
-
         @Override
         protected void onCancelled() {
             getMyAcceptSetTask = null;
             showProgress(false);
         }
+    }
+
+    public class UpdateUserProfile extends AsyncTask<Void, Void, Boolean>{
+        private User newLoginUser;
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            newLoginUser = ApiManager.getInstance().handleGetUserById
+                            (DataManager.getInstance().getCurrentUser().getUserId());
+            if(newLoginUser== null){
+                System.out.println("[Tip] Get My accept task set fail. Cannot Get Login User");
+                return false;
+            }else{
+                return true;
+            }
+        }
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (success == true) {
+                DataManager.getInstance().setCurrentUser(newLoginUser);
+            }
+        }
+        @Override
+        protected void onCancelled() { }
     }
 
 }

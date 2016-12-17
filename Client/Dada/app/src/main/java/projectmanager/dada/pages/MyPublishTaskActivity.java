@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,8 +18,6 @@ import projectmanager.dada.model.Task;
 import projectmanager.dada.model.User;
 import projectmanager.dada.util.ApiManager;
 import projectmanager.dada.util.DataManager;
-
-;
 
 public class MyPublishTaskActivity extends AppCompatActivity {
 
@@ -37,10 +34,15 @@ public class MyPublishTaskActivity extends AppCompatActivity {
 
         myPublishListView = (ListView) findViewById(R.id.my_publish_task_list_view);
         progressView = findViewById(R.id.get_my_publish_task_progress);
+    }
 
+
+    @Override
+    protected void onResume(){
+        super.onResume();
         myPublishTaskList = new ArrayList<>();
-
         tryGetMyPublishTasks();
+        new UpdateUserProfile().execute();
     }
 
 
@@ -140,7 +142,26 @@ public class MyPublishTaskActivity extends AppCompatActivity {
         }
     }
 
-
-
-
+    public class UpdateUserProfile extends AsyncTask<Void, Void, Boolean>{
+        private User newLoginUser;
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            newLoginUser = ApiManager.getInstance().handleGetUserById
+                    (DataManager.getInstance().getCurrentUser().getUserId());
+            if(newLoginUser== null){
+                System.out.println("[Tip] Get My accept task set fail. Cannot Get Login User");
+                return false;
+            }else{
+                return true;
+            }
+        }
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (success == true) {
+                DataManager.getInstance().setCurrentUser(newLoginUser);
+            }
+        }
+        @Override
+        protected void onCancelled() { }
+    }
 }

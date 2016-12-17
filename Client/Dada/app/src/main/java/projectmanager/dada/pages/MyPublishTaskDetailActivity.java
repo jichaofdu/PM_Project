@@ -1,13 +1,9 @@
 package projectmanager.dada.pages;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -86,7 +82,7 @@ public class MyPublishTaskDetailActivity extends Activity {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println();
+                clickConfirmButton();
             }
         });
         if(selectedTask.getStatus() == StatusType.WAITCONFIRM.getCode()){
@@ -111,7 +107,7 @@ public class MyPublishTaskDetailActivity extends Activity {
                 }).show();
     }
 
-    private void clickComfirmButton(){
+    private void clickConfirmButton(){
         new AlertDialog.Builder(this).setTitle("确定此任务已完成吗？")
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {

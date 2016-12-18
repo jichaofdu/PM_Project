@@ -32,5 +32,5 @@ define('COST_PUBLISH', 2);
 define('REWARD_ACCEPT', 3);
 
 //penalty
-define('PENALTY_CANCEL', 8);
+define('PENALTY_CANCEL', 6);
 define('PENALTY_QUIT', 5);

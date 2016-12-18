@@ -137,13 +137,18 @@ class UserController extends Controller
             abort(400);
         }
 
+        if ($oldPassword == $newPassword) {
+            $result = FAILED;
+            $error = 'New password cannot be same as the old one';
+            return new Response(['result' => $result, 'error' => $error]);
+        }
+
         $User = new User;
         $user = $User->getUser($userId);
 
         try {
             $decrypted = Crypt::decrypt($user->password);
-            echo $decrypted . "\n";
-            echo $oldPassword . "\n";
+
             if ($decrypted == $oldPassword) {
                 $user->password = Crypt::encrypt($newPassword);
                 $user->save();
@@ -218,6 +223,10 @@ class UserController extends Controller
             abort(400);
         }
 
+        if (!is_int($limit)) {
+            $limit = 0;
+        }
+
         $User = new User;
         $Tag = new Tag;
         $Task = new Task;
@@ -260,6 +269,10 @@ class UserController extends Controller
 
         if (empty($userId)) {
             abort(400);
+        }
+
+        if (!is_int($limit)) {
+            $limit = 0;
         }
 
         $User = new User;

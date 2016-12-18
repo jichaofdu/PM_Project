@@ -19,8 +19,11 @@ use Illuminate\Support\Facades\DB;
 
 require 'constants.php';
 
+
 class TaskController extends Controller
 {
+
+    //TODO: 测试访问API时的参数类型问题
 
     /**
      *
@@ -39,13 +42,13 @@ class TaskController extends Controller
         $latitude = $request->input('latitude');
         $locationDscp = $request->input('locationDscp');
         $tags = $request->input('tags');
-        $credit = $request->input('credit');
+        $credit = $request->input('credit', DEFAULT_TASK_CREDIT);
 
         if (empty($title) || empty($description) || empty($userId)) {
             abort(400);
         }
 
-        if (empty($credit) || !is_int($credit)) {
+        if (!is_int($credit)) {
             $credit = DEFAULT_TASK_CREDIT;
         }
 
@@ -179,7 +182,12 @@ class TaskController extends Controller
         }
 
         $Task = new Task;
+        $User = new User;
         $task = $Task->getTaskByTaskIdRaw($taskId);
+        $publisher = $User->getUser($task->publisher_id);
+        if ($userId == $publisher->user_id) {
+            abort(403);
+        }
 
         if ($task->status != STATUS_PENDING) {
             $result = FAILED;
@@ -301,7 +309,7 @@ class TaskController extends Controller
 
     /**
      *
-     * Publisher cancel a task
+     * Publisher cancels a task
      *
      * @param Request $request
      * @return Response
@@ -337,6 +345,7 @@ class TaskController extends Controller
             $penalty = PENALTY_CANCEL;
         }
 
+        //发布者的信誉值必须高于惩罚
         if ($publisher->credit + $task->credit < $penalty) {
             $result = FAILED;
             $error = 'Credit insufficient!';
@@ -369,7 +378,7 @@ class TaskController extends Controller
 
     /**
      *
-     * Accepter quit a task
+     * Accepter quits a task
      *
      * @param Request $request
      * @return Response
@@ -440,6 +449,7 @@ class TaskController extends Controller
             $error = 'Invalid request: not numbers';
             return new Response(['result' => $result, 'error' => $error]);
         }
+
         if (empty($lon) || empty($lat) || empty($coordRadius)) {
             abort(400);
         }

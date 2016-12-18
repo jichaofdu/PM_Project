@@ -23,7 +23,6 @@ require 'constants.php';
 class UserController extends Controller
 {
 
-
     /**
      *
      * User register

@@ -76,12 +76,13 @@ public class PublishTaskStepTwoActivity extends AppCompatActivity {
                 String title = inputTaskTitle.getText().toString();
                 String content = inputTaskContent.getText().toString();
                 String locationDscp = inputTaskLocation.getText().toString();
+                String creditStr = inputTaskCredit.getText().toString();
                 Date date = calendar.getTime();
                 View focus = null;
                 boolean b = false;
                 int credit = 0;
-                if (inputTaskCredit.getText() != null) {
-                     credit = Integer.parseInt(inputTaskCredit.getText().toString());
+                if (!TextUtils.isEmpty(creditStr)) {
+                     credit = Integer.parseInt(creditStr);
                 }
                 Task task = DataManager.getInstance().getNewTask();
                 task.setTitle(title);

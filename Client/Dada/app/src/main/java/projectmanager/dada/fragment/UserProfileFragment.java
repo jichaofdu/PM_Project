@@ -29,6 +29,7 @@ import java.io.File;
 import projectmanager.dada.R;
 import projectmanager.dada.model.SexType;
 import projectmanager.dada.model.User;
+import projectmanager.dada.pages.ResetPasswordActivity;
 import projectmanager.dada.pages.UserBioModifyActivity;
 import projectmanager.dada.pages.UsernameModifyActivity;
 import projectmanager.dada.util.ApiManager;
@@ -48,6 +49,7 @@ public class UserProfileFragment extends Fragment {
     private TextView sex;
     private TextView phone;
     private TextView bio;
+    private TextView resetPassword;
     private Type type;
     private MPoPuWindow puWindow;
     private File file;
@@ -67,6 +69,7 @@ public class UserProfileFragment extends Fragment {
         sex = (TextView) view.findViewById(R.id.sex);
         phone = (TextView) view.findViewById(R.id.phone);
         bio = (TextView) view.findViewById(R.id.bio);
+        resetPassword = (TextView) view.findViewById(R.id.reset_password);
         if(currentUser != null){
             if(currentUser.getUsername() != null && !currentUser.getUsername().equals("")){
                 username.setText(currentUser.getUsername());
@@ -175,6 +178,15 @@ public class UserProfileFragment extends Fragment {
             public void onClick(View view) {
 
                 Intent intent = new Intent(getActivity(), UserBioModifyActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        View passwordView = view.findViewById(R.id.passwordLayout);
+        passwordView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ResetPasswordActivity.class);
                 startActivity(intent);
             }
         });

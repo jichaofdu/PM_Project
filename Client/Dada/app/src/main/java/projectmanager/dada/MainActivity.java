@@ -1,5 +1,6 @@
 package projectmanager.dada;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -15,8 +16,11 @@ import projectmanager.dada.fragment.AcceptedTaskFragment;
 import projectmanager.dada.fragment.NearbyFragment;
 import projectmanager.dada.fragment.PublishedTaskFragment;
 import projectmanager.dada.fragment.UserProfileFragment;
+import projectmanager.dada.pages.PublishTaskStepOneActivity;
 
 public class MainActivity extends FragmentActivity implements OnClickListener{
+
+    private TextView publishTask;
 
     // 底部菜单4个Linearlayout
     private LinearLayout nearby;
@@ -61,6 +65,13 @@ public class MainActivity extends FragmentActivity implements OnClickListener{
         accepted.setOnClickListener(this);
         published.setOnClickListener(this);
         profile.setOnClickListener(this);
+        publishTask.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent nextPage = new Intent(MainActivity.this, PublishTaskStepOneActivity.class);
+                startActivity(nextPage);
+            }
+        });
     }
 
     private void initView() {
@@ -82,6 +93,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener{
         this.tv_accepted = (TextView) findViewById(R.id.txt_accepted);
         this.tv_published = (TextView) findViewById(R.id.txt_published);
         this.tv_profile = (TextView) findViewById(R.id.txt_profile);
+
+        this.publishTask = (TextView) findViewById(R.id.publishTask);
 
     }
 
@@ -206,6 +219,11 @@ public class MainActivity extends FragmentActivity implements OnClickListener{
         tv_accepted.setTextColor(0xffffffff);
         tv_published.setTextColor(0xffffffff);
         tv_profile.setTextColor(0xffffffff);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
 }

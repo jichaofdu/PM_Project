@@ -221,6 +221,22 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/passwordLayout"
+            android:layout_width="match_parent"
+            android:layout_height="120px"
+            android:layout_marginTop="40px"
+            android:background="@drawable/item_selector"
+            android:clickable="true">
+            <TextView
+                android:id="@+id/reset_password"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:text="修改密码"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="8dip"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 

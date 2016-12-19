@@ -424,8 +424,9 @@ class TaskController extends Controller
 
         //扣除放弃任务的惩罚
         $accepter->credit = $accepter->credit - $penalty;
-
-        $task->status = STATUS_CANCELED;
+        //任务状态转为开放申请
+        $task->accepter_id = null;
+        $task->status = STATUS_PENDING;
 
         try {
             DB::beginTransaction();

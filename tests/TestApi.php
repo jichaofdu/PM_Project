@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Task;
+use Laravel\Lumen\Testing\DatabaseTransactions;
 
 require 'test_config.php';
 /**
@@ -12,7 +12,7 @@ require 'test_config.php';
 class TestApi extends TestCase
 {
 
-//    use DatabaseTransactions;
+    use DatabaseTransactions;
 
     public function testRegister()
     {
@@ -396,23 +396,6 @@ class TestApi extends TestCase
         //参数错误
         $this->post('/quitTask', ['taskId' => TASK_ID_UNDERWAY])
             ->assertResponseStatus(400);
-    }
-
-
-    public function test()
-    {
-        Task::expireTasks();
-//            $now = date("Y-m-d H:i");
-//            $justNow = date("2016-12-19 16:23");
-//
-//            echo $now . "\n";
-//            echo $justNow . "\n";
-//
-//            if($now >= $justNow) {
-//                echo "do it!";
-//            } else {
-//                echo "wait a moment";
-//            }
     }
 
 }

@@ -115,7 +115,7 @@ class Task extends CamelModel
         }
 
 
-        //对于正在进行中的任务，过期后对接受者进行惩罚（等同于接受者放弃任务）
+        //对于正在进行中的任务，过期后对接受者进行惩罚
         foreach ($underwayTasks as $task) {
             $now = date("Y-m-d H:i");
             $deadline = $task->deadline;
@@ -127,7 +127,7 @@ class Task extends CamelModel
 //            echo $deadline . "\n";
             if ($now >= $deadline) {
                 $accepter = $User->getUser($task->accepter_id);
-                $penalty = PENALTY_QUIT;
+                $penalty = PENALTY_EXPIRE;
                 //若接受者的信誉值足够，则扣除惩罚，否则扣成0
                 if ($accepter->credit > $penalty) {
                     $accepter->credit = $accepter->credit - $penalty;

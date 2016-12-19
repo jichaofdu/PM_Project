@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Models\Task;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 
@@ -24,7 +25,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        //
-
+        //每分钟检查任务是否过期并进行处理
+        $schedule->call(
+            function () {
+                Task::expireTasks();
+            }
+        )->everyMinute();
     }
 }

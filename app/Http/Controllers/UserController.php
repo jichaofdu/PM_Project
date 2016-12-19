@@ -209,6 +209,8 @@ class UserController extends Controller
                     $constraint->aspectRatio();
                 })->save($rootDir.$imgName);
 
+                if ($user->avatar != 'default.jpg')
+                    $fs->remove($rootDir.$user->avatar);
                 $user->avatar = $imgName;
             }
             catch (Exception $e){

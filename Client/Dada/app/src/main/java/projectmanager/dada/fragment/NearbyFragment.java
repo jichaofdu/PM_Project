@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -27,10 +26,8 @@ import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.MyLocationStyle;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import projectmanager.dada.R;
 import projectmanager.dada.model.Location;
 import projectmanager.dada.model.Task;
@@ -250,7 +247,6 @@ public class NearbyFragment extends Fragment implements LocationSource, AMapLoca
                     Marker marker = aMap.addMarker(new MarkerOptions().position(latLng));
                     marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.task));
                 }
-
             }else {
                 Toast.makeText(getActivity(), "failed", Toast.LENGTH_SHORT).show();
             }
@@ -258,7 +254,6 @@ public class NearbyFragment extends Fragment implements LocationSource, AMapLoca
         }
 
         @Override
-        protected void onCancelled() {
-        }
+        protected void onCancelled() { }
     }
 }

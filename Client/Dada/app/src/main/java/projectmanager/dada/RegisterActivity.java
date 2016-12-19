@@ -15,7 +15,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import projectmanager.dada.model.User;
 import projectmanager.dada.util.ApiManager;
 import projectmanager.dada.util.DataManager;
@@ -63,8 +62,6 @@ public class RegisterActivity extends AppCompatActivity{
      * 点击“跳转到登录”按钮之后，关闭注册页面并打开登录页面
      */
     private void turnToLoginPage(){
-        //1.首先关闭本页面
-        //2.打开登录页面
         finish();
         Intent nextPage = new Intent(RegisterActivity.this,LoginActivity.class);
         startActivity(nextPage);
@@ -169,7 +166,6 @@ public class RegisterActivity extends AppCompatActivity{
 
         @Override
         protected Boolean doInBackground(Void... params) {
-//            ApiManager apiManager = new ApiManager();
             registerUser = ApiManager.getInstance().handleRegister(phone,username,password);
             if(registerUser == null){
                 System.out.println("[Tip] Register Fail.");

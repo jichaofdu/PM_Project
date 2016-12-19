@@ -2,7 +2,6 @@ package projectmanager.dada;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
@@ -14,9 +13,7 @@ import android.view.KeyEvent;
  * 继承了Activity，实现Android6.0的运行时权限检测
  * 需要进行运行时权限检测的Activity可以继承这个类
  */
-public class CheckPermissionsActivity extends Activity
-        implements
-        ActivityCompat.OnRequestPermissionsResultCallback {
+public class CheckPermissionsActivity extends Activity implements ActivityCompat.OnRequestPermissionsResultCallback {
     /**
      * 需要进行检测的权限数组
      */
@@ -27,7 +24,6 @@ public class CheckPermissionsActivity extends Activity
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.READ_PHONE_STATE
     };
-
     private static final int PERMISSON_REQUESTCODE = 0;
 
     /**
@@ -100,9 +96,6 @@ public class CheckPermissionsActivity extends Activity
         }
     }
 
-
-
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode == KeyEvent.KEYCODE_BACK){
@@ -111,5 +104,4 @@ public class CheckPermissionsActivity extends Activity
         }
         return super.onKeyDown(keyCode, event);
     }
-
 }

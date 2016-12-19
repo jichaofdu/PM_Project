@@ -6,10 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
 import com.amap.api.services.core.PoiItem;
 import java.util.List;
-
 import projectmanager.dada.R;
 
 /**

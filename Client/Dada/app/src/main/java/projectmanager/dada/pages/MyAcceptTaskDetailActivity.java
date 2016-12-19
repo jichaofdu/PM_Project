@@ -1,13 +1,9 @@
 package projectmanager.dada.pages;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -27,7 +23,6 @@ import projectmanager.dada.util.DataManager;
 public class MyAcceptTaskDetailActivity extends Activity {
 
     private View myAcceptTaskDetailView;
-    private View progressView;
     private Task selectedTask;
     private DoneMyFinishTask doneTask;
     private QuitMyAcceptTask quitTask;
@@ -40,7 +35,6 @@ public class MyAcceptTaskDetailActivity extends Activity {
         setContentView(R.layout.activity_my_accept_task_detail);
 
         myAcceptTaskDetailView = findViewById(R.id.activity_my_accept_task_detail);
-        progressView = findViewById(R.id.get_my_accept_task_progress);
 
         TextView titleView = (TextView)myAcceptTaskDetailView.findViewById(R.id.my_accept_detail_title);
         titleView.setText(selectedTask.getTitle());
@@ -53,6 +47,8 @@ public class MyAcceptTaskDetailActivity extends Activity {
         deadlineView.setText(sdf.format(selectedTask.getDeadline()));
         TextView descriptionView = (TextView)myAcceptTaskDetailView.findViewById(R.id.my_accept_detail_description);
         descriptionView.setText(selectedTask.getDescription());
+        TextView locationView = (TextView)myAcceptTaskDetailView.findViewById(R.id.my_accept_detail_location);
+        locationView.setText(selectedTask.getLocation().getDescription());
         TextView statusView = (TextView)myAcceptTaskDetailView.findViewById(R.id.my_accept_detail_status);
         statusView.setText(StatusType.getTypeByStatusId(selectedTask.getStatus()));
         TextView creditView = (TextView)myAcceptTaskDetailView.findViewById(R.id.my_accept_detail_spend_credit);

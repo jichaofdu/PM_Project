@@ -208,20 +208,25 @@ class TestApi extends TestCase
             ->seeJsonStructure(['result', 'error'])
             ->seeJson(['result' => FAILED]);
 
+        //tag类型不正确
+        $this->post('/publishTask', ['title' => 'test', 'description' => 'test', 'userId' => USER_ID_VALID,
+            'longitude' => '0', 'latitude' => '0', 'locationDscp' => 'test',
+            'tags' => '[jojoj]'])
+            ->seeJsonStructure(['result', 'error'])
+            ->seeJson(['result' => FAILED]);
 
-        //参数错误
-        $this->post('/publishTask', ['description' => 'test', 'userId' => USER_ID_VALID,
-            'deadline' => "2016-12-01 00:00:00", 'longitude' => '0', 'latitude' => '0', 'locationDscp' => 'test',
-            'tags' => '["xx","yy"]'])
-            ->assertResponseStatus(400);
-
-        //参数类型不正确
+        //deadline和credit类型不正确
         $this->post('/publishTask', ['title' => 'test', 'description' => 'test', 'userId' => USER_ID_VALID,
             'deadline' => "fweojw", 'longitude' => '0', 'latitude' => '0', 'locationDscp' => 'test',
             'tags' => '["xx","yy"]', 'credit' => 'faeojf'])
             ->seeJsonStructure(['result', 'task'])
             ->seeJson(['result' => SUCCEED]);
 
+        //参数错误
+        $this->post('/publishTask', ['description' => 'test', 'userId' => USER_ID_VALID,
+            'deadline' => "2016-12-01 00:00:00", 'longitude' => '0', 'latitude' => '0', 'locationDscp' => 'test',
+            'tags' => '["xx","yy"]'])
+            ->assertResponseStatus(400);
 
         //用户不存在
         $this->post('/publishTask', ['title' => 'test', 'description' => 'test', 'userId' => USER_ID_INVALID,
@@ -232,26 +237,167 @@ class TestApi extends TestCase
 
     public function testViewTask()
     {
-        $response = $this->call('GET', '/viewTask', ['taskId' => 1]);
-        echo $response;
+        //正确请求
+        $this->json('GET', '/viewTask', ['taskId' => TASK_ID_VALID])
+            ->seeJsonStructure(['result', 'task'])
+            ->seeJson(['result' => SUCCEED]);
+
+        //请求不存在的任务
+        $this->json('GET', '/viewTask', ['taskId' => TASK_ID_INVALID])
+            ->assertResponseStatus(404);
+
+        //请求参数错误
+        $this->json('GET', '/viewTask')
+            ->assertResponseStatus(400);
     }
 
     public function testAcceptTask()
     {
-        $response = $this->call('POST', '/acceptTask', ['taskId' => 1, 'userId' => 5]);
-        echo $response;
+        //接受开放申请的任务
+        $this->post('/acceptTask', ['taskId' => TASK_ID_PENDING, 'userId' => USER_ID_VALID])
+            ->seeJsonEquals(['result' => SUCCEED]);
+
+        //接受非开放申请的任务
+        $this->post('/acceptTask', ['taskId' => TASK_ID_UNDERWAY, 'userId' => USER_ID_VALID])
+            ->seeJsonStructure(['result', 'error'])
+            ->seeJson(['result' => FAILED]);
+
+        //任务不存在
+        $this->post('/acceptTask', ['taskId' => TASK_ID_INVALID, 'userId' => USER_ID_VALID])
+            ->assertResponseStatus(404);
+
+        //错误参数
+        $this->post('/acceptTask', ['taskId' => TASK_ID_PENDING])
+            ->assertResponseStatus(400);
+
+        //错误用户
+        $this->post('/acceptTask', ['taskId' => TASK_ID_PENDING, 'userId' => USER_ID_INVALID])
+            ->assertResponseStatus(404);
+
+        //接受者与发布者一致
+        $this->post('/acceptTask', ['taskId' => TASK_ID_PENDING, 'userId' => PUBLISHER_PENDING])
+            ->assertResponseStatus(403);
     }
 
     public function testDoneTask()
     {
-        $response = $this->call('POST', '/doneTask', ['taskId' => 1, 'userId' => 2]);
-        echo $response;
+        //完成进行中的任务
+        $this->post('/doneTask', ['taskId' => TASK_ID_UNDERWAY, 'userId' => ACCEPTER_UNDERWAY])
+            ->seeJsonEquals(['result' => SUCCEED]);
+
+        //完成非进行中的任务
+        $this->post('/doneTask', ['taskId' => TASK_ID_DONE, 'userId' => ACCEPTER_DONE])
+            ->seeJsonStructure(['result', 'error'])
+            ->seeJson(['result' => FAILED]);
+
+        //非接受者完成任务
+        $this->post('/doneTask', ['taskId' => TASK_ID_UNDERWAY, 'userId' => ACCEPTER_DONE])
+            ->assertResponseStatus(403);
+
+        //任务不存在
+        $this->post('/doneTask', ['taskId' => TASK_ID_INVALID, 'userId' => USER_ID_VALID])
+            ->assertResponseStatus(404);
+
+        //不存在的用户
+        $this->post('/doneTask', ['taskId' => TASK_ID_UNDERWAY, 'userId' => USER_ID_INVALID])
+            ->assertResponseStatus(403);
+
+        //错误参数
+        $this->post('/doneTask', ['taskId' => TASK_ID_UNDERWAY])
+            ->assertResponseStatus(400);
+    }
+
+    public function testConfirmTask()
+    {
+        //确认已完成的任务
+        $this->post('/confirmTask', ['taskId' => TASK_ID_DONE, 'userId' => PUBLISHER_DONE])
+            ->seeJsonEquals(['result' => SUCCEED]);
+
+        //确认非已完成的任务
+        $this->post('/confirmTask', ['taskId' => TASK_ID_UNDERWAY, 'userId' => PUBLISHER_UNDERWAY])
+            ->seeJsonStructure(['result', 'error'])
+            ->seeJson(['result' => FAILED]);
+
+        //任务不存在
+        $this->post('/confirmTask', ['taskId' => TASK_ID_INVALID, 'userId' => USER_ID_VALID])
+            ->assertResponseStatus(404);
+
+        //非发布者确认任务
+        $this->post('/confirmTask', ['taskId' => TASK_ID_DONE, 'userId' => ACCEPTER_DONE])
+            ->assertResponseStatus(403);
+
+        //不存在的用户
+        $this->post('/confirmTask', ['taskId' => TASK_ID_DONE, 'userId' => USER_ID_INVALID])
+            ->assertResponseStatus(403);
+
+        //错误参数
+        $this->post('/confirmTask', ['taskId' => TASK_ID_DONE])
+            ->assertResponseStatus(400);
+
+
     }
 
     public function testCancelTask()
     {
-        $response = $this->call('POST', '/cancelTask', ['taskId' => 39, 'userId' => 35]);
-        echo $response;
+        //取消开放申请的任务
+        $this->post('/cancelTask', ['taskId' => TASK_ID_PENDING, 'userId' => PUBLISHER_PENDING])
+            ->seeJsonEquals(['result' => SUCCEED]);
+
+        //取消进行中的任务
+        $this->post('/cancelTask', ['taskId' => TASK_ID_UNDERWAY, 'userId' => PUBLISHER_UNDERWAY])
+            ->seeJsonEquals(['result' => SUCCEED]);
+
+        //取消已完成的任务
+        $this->post('/cancelTask', ['taskId' => TASK_ID_DONE, 'userId' => PUBLISHER_DONE])
+            ->seeJsonStructure(['result', 'error'])
+            ->seeJson(['result' => FAILED]);
+
+        //不存在的任务
+        $this->post('/cancelTask', ['taskId' => TASK_ID_INVALID, 'userId' => USER_ID_VALID])
+            ->assertResponseStatus(404);
+
+        //非发布者取消任务
+        $this->post('/cancelTask', ['taskId' => TASK_ID_UNDERWAY, 'userId' => ACCEPTER_UNDERWAY])
+            ->assertResponseStatus(403);
+
+        //不存在的用户
+        $this->post('/cancelTask', ['taskId' => TASK_ID_UNDERWAY, 'userId' => USER_ID_INVALID])
+            ->assertResponseStatus(404);
+
+        //参数错误
+        $this->post('/cancelTask', ['taskId' => TASK_ID_PENDING])
+            ->assertResponseStatus(400);
+    }
+
+    public function testQuitTask()
+    {
+        //放弃进行中的任务(信誉值不足)
+        $this->post('/quitTask', ['taskId' => TASK_ID_UNDERWAY, 'userId' => ACCEPTER_UNDERWAY])
+            ->seeJsonStructure(['result', 'error'])
+            ->seeJson(['result' => FAILED]);
+
+        //放弃已完成的任务
+        $this->post('/quitTask', ['taskId' => TASK_ID_DONE, 'userId' => ACCEPTER_DONE])
+            ->seeJsonStructure(['result', 'error'])
+            ->seeJson(['result' => FAILED]);
+
+        //不存在的任务
+        $this->post('/quitTask', ['taskId' => TASK_ID_INVALID, 'userId' => USER_ID_VALID])
+            ->assertResponseStatus(404);
+
+        //非接受者放弃任务
+        $this->post('/quitTask', ['taskId' => TASK_ID_UNDERWAY, 'userId' => PUBLISHER_UNDERWAY])
+            ->assertResponseStatus(403);
+
+        //不存在的用户
+        $this->post('/quitTask', ['taskId' => TASK_ID_UNDERWAY, 'userId' => USER_ID_INVALID])
+            ->assertResponseStatus(404);
+
+        //参数错误
+        $this->post('/quitTask', ['taskId' => TASK_ID_UNDERWAY])
+            ->assertResponseStatus(400);
+
+
     }
 
 }

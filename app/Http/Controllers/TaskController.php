@@ -184,7 +184,9 @@ class TaskController extends Controller
         $Task = new Task;
         $User = new User;
         $task = $Task->getTaskByTaskIdRaw($taskId);
+        $accepter = $User->getUser($userId);
         $publisher = $User->getUser($task->publisher_id);
+
         if ($userId == $publisher->user_id) {
             abort(403);
         }

@@ -13,7 +13,7 @@ define('FAILED', 'failed');
 //default user values
 define('DEFAULT_USER_CREDIT', 5);
 define('DEFAULT_USER_SEX', 0);
-define('DEFAULT_USER_AVATAR', '');
+define('DEFAULT_USER_AVATAR', 'default.jpg');
 define('DEFAULT_USER_BIO', '好像没有什么想说的');
 
 //default task value

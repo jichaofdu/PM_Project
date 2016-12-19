@@ -17,6 +17,10 @@ use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Crypt;
+use Symfony\Component\Filesystem\Filesystem;
+
+//require __DIR__.'/../../../vendor/autoload.php';
+use Intervention\Image\ImageManagerStatic as Image;
 
 //require 'constants.php';
 
@@ -182,16 +186,37 @@ class UserController extends Controller
 
         $User = new User;
         $user = $User->getUser($userId);
+        $user->username = $request->input('username', $user->username);
+        $user->sex = $request->input('sex', $user->sex);
+        $user->bio = $request->input('bio', $user->bio);
 
-        $username = $request->input('username', $user->username);
-        $sex = $request->input('sex', $user->sex);
-        $avatar = $request->input('avatar', $user->avatar);
-        $bio = $request->input('bio', $user->bio);
+        if ($request->hasFile('avatar')){
+            $photo=$request->file('avatar');
+            if (!$photo->isValid()){
+                $result = FAILED;
+                $error = "Avatar upload failed";
+                return new Response(['result' => $result, 'error' => $error]);
+            }
+            try {
+                $rootDir='avatars/';
+                $imgName = uniqid() . '.jpg';
 
-        $user->username = $username;
-        $user->sex = $sex;
-        $user->avatar = $avatar;
-        $user->bio = $bio;
+                $fs = new Filesystem();
+                if (!$fs->exists($rootDir)) $fs->mkdir($rootDir);
+                while ($fs->exists($rootDir.$imgName)) $imgName = uniqid() . '.jpg';
+
+                Image::make($photo)->fit(200, 200, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($rootDir.$imgName);
+
+                $user->avatar = $imgName;
+            }
+            catch (Exception $e){
+                $result = FAILED;
+                $error = $e;
+                return new Response(['result' => $result, 'error' => $error]);
+            }
+        }
 
         try {
             $user->save();

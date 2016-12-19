@@ -46,6 +46,8 @@ public class MyPublishTaskDetailActivity extends Activity {
         deadlineView.setText(sdf.format(selectedTask.getDeadline()));
         TextView descriptionView = (TextView)myPublishTaskDetailView.findViewById(R.id.my_publish_detail_description);
         descriptionView.setText(selectedTask.getDescription());
+        TextView locationView = (TextView)myPublishTaskDetailView.findViewById(R.id.my_publish_detail_location);
+        locationView.setText(selectedTask.getLocation().getDescription());
         TextView statusView = (TextView)myPublishTaskDetailView.findViewById(R.id.my_publish_detail_status);
         statusView.setText(StatusType.getTypeByStatusId(selectedTask.getStatus()));
         TextView accepterView = (TextView)myPublishTaskDetailView.findViewById(R.id.my_publish_detail_acceptor);

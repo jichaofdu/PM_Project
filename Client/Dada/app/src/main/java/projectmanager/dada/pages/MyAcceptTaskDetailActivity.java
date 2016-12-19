@@ -1,13 +1,9 @@
 package projectmanager.dada.pages;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -53,6 +49,8 @@ public class MyAcceptTaskDetailActivity extends Activity {
         deadlineView.setText(sdf.format(selectedTask.getDeadline()));
         TextView descriptionView = (TextView)myAcceptTaskDetailView.findViewById(R.id.my_accept_detail_description);
         descriptionView.setText(selectedTask.getDescription());
+        TextView locationView = (TextView)myAcceptTaskDetailView.findViewById(R.id.my_accept_detail_location);
+        locationView.setText(selectedTask.getLocation().getDescription());
         TextView statusView = (TextView)myAcceptTaskDetailView.findViewById(R.id.my_accept_detail_status);
         statusView.setText(StatusType.getTypeByStatusId(selectedTask.getStatus()));
         TextView creditView = (TextView)myAcceptTaskDetailView.findViewById(R.id.my_accept_detail_spend_credit);

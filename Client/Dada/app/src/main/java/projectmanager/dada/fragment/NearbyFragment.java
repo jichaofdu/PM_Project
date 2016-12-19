@@ -249,7 +249,6 @@ public class NearbyFragment extends Fragment implements LocationSource, AMapLoca
                     LatLng latLng = new LatLng(task.getLocation().getLatitude(), task.getLocation().getLongitude());
                     Marker marker = aMap.addMarker(new MarkerOptions().position(latLng));
                 }
-
             }else {
                 Toast.makeText(getActivity(), "failed", Toast.LENGTH_SHORT).show();
             }
@@ -257,7 +256,6 @@ public class NearbyFragment extends Fragment implements LocationSource, AMapLoca
         }
 
         @Override
-        protected void onCancelled() {
-        }
+        protected void onCancelled() { }
     }
 }

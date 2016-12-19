@@ -23,7 +23,7 @@
                     android:id="@+id/my_accept_detail_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="一个任务"
+                    android:text=""
                     android:textSize="20sp"/>
             </LinearLayout>
             <LinearLayout
@@ -39,7 +39,7 @@
                     android:id="@+id/my_accept_detail_publisher"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="张三"
+                    android:text=""
                     android:textSize="20sp"/>
             </LinearLayout>
             <LinearLayout
@@ -55,7 +55,7 @@
                     android:id="@+id/my_accept_detail_publish_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2016-12-1"
+                    android:text=""
                     android:textSize="20sp"/>
             </LinearLayout>
             <LinearLayout
@@ -71,7 +71,7 @@
                     android:id="@+id/my_accept_detail_deadline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2016-12-2"
+                    android:text=""
                     android:textSize="20sp"/>
             </LinearLayout>
             <LinearLayout
@@ -87,7 +87,23 @@
                     android:id="@+id/my_accept_detail_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="所经历的发酵撒酒疯卡拉手机断开就撒娇风口浪尖奥斯卡大师的房间卡洛斯极度分裂霎时刻的减肥啦刷机大师卡机的书房里看见阿斯利康剪短发"
+                    android:text=""
+                    android:textSize="20sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dip">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="地点描述："
+                    android:textSize="20sp"/>
+                <TextView
+                    android:id="@+id/my_accept_detail_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
                     android:textSize="20sp"/>
             </LinearLayout>
             <LinearLayout
@@ -103,7 +119,7 @@
                     android:id="@+id/my_accept_detail_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="未接受"
+                    android:text=""
                     android:textSize="20sp"/>
             </LinearLayout>
             <LinearLayout
@@ -119,7 +135,7 @@
                     android:id="@+id/my_accept_detail_spend_credit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="20"
+                    android:text=""
                     android:textSize="20sp"/>
             </LinearLayout>
             <LinearLayout

@@ -14,9 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
 import java.util.ArrayList;
-
 import projectmanager.dada.R;
 import projectmanager.dada.adapter.ViewMyAcceptTaskAdapter;
 import projectmanager.dada.model.Task;

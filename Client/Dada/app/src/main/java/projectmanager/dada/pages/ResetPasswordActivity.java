@@ -15,7 +15,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import projectmanager.dada.R;
 import projectmanager.dada.util.ApiManager;
 import projectmanager.dada.util.DataManager;

@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import projectmanager.dada.R;
 import projectmanager.dada.model.User;
 import projectmanager.dada.util.ApiManager;

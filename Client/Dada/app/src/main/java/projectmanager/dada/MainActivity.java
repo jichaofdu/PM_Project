@@ -11,7 +11,6 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import projectmanager.dada.fragment.AcceptedTaskFragment;
 import projectmanager.dada.fragment.NearbyFragment;
 import projectmanager.dada.fragment.PublishedTaskFragment;

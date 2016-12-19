@@ -23,7 +23,6 @@ import projectmanager.dada.util.DataManager;
 public class MyAcceptTaskDetailActivity extends Activity {
 
     private View myAcceptTaskDetailView;
-    private View progressView;
     private Task selectedTask;
     private DoneMyFinishTask doneTask;
     private QuitMyAcceptTask quitTask;
@@ -36,7 +35,6 @@ public class MyAcceptTaskDetailActivity extends Activity {
         setContentView(R.layout.activity_my_accept_task_detail);
 
         myAcceptTaskDetailView = findViewById(R.id.activity_my_accept_task_detail);
-        progressView = findViewById(R.id.get_my_accept_task_progress);
 
         TextView titleView = (TextView)myAcceptTaskDetailView.findViewById(R.id.my_accept_detail_title);
         titleView.setText(selectedTask.getTitle());

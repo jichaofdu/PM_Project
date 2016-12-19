@@ -3,7 +3,6 @@ package projectmanager.dada.adapter;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
-
 import java.util.List;
 
 /**

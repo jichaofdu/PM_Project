@@ -23,9 +23,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.io.File;
-
 import projectmanager.dada.R;
 import projectmanager.dada.model.SexType;
 import projectmanager.dada.model.User;

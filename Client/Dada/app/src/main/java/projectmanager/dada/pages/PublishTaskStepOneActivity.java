@@ -5,16 +5,10 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.PopupWindow;
-import android.widget.SimpleAdapter;
 import android.widget.Toast;
-
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -27,19 +21,12 @@ import com.amap.api.maps2d.UiSettings;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
-import com.amap.api.maps2d.overlay.PoiOverlay;
 import com.amap.api.services.core.PoiItem;
-import com.amap.api.services.core.SuggestionCity;
 import com.amap.api.services.help.Inputtips;
-import com.amap.api.services.help.InputtipsQuery;
 import com.amap.api.services.help.Tip;
 import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
 import projectmanager.dada.CheckPermissionsActivity;
 import projectmanager.dada.R;
 import projectmanager.dada.adapter.LocationAdapter;

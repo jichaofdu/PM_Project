@@ -4,28 +4,17 @@ import java.io.Serializable;
 
 public class Location implements Serializable {
 
-    private int    locationId;
     private double longitude;
     private double latitude;
     private String description;
 
     public Location(int locationId, double longitude, double latitude, String description) {
-        this.locationId = locationId;
         this.longitude = longitude;
         this.latitude = latitude;
         this.description = description;
     }
 
     public Location() {}
-
-
-    public int getLocationId() {
-        return locationId;
-    }
-
-    public void setLocationId(int locationId) {
-        this.locationId = locationId;
-    }
 
     public double getLongitude() {
         return longitude;

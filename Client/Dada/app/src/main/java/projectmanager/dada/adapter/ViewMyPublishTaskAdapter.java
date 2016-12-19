@@ -11,7 +11,6 @@ import java.util.List;
 import projectmanager.dada.R;
 import projectmanager.dada.model.StatusType;
 import projectmanager.dada.model.Task;
-import projectmanager.dada.util.DataManager;
 
 /**
  * jichao at 2016/12/03

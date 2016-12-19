@@ -112,8 +112,16 @@ public class TaskDetailActivity extends Activity {
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                AcceptTask acceptTask = new AcceptTask(task.getTaskId(), DataManager.getInstance().getCurrentUser().getUserId());
-                                acceptTask.execute((Void)null);
+                                if(task.getPublisher().getUserId() == DataManager.getInstance().getCurrentUser().getUserId()){
+                                    new AlertDialog.Builder(TaskDetailActivity.this)
+                                            .setTitle("warning")
+                                            .setMessage("亲，这是您自己发布的任务，需要别人来完成哦~")
+                                            .show();
+                                }else {
+                                    AcceptTask acceptTask = new AcceptTask(task.getTaskId(), DataManager.getInstance().getCurrentUser().getUserId());
+                                    acceptTask.execute((Void)null);
+                                }
+
                             }
                         })
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {

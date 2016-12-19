@@ -1,6 +1,5 @@
 package projectmanager.dada.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -22,6 +21,7 @@ import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.LocationSource;
 import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.UiSettings;
+import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.CircleOptions;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
@@ -187,7 +187,7 @@ public class NearbyFragment extends Fragment implements LocationSource, AMapLoca
                     aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
                     mapListener.onLocationChanged(aMapLocation);
                     isFirstLoc = false;
-                    aMap.addCircle(new CircleOptions().center(new LatLng(aMap.getMyLocation().getLatitude(), aMap.getMyLocation().getLongitude())).fillColor(Color.argb(127, 0, 0, 255)).strokeColor(Color.BLACK).strokeWidth(5).radius(300));
+                    aMap.addCircle(new CircleOptions().center(new LatLng(aMap.getMyLocation().getLatitude(), aMap.getMyLocation().getLongitude())).fillColor(Color.argb(80, 15, 137, 248)).strokeColor(Color.argb(100, 92, 124, 153)).strokeWidth(5).radius(300));
                     Location location = new Location(0, aMap.getMyLocation().getLongitude(), aMap.getMyLocation().getLatitude(), "");
                     NearbyTask nearbyTask = new NearbyTask(location, 300);
                     nearbyTask.execute((Void) null);
@@ -248,6 +248,7 @@ public class NearbyFragment extends Fragment implements LocationSource, AMapLoca
                 for(Task task : taskList){
                     LatLng latLng = new LatLng(task.getLocation().getLatitude(), task.getLocation().getLongitude());
                     Marker marker = aMap.addMarker(new MarkerOptions().position(latLng));
+                    marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.task));
                 }
 
             }else {

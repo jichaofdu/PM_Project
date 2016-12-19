@@ -6,6 +6,7 @@
     <string name="login_input_password">密码</string>
     <string name="login_action_sign_in">登入</string>
     <string name="login_action_turn_to_register">还没有账号？前往注册~</string>
+    <string name="login_action_turn_to_instruction">不知道怎么用？快戳我吧！</string>
 
     <string name="regist_input_phone">手机号</string>
     <string name="regist_input_password">登录密码</string>

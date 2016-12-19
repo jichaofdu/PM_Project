@@ -3,10 +3,10 @@ apply plugin: 'com.android.application'
 android {
     useLibrary 'org.apache.http.legacy'
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.1"
     defaultConfig {
         applicationId "projectmanager.dada"
-        minSdkVersion 23
+        minSdkVersion 15
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"

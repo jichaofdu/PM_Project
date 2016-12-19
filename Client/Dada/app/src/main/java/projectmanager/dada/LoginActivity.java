@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import projectmanager.dada.model.User;
+import projectmanager.dada.pages.ProjectInstructionActivity;
 import projectmanager.dada.util.ApiManager;
 import projectmanager.dada.util.DataManager;
 
@@ -29,6 +30,7 @@ public class LoginActivity extends AppCompatActivity{
     private View          loginFormView;
     private Button        signInButton;
     private Button        turnRegisterButton;
+    private Button        turnInstructionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,13 @@ public class LoginActivity extends AppCompatActivity{
                 turnToRegisterPage();
             }
         });
+        turnInstructionButton = (Button) findViewById(R.id.login_turn_instruction_button);
+        turnInstructionButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                turnToInstructionPage();
+            }
+        });
         phoneView.setText("jichao1");
         passwordView.setText("321321");
     }
@@ -61,11 +70,14 @@ public class LoginActivity extends AppCompatActivity{
      * 点击“跳转到注册”按钮之后，关闭登录页面并打开注册页面
      */
     private void turnToRegisterPage(){
-        //1.首先关闭本页面
         //2.打开注册页面
-        finish();
         Intent nextPage = new Intent(LoginActivity.this,RegisterActivity.class);
         startActivity(nextPage);
+    }
+
+    private void turnToInstructionPage(){
+        Intent intent = new Intent(LoginActivity.this, ProjectInstructionActivity.class);
+        startActivity(intent);
     }
 
     /**

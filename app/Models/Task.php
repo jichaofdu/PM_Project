@@ -8,6 +8,9 @@
 
 namespace App\Models;
 
+use Exception;
+use Illuminate\Support\Facades\DB;
+
 class Task extends CamelModel
 {
     protected $primaryKey = 'task_id';
@@ -74,5 +77,78 @@ class Task extends CamelModel
         return $task;
     }
 
+
+    public static function expireTasks()
+    {
+        $pendingTasks = Task::where('status', STATUS_PENDING)->get();
+        $underwayTasks = Task::where('status', STATUS_UNDERWAY)->get();
+
+        $User = new User;
+
+        //对于未被接受的任务，过期后向发布者返还扣除的信誉值
+        foreach ($pendingTasks as $task) {
+            $now = date("Y-m-d H:i");
+            $deadline = $task->deadline;
+
+            if (is_null($deadline)) {
+                continue;
+            }
+
+//            echo $deadline . "\n";
+            if ($now >= $deadline) {
+                $publisher = $User->getUser($task->publisher_id);
+                $publisher->credit = $publisher->credit + COST_PUBLISH + $task->credit;
+                $task->status = STATUS_CANCELED;
+
+                try {
+                    DB::beginTransaction();
+
+                    $task->save();
+                    $publisher->save();
+
+                    DB::commit();
+
+                } catch (Exception $exception) {
+                    DB::rollback();
+                }
+            }
+        }
+
+
+        //对于正在进行中的任务，过期后对接受者进行惩罚（等同于接受者放弃任务）
+        foreach ($underwayTasks as $task) {
+            $now = date("Y-m-d H:i");
+            $deadline = $task->deadline;
+
+            if (is_null($deadline)) {
+                continue;
+            }
+
+//            echo $deadline . "\n";
+            if ($now >= $deadline) {
+                $accepter = $User->getUser($task->accepter_id);
+                $penalty = PENALTY_QUIT;
+                //若接受者的信誉值足够，则扣除惩罚，否则扣成0
+                if ($accepter->credit > $penalty) {
+                    $accepter->credit = $accepter->credit - $penalty;
+                } else {
+                    $accepter->credit = 0;
+                }
+                $task->status = STATUS_CANCELED;
+                try {
+                    DB::beginTransaction();
+
+                    $task->save();
+                    $accepter->save();
+
+                    DB::commit();
+
+                } catch (Exception $exception) {
+                    DB::rollback();
+                }
+
+            }
+        }
+    }
 
 }

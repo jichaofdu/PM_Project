@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../app/Http/Controllers/constants.php';
 
 try {
     (new Dotenv\Dotenv(__DIR__.'/../'))->load();
@@ -96,5 +97,6 @@ $app->singleton(
 $app->group(['namespace' => 'App\Http\Controllers'], function ($app) {
     require __DIR__.'/../routes/web.php';
 });
+
 
 return $app;

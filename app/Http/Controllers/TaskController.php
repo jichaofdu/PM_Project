@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
-require 'constants.php';
+//require 'constants.php';
 
 
 class TaskController extends Controller
@@ -61,10 +61,15 @@ class TaskController extends Controller
         $task->title = $title;
         $task->description = $description;
         $task->publisher_id = $userId;
-        $task->published_time = date("Y-m-d H:i:s");
+        $task->published_time = date("Y-m-d H:i");
         if (!is_null($deadline)) {
-            $task->deadline = date("Y-m-d H:i:s", strtotime($deadline));
+            $task->deadline = date("Y-m-d H:i", strtotime($deadline));
         }
+
+        if ($task->deadline <= $task->published_time) {
+            $task->deadline = null;
+        }
+
         $task->longitude = $longitude;
         $task->latitude = $latitude;
         $task->location_dscp = $locationDscp;

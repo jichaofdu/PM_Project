@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Crypt;
 
-require 'constants.php';
+//require 'constants.php';
 
 class UserController extends Controller
 {

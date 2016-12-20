@@ -1,6 +1,8 @@
 package projectmanager.dada.adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +59,13 @@ public class ViewMyPublishTaskAdapter extends ArrayAdapter<Task> {
         descriptionView.setText(task.getDescription());
         deadlineView.setText(deadlineString);
         statusView.setText(StatusType.getTypeByStatusId(task.getStatus()));
+        if(task.getStatus() == StatusType.WAITCONFIRM.getCode()){
+            statusView.setTextColor(Color.RED);
+        }else if(task.getStatus() == StatusType.GOINGON.getCode()){
+            statusView.setTextColor(Color.rgb(250,128,10));
+        }else if(task.getStatus() == StatusType.OPEN.getCode()){
+            statusView.setTextColor(Color.rgb(0x00,0x9f,0xd3));
+        }
         return view;
     }
 }

@@ -495,7 +495,13 @@ public class ApiManager {
             postParameters.add(new BasicNameValuePair("description", task.getDescription()));
             postParameters.add(new BasicNameValuePair("userId", "" + task.getPublisher().getUserId()));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            postParameters.add(new BasicNameValuePair("deadline", "" + sdf.format(task.getDeadline())));
+            String dateStr;
+            if (task.getDeadline() != null) {
+                dateStr = sdf.format(task.getDeadline());
+            }else {
+                dateStr = "";
+            }
+            postParameters.add(new BasicNameValuePair("deadline", "" + dateStr));
             postParameters.add(new BasicNameValuePair("longitude", "" + task.getLocation().getLongitude()));
             postParameters.add(new BasicNameValuePair("latitude", "" + task.getLocation().getLatitude()));
             postParameters.add(new BasicNameValuePair("locationDscp", "" + task.getLocation().getDescription()));
@@ -516,6 +522,7 @@ public class ApiManager {
                 String result = resultJson.get("result").getAsString();
                 if(result.equals("succeed")){
                     Task t = gson.fromJson(resultJson.get("task"), Task.class);
+                    DataManager.getInstance().getCurrentUser().setCredit(t.getPublisher().getCredit());
                     return t;
                 }else{
                     String error = resultJson.get("error").getAsString();

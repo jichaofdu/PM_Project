@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,7 +23,7 @@ import projectmanager.dada.util.DataManager;
 /**
  * Created by JScarlet on 2016/12/11.
  */
-public class TaskDetailActivity extends Activity {
+public class TaskDetailActivity extends AppCompatActivity {
     private TagListView mTagListView;
 
     private final String[] titles = { "快递", "外卖", "紧急" };

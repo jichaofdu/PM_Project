@@ -7,13 +7,17 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 /**
  * 继承了Activity，实现Android6.0的运行时权限检测
  * 需要进行运行时权限检测的Activity可以继承这个类
  */
-public class CheckPermissionsActivity extends Activity implements ActivityCompat.OnRequestPermissionsResultCallback {
+public class CheckPermissionsActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
     /**
      * 需要进行检测的权限数组
      */

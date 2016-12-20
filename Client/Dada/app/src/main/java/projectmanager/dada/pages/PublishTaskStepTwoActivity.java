@@ -3,6 +3,7 @@ package projectmanager.dada.pages;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,6 +12,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.text.SimpleDateFormat;
@@ -26,8 +29,7 @@ public class PublishTaskStepTwoActivity extends AppCompatActivity {
     private EditText inputTaskLocation;
     private EditText inputTaskCredit;
     private Button   stepTwoFinishButton;
-    private String dateString;
-    private Calendar calendar = Calendar.getInstance();
+    private Calendar calendar;
     private Calendar now;
 
     @Override
@@ -41,6 +43,7 @@ public class PublishTaskStepTwoActivity extends AppCompatActivity {
         deadline = (Button) findViewById(R.id.step_two_deadline);
         inputTaskCredit = (EditText) findViewById(R.id.step_two_input_credit);
         stepTwoFinishButton = (Button) findViewById(R.id.step_two_ok_button);
+        calendar = Calendar.getInstance();
         deadline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -48,13 +51,19 @@ public class PublishTaskStepTwoActivity extends AppCompatActivity {
                 new DatePickerDialog(PublishTaskStepTwoActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, final int y, final int m, final int d) {
-
                         new TimePickerDialog(PublishTaskStepTwoActivity.this, new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker timePicker, int h, int mm) {
                                 calendar.set(y, m, d, h ,mm);
-                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                                deadline.setText(sdf.format(calendar.getTime()));
+                                if (calendar.after(now)) {
+                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                                    deadline.setText(sdf.format(calendar.getTime()));
+                                }else {
+                                    calendar = null;
+                                    deadline.setText("请选择当前时刻之后的时间");
+                                    deadline.setError("请选择当前时刻之后的时间");
+                                }
+
                             }
                         }, now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), true).show();
                     }
@@ -72,7 +81,10 @@ public class PublishTaskStepTwoActivity extends AppCompatActivity {
                 String content = inputTaskContent.getText().toString();
                 String locationDscp = inputTaskLocation.getText().toString();
                 String creditStr = inputTaskCredit.getText().toString();
-                Date date = calendar.getTime();
+                Date date = null;
+                if (calendar != null) {
+                    date = calendar.getTime();
+                }
                 View focus = null;
                 boolean b = false;
                 int credit = 0;

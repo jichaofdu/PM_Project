@@ -42,7 +42,7 @@
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="2265f95d4fa3808fcd475be483b8d7f1" />
+            android:value="26014d4e525d106d54929b790aa25ec3" />
 
         <service android:name="com.amap.api.location.APSService" />
 
@@ -58,18 +58,29 @@
         <activity android:name=".RegisterActivity" />
         <activity
             android:name=".MainActivity"
-            />
-        <activity android:name=".pages.ResetPasswordActivity" />
-        <activity android:name=".pages.PublishTaskStepOneActivity" />
-        <activity android:name=".pages.PublishTaskStepTwoActivity" />
-        <activity android:name=".pages.PublishTaskStepThreeActivity" />
-        <activity android:name=".CheckPermissionsActivity" />
-        <activity android:name=".pages.UsernameModifyActivity" />
-        <activity android:name=".pages.UserBioModifyActivity" />
-        <activity android:name=".pages.TaskDetailActivity"/>
-        <activity android:name=".pages.MyPublishTaskDetailActivity" />
-        <activity android:name=".pages.MyAcceptTaskDetailActivity"/>
-        <activity android:name=".pages.ProjectInstructionActivity"/>
+             />
+        <activity android:name=".pages.ResetPasswordActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".pages.PublishTaskStepOneActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".pages.PublishTaskStepTwoActivity"
+            android:parentActivityName=".pages.PublishTaskStepOneActivity"/>
+        <activity android:name=".pages.PublishTaskStepThreeActivity"
+            android:parentActivityName=".pages.PublishTaskStepTwoActivity"/>
+        <activity android:name=".CheckPermissionsActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".pages.UsernameModifyActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".pages.UserBioModifyActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".pages.TaskDetailActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".pages.MyPublishTaskDetailActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".pages.MyAcceptTaskDetailActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".pages.ProjectInstructionActivity"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

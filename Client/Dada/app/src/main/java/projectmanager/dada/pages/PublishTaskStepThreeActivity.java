@@ -142,6 +142,7 @@ public class PublishTaskStepThreeActivity extends Activity {
         protected void onPostExecute(final Boolean success) {
             if (success) {
                 Intent intent = new Intent(PublishTaskStepThreeActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();

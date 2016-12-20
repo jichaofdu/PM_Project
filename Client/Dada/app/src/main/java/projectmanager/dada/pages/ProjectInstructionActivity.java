@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,7 @@ import projectmanager.dada.R;
 /**
  * Created by JScarlet on 2016/12/19.
  */
-public class ProjectInstructionActivity extends Activity implements ViewPager.OnPageChangeListener {
+public class ProjectInstructionActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
     private ViewPager viewPager;
     private ImageView[] imageViews;
     private int[] imgIdArray;

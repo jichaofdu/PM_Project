@@ -1,27 +1,40 @@
 package projectmanager.dada;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.InflateException;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewConfiguration;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.lang.reflect.Field;
 
 import projectmanager.dada.fragment.AcceptedTaskFragment;
 import projectmanager.dada.fragment.NearbyFragment;
 import projectmanager.dada.fragment.PublishedTaskFragment;
 import projectmanager.dada.fragment.UserProfileFragment;
 import projectmanager.dada.pages.PublishTaskStepOneActivity;
+import projectmanager.dada.util.DataManager;
 
-public class MainActivity extends FragmentActivity implements OnClickListener{
+public class MainActivity extends AppCompatActivity implements OnClickListener{
 
-    private TextView publishTask;
+//    private TextView publishTask;
 
     // 底部菜单4个Linearlayout
     private LinearLayout nearby;
@@ -73,13 +86,13 @@ public class MainActivity extends FragmentActivity implements OnClickListener{
         accepted.setOnClickListener(this);
         published.setOnClickListener(this);
         profile.setOnClickListener(this);
-        publishTask.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent nextPage = new Intent(MainActivity.this, PublishTaskStepOneActivity.class);
-                startActivity(nextPage);
-            }
-        });
+//        publishTask.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent nextPage = new Intent(MainActivity.this, PublishTaskStepOneActivity.class);
+//                startActivity(nextPage);
+//            }
+//        });
     }
 
     private void initView() {
@@ -102,7 +115,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener{
         this.tv_published = (TextView) findViewById(R.id.txt_published);
         this.tv_profile = (TextView) findViewById(R.id.txt_profile);
 
-        this.publishTask = (TextView) findViewById(R.id.publishTask);
+//        this.publishTask = (TextView) findViewById(R.id.publishTask);
 
     }
 
@@ -241,6 +254,34 @@ public class MainActivity extends FragmentActivity implements OnClickListener{
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.publish_new_task:
+                Intent nextPage = new Intent(MainActivity.this, PublishTaskStepOneActivity.class);
+                startActivity(nextPage);
+                return true;
+            case R.id.logout:
+                finish();
+                DataManager.getInstance().setCurrentUser(null);
+                Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }

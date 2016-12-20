@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,7 +21,7 @@ import projectmanager.dada.model.Task;
 import projectmanager.dada.util.ApiManager;
 import projectmanager.dada.util.DataManager;
 
-public class MyPublishTaskDetailActivity extends Activity {
+public class MyPublishTaskDetailActivity extends AppCompatActivity {
 
     private View myPublishTaskDetailView;
     private View progressView;

@@ -3,6 +3,7 @@ package projectmanager.dada.pages;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,7 +16,7 @@ import projectmanager.dada.util.DataManager;
 /**
  * Created by JScarlet on 2016/12/6.
  */
-public class UsernameModifyActivity extends Activity {
+public class UsernameModifyActivity extends AppCompatActivity {
     private User currentUser;
     EditText editText;
     @Override

@@ -1,24 +1,34 @@
 package projectmanager.dada.util;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
+
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,6 +36,7 @@ import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
 import projectmanager.dada.model.Location;
 import projectmanager.dada.model.Task;
 import projectmanager.dada.model.User;
@@ -265,6 +276,58 @@ public class ApiManager {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public String handleUploadAvatars(File file){
+        try {
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost("https://relay.nxtsysx.net/updateProfile/");
+            MultipartEntity multipartEntity = new MultipartEntity();
+            FileBody bin = new FileBody(file);
+            multipartEntity.addPart("avatar", bin);
+            multipartEntity.addPart("userId", new StringBody(DataManager.getInstance().getCurrentUser().getUserId() + ""));
+            httpPost.setEntity(multipartEntity);
+            HttpResponse response = httpClient.execute(httpPost);
+            Log.i("xwk", response.getStatusLine().getStatusCode() + "");
+            if(response.getStatusLine().getStatusCode() == 200){
+                InputStream is = response.getEntity().getContent();
+                String str = convertStreamToString(is);
+                JSONObject resultJson = new JSONObject(str);
+                String result = resultJson.getString("result");
+                if(result.equals("succeed")){
+                    return "SUCCESS";
+                }else{
+                    String error = resultJson.getString("error");
+                    System.out.println("[Error] Get User process. Upload avatar fail. Error Message:" + error);
+                    return "FAILURE";
+                }
+            }else {
+                System.out.println("[Error] Upload avatar Process. Status Code:" +
+                        response.getStatusLine().getStatusCode());
+                return "FAILURE";
+            }
+        } catch (IOException | JSONException e1) {
+            e1.printStackTrace();
+        }
+
+
+        return null;
+    }
+
+    public Bitmap getAvatarBitmap(String image){
+        HttpGet httpGet = new HttpGet("https://relay.nxtsysx.net/avatars/" + image);
+        HttpClient httpClient = new DefaultHttpClient();
+        Bitmap pic = null;
+        try {
+            HttpResponse response = httpClient.execute(httpGet);
+            HttpEntity entity = response.getEntity();
+            InputStream is = entity.getContent();
+            pic = BitmapFactory.decodeStream(is);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return pic;
     }
 
 

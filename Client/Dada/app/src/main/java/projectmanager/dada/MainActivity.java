@@ -6,11 +6,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import projectmanager.dada.fragment.AcceptedTaskFragment;
 import projectmanager.dada.fragment.NearbyFragment;
 import projectmanager.dada.fragment.PublishedTaskFragment;
@@ -43,6 +45,13 @@ public class MainActivity extends FragmentActivity implements OnClickListener{
     private Fragment acceptedFragment;
     private Fragment publishedFragment;
     private Fragment profileFragment;
+
+    public FragmentTransaction fragmentTransaction;
+    public FragmentManager fragmentManager;
+    public final String tag0 = "0";
+    public final String tag1 = "1";
+    public final String tag2 = "2";
+    public final String tag3 = "3";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +119,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener{
             case 0:
                 if (nearbyFragment == null) {
                     nearbyFragment = new NearbyFragment();
-                    transaction.add(R.id.fl_content, nearbyFragment);
+                    transaction.add(R.id.fl_content, nearbyFragment, tag0);
                 } else {
 
                     transaction.show(nearbyFragment);
@@ -120,7 +129,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener{
                 if (acceptedFragment == null) {
 //                    addressFragment = new AddressFragment();
                     acceptedFragment = new AcceptedTaskFragment();
-                    transaction.add(R.id.fl_content, acceptedFragment);
+                    transaction.add(R.id.fl_content, acceptedFragment, tag1);
                 } else {
                     transaction.show(acceptedFragment);
                 }
@@ -130,7 +139,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener{
                 if (publishedFragment == null) {
 //                    publishedFragment = new FriendFragment();
                     publishedFragment = new PublishedTaskFragment();
-                    transaction.add(R.id.fl_content, publishedFragment);
+                    transaction.add(R.id.fl_content, publishedFragment, tag2);
                 } else {
                     transaction.show(publishedFragment);
                 }
@@ -140,7 +149,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener{
                 if (profileFragment == null) {
 //                    settingFragment = new SettingFragment();
                     profileFragment = new UserProfileFragment();
-                    transaction.add(R.id.fl_content, profileFragment);
+                    transaction.add(R.id.fl_content, profileFragment, tag3);
                 } else {
                     transaction.show(profileFragment);
                 }
@@ -173,6 +182,15 @@ public class MainActivity extends FragmentActivity implements OnClickListener{
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        fragmentManager = getSupportFragmentManager();
+        Fragment f = fragmentManager.findFragmentByTag(tag3);
+        Log.i("xwk", (f == null) + "");
+        f.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     public void onClick(View v) {

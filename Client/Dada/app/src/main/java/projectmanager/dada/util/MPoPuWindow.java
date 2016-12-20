@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,7 +91,7 @@ public class MPoPuWindow extends PopupWindow implements OnClickListener {
 				listener.getType(type);
 				listener.getImgUri(ImgUri, file);
 			}
-
+			Log.i("xwk", "come 1");
 			this.dismiss();
 			break;
 		case R.id.photo_album:
@@ -102,6 +103,7 @@ public class MPoPuWindow extends PopupWindow implements OnClickListener {
 				listener.getType(type);
 			}
 			this.dismiss();
+			Log.i("xwk", "come 2");
 			break;
 		case R.id.photo_cancel:
 			this.dismiss();

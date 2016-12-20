@@ -23,7 +23,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.io.File;
+
 import projectmanager.dada.R;
 import projectmanager.dada.model.SexType;
 import projectmanager.dada.model.User;
@@ -32,7 +34,6 @@ import projectmanager.dada.pages.UserBioModifyActivity;
 import projectmanager.dada.pages.UsernameModifyActivity;
 import projectmanager.dada.util.ApiManager;
 import projectmanager.dada.util.DataManager;
-import projectmanager.dada.util.FileImageUpload;
 import projectmanager.dada.util.MPoPuWindow;
 
 /**
@@ -73,6 +74,11 @@ public class UserProfileFragment extends Fragment {
                 username.setText(currentUser.getUsername());
             }else {
                 username.setText("未填写");
+            }
+
+            if(currentUser.getAvatar() != null && !currentUser.getAvatar().equals("")){
+                UserAvatar userAvatar = new UserAvatar(currentUser.getAvatar());
+                userAvatar.execute((Void) null);
             }
 
             if(currentUser.getSex() <= 3) {
@@ -226,6 +232,7 @@ public class UserProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
+        Log.i("xwk", "i'm in?");
         Log.e("requestCode", type + "");
         if (requestCode == 1) {
             if (ImgUri != null) {
@@ -242,12 +249,6 @@ public class UserProfileFragment extends Fragment {
         } else if (requestCode == 3) {
             if (type == Type.PHONE) {
                 if (data != null) {
-//                    Bundle bundle = data.getExtras();
-//                    Uri uri= bundle.getParcelable(MediaStore.EXTRA_OUTPUT);
-//                    Log.i("xwk", bundle.toString());
-////                    Uri uri = data.getParcelableExtra(MediaStore.EXTRA_OUTPUT);
-//                    Log.i("xwk", String.valueOf(uri));
-
                     try{
                         String[] pojo = {MediaStore.Images.Media.DATA};
                         Log.i("xwk", String.valueOf(temp));
@@ -276,17 +277,12 @@ public class UserProfileFragment extends Fragment {
                     } catch (Exception e){
                         e.printStackTrace();
                     }
-              /*      Bundle extras = data.getExtras();
-                    Bitmap bitmap = (Bitmap) extras.get("data");
-                    if (bitmap != null) {
-                        avatar.setImageBitmap(bitmap);
-                    }*/
                 }
             } else if (type == Type.CAMERA) {
                 avatar.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
                 Log.i("xwk", file.getPath());
-//                UploadFileTask uploadFileTask = new UploadFileTask(this);
-//                uploadFileTask.execute(file.getPath());
+                UploadFileTask uploadFileTask = new UploadFileTask(getActivity());
+                uploadFileTask.execute(file.getPath());
             }
         }
     }
@@ -346,7 +342,6 @@ public class UserProfileFragment extends Fragment {
     }
 
     public class UploadFileTask extends AsyncTask<String, Void, String>{
-        public static final String requestURL="http://192.168.208.13:8080/AndroidUploadFileWeb/FileImageUploadServlet";
         private ProgressDialog progressDialog;
         private Activity context = null;
 
@@ -358,17 +353,51 @@ public class UserProfileFragment extends Fragment {
         @Override
         protected String doInBackground(String... strings) {
             File file = new File(strings[0]);
-            return FileImageUpload.uploadFile(file, requestURL);
+            return ApiManager.getInstance().handleUploadAvatars(file);
         }
 
         @Override
         protected void onPostExecute(String s) {
             progressDialog.dismiss();
-            if(FileImageUpload.SUCCESS.equalsIgnoreCase(s)){
+            if(s.equalsIgnoreCase("SUCCESS")){
                 Toast.makeText(context, "上传成功", Toast.LENGTH_SHORT).show();
             }else {
                 Toast.makeText(context, "上传失败", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    public class UserAvatar extends AsyncTask<Void, Void, Boolean> {
+        private String image;
+        private Bitmap bitmap;
+
+        UserAvatar(String image) {
+            this.image = image;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            bitmap = ApiManager.getInstance().getAvatarBitmap(image);
+            if(bitmap == null){
+                System.out.println("[Tip] get avatar fail.");
+                return false;
+            }else{
+                return true;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if(success){
+                avatar.setImageBitmap(bitmap);
+            }else {
+                Toast.makeText(getActivity(), "failed", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        @Override
+        protected void onCancelled() {
         }
     }
 }

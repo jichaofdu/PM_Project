@@ -100,7 +100,6 @@ public class RegisterActivity extends AppCompatActivity{
         if (cancel) {
             focusView.requestFocus();
         } else {
-            showProgress(true);
             registerTask = new UserRegisterTask(phone, username ,password);
             registerTask.execute((Void) null);
         }
@@ -163,7 +162,10 @@ public class RegisterActivity extends AppCompatActivity{
             password = pw;
             registerUser = null;
         }
-
+        @Override
+        protected void onPreExecute(){
+            showProgress(true);
+        }
         @Override
         protected Boolean doInBackground(Void... params) {
             registerUser = ApiManager.getInstance().handleRegister(phone,username,password);

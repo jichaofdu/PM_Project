@@ -61,8 +61,8 @@ public class LoginActivity extends AppCompatActivity{
                 turnToInstructionPage();
             }
         });
-        phoneView.setText("jichao1");
-        passwordView.setText("321321");
+        phoneView.setText("15221870263");
+        passwordView.setText("140311");
     }
 
     /**
@@ -104,7 +104,6 @@ public class LoginActivity extends AppCompatActivity{
         if (cancel) {
             focusView.requestFocus();
         } else {
-            showProgress(true);
             loginTask = new UserLoginTask(phone, password);
             loginTask.execute((Void) null);
         }
@@ -165,7 +164,10 @@ public class LoginActivity extends AppCompatActivity{
             password = pw;
             loginUser = null;
         }
-
+        @Override
+        protected void onPreExecute(){
+            showProgress(true);
+        }
         @Override
         protected Boolean doInBackground(Void... params) {
             loginUser = ApiManager.getInstance().handleLogin(phone,password);

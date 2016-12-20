@@ -47,13 +47,16 @@ public class ViewMyPublishTaskAdapter extends ArrayAdapter<Task> {
         TextView statusView = (TextView)view.findViewById(R.id.my_publish_task_status);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        String deadlineString = sdf.format(task.getDeadline());
-
+        String deadlineString;
+        if(task.getDeadline() != null){
+            deadlineString = sdf.format(task.getDeadline());
+        }else{
+            deadlineString = "无限期";
+        }
         titleView.setText(task.getTitle());
         descriptionView.setText(task.getDescription());
         deadlineView.setText(deadlineString);
         statusView.setText(StatusType.getTypeByStatusId(task.getStatus()));
-
         return view;
     }
 }

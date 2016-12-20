@@ -44,7 +44,13 @@ public class MyAcceptTaskDetailActivity extends Activity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         publishTimeView.setText(sdf.format(selectedTask.getPublishedTime()));
         TextView deadlineView = (TextView)myAcceptTaskDetailView.findViewById(R.id.my_accept_detail_deadline);
-        deadlineView.setText(sdf.format(selectedTask.getDeadline()));
+        String deadlineString;
+        if(selectedTask.getDeadline() != null){
+            deadlineString = sdf.format(selectedTask.getDeadline());
+        }else{
+            deadlineString = "无限期";
+        }
+        deadlineView.setText(deadlineString);
         TextView descriptionView = (TextView)myAcceptTaskDetailView.findViewById(R.id.my_accept_detail_description);
         descriptionView.setText(selectedTask.getDescription());
         TextView locationView = (TextView)myAcceptTaskDetailView.findViewById(R.id.my_accept_detail_location);

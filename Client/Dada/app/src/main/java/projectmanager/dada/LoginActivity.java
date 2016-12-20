@@ -15,7 +15,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import projectmanager.dada.model.User;
 import projectmanager.dada.pages.ProjectInstructionActivity;
 import projectmanager.dada.util.ApiManager;

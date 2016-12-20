@@ -3,9 +3,12 @@ package projectmanager.dada.pages;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,6 +16,8 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import projectmanager.dada.MainActivity;
 import projectmanager.dada.R;
 import projectmanager.dada.model.StatusType;
 import projectmanager.dada.model.Tag;
@@ -133,7 +138,16 @@ public class MyPublishTaskDetailActivity extends AppCompatActivity {
     }
 
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
     /**
      * 连接服务器取消任务的线程
      */

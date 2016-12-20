@@ -3,9 +3,11 @@ package projectmanager.dada.pages;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,6 +15,8 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import projectmanager.dada.MainActivity;
 import projectmanager.dada.R;
 import projectmanager.dada.model.StatusType;
 import projectmanager.dada.model.Tag;
@@ -34,7 +38,6 @@ public class MyAcceptTaskDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         selectedTask = DataManager.getInstance().getSelectedMyAcceptTask();
         setContentView(R.layout.activity_my_accept_task_detail);
-
         myAcceptTaskDetailView = findViewById(R.id.activity_my_accept_task_detail);
 
         TextView titleView = (TextView)myAcceptTaskDetailView.findViewById(R.id.my_accept_detail_title);
@@ -125,6 +128,17 @@ public class MyAcceptTaskDetailActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) { }
                 }).show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**

@@ -332,4 +332,15 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
     public void onPoiItemSearched(PoiItem poiItem, int i) {
 
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

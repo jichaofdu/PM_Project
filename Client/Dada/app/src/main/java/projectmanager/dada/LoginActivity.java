@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -189,10 +190,21 @@ public class LoginActivity extends AppCompatActivity{
                 DataManager.getInstance().setCurrentUser(loginUser);
                 startActivity(nextPage);
             } else {
-                phoneView.setError(DataManager.getInstance().getLoginErrorMesssage());
-                passwordView.requestFocus();
-                Toast.makeText(getApplicationContext(),DataManager.getInstance().getLoginErrorMesssage(),
-                        Toast.LENGTH_LONG).show();
+                String rtErrorMsg = DataManager.getInstance().getLoginErrorMesssage();
+                if(rtErrorMsg.contains("404")){
+                    Toast.makeText(getApplicationContext(),"该用户不存在",
+                            Toast.LENGTH_LONG).show();
+                    phoneView.setError("该用户不存在");
+                    phoneView.requestFocus();
+                }else if(rtErrorMsg.contains("password")){
+                    Toast.makeText(getApplicationContext(),"用户名与密码不匹配",
+                            Toast.LENGTH_LONG).show();
+                    passwordView.setError("用户名与密码不匹配");
+                    passwordView.requestFocus();
+                }else{
+                    Toast.makeText(getApplicationContext(),"登录失败 错误原因不明",
+                            Toast.LENGTH_LONG).show();
+                }
             }
         }
 

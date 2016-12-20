@@ -25,7 +25,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
-                    android:textStyle="bold"
                     android:textSize="20sp"/>
             </LinearLayout>
             <LinearLayout
@@ -172,7 +171,11 @@
                 android:textStyle="bold"
                 android:background="@color/community_blue_bg"
                 android:textColor="@color/white"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                android:layout_marginLeft="20px"
+                android:layout_marginRight="20px"
+                android:layout_marginTop="10px"
+                android:layout_marginBottom="10px"/>
             <Button
                 android:id="@+id/my_publish_detail_confirm_task"
                 android:layout_width="match_parent"
@@ -182,7 +185,11 @@
                 android:textStyle="bold"
                 android:background="@color/community_blue_bg"
                 android:visibility="invisible"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:layout_marginLeft="20px"
+                android:layout_marginRight="20px"
+                android:layout_marginTop="10px"
+                android:layout_marginBottom="10px"/>
         </LinearLayout>
     </ScrollView>
 

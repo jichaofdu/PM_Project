@@ -170,7 +170,11 @@
                 android:textStyle="bold"
                 android:background="@color/community_blue_bg"
                 android:textColor="@color/white"
-                android:text="已完成任务"/>
+                android:text="已完成任务"
+                android:layout_marginLeft="20px"
+                android:layout_marginRight="20px"
+                android:layout_marginTop="10px"
+                android:layout_marginBottom="10px"/>
             <Button
                 android:id="@+id/my_accept_detail_quit_task"
                 android:layout_width="match_parent"
@@ -180,7 +184,11 @@
                 android:textStyle="bold"
                 android:background="@color/community_blue_bg"
                 android:visibility="invisible"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:layout_marginLeft="20px"
+                android:layout_marginRight="20px"
+                android:layout_marginTop="10px"
+                android:layout_marginBottom="10px"/>
         </LinearLayout>
     </ScrollView>
 

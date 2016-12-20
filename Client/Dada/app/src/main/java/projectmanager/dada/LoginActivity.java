@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import projectmanager.dada.model.User;
 import projectmanager.dada.pages.ProjectInstructionActivity;
 import projectmanager.dada.util.ApiManager;
@@ -63,6 +64,7 @@ public class LoginActivity extends AppCompatActivity{
         });
         phoneView.setText("111111");
         passwordView.setText("111111");
+
     }
 
     /**
@@ -104,7 +106,6 @@ public class LoginActivity extends AppCompatActivity{
         if (cancel) {
             focusView.requestFocus();
         } else {
-            showProgress(true);
             loginTask = new UserLoginTask(phone, password);
             loginTask.execute((Void) null);
         }
@@ -165,7 +166,10 @@ public class LoginActivity extends AppCompatActivity{
             password = pw;
             loginUser = null;
         }
-
+        @Override
+        protected void onPreExecute(){
+            showProgress(true);
+        }
         @Override
         protected Boolean doInBackground(Void... params) {
             loginUser = ApiManager.getInstance().handleLogin(phone,password);
@@ -187,10 +191,21 @@ public class LoginActivity extends AppCompatActivity{
                 DataManager.getInstance().setCurrentUser(loginUser);
                 startActivity(nextPage);
             } else {
-                phoneView.setError(DataManager.getInstance().getLoginErrorMesssage());
-                passwordView.requestFocus();
-                Toast.makeText(getApplicationContext(),DataManager.getInstance().getLoginErrorMesssage(),
-                        Toast.LENGTH_LONG).show();
+                String rtErrorMsg = DataManager.getInstance().getLoginErrorMesssage();
+                if(rtErrorMsg.contains("404")){
+                    Toast.makeText(getApplicationContext(),"该用户不存在",
+                            Toast.LENGTH_LONG).show();
+                    phoneView.setError("该用户不存在");
+                    phoneView.requestFocus();
+                }else if(rtErrorMsg.contains("password")){
+                    Toast.makeText(getApplicationContext(),"用户名与密码不匹配",
+                            Toast.LENGTH_LONG).show();
+                    passwordView.setError("用户名与密码不匹配");
+                    passwordView.requestFocus();
+                }else{
+                    Toast.makeText(getApplicationContext(),"登录失败 错误原因不明",
+                            Toast.LENGTH_LONG).show();
+                }
             }
         }
 

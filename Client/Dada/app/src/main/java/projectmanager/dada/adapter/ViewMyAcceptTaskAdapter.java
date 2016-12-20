@@ -1,6 +1,7 @@
 package projectmanager.dada.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,12 +48,23 @@ public class ViewMyAcceptTaskAdapter extends ArrayAdapter<Task> {
         TextView statusView = (TextView)view.findViewById(R.id.my_accept_task_status);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        String deadlineString = sdf.format(task.getDeadline());
-
+        String deadlineString;
+        if(task.getDeadline() != null){
+            deadlineString = sdf.format(task.getDeadline());
+        }else{
+            deadlineString = "无限期";
+        }
         titleView.setText(task.getTitle());
         descriptionView.setText(task.getDescription());
         deadlineView.setText(deadlineString);
         statusView.setText(StatusType.getTypeByStatusId(task.getStatus()));
+        if(task.getStatus() == StatusType.WAITCONFIRM.getCode()){
+            statusView.setTextColor(Color.RED);
+        }else if(task.getStatus() == StatusType.GOINGON.getCode()){
+            statusView.setTextColor(Color.rgb(250,128,10));
+        }else if(task.getStatus() == StatusType.OPEN.getCode()){
+            statusView.setTextColor(Color.GREEN);
+        }
         return view;
     }
 

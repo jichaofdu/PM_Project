@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import projectmanager.dada.R;
 import projectmanager.dada.adapter.ViewMyPublishTaskAdapter;
+import projectmanager.dada.model.StatusType;
 import projectmanager.dada.model.Task;
 import projectmanager.dada.model.User;
 import projectmanager.dada.pages.MyPublishTaskDetailActivity;
@@ -105,15 +107,20 @@ public class PublishedTaskFragment extends Fragment {
             nowLoginUser = DataManager.getInstance().getCurrentUser();
         }
         @Override
-        protected Boolean doInBackground(Void... voids) {
+        protected void onPreExecute(){
             showProgress(true);
+        }
+        @Override
+        protected Boolean doInBackground(Void... voids) {
             ArrayList<Task> acceptList = ApiManager.getInstance().handleGetPublishTasks(nowLoginUser.getUserId(),
                     0,10);
             if(acceptList == null || acceptList.isEmpty()){
+                myPublishTaskList = new ArrayList<>();
                 System.out.println("[Tip] Get My publish task set fail. Empty Set.");
                 return false;
             }else{
                 myPublishTaskList = acceptList;
+                rearrangeTaskSort();
                 System.out.println("[Tip]My Publish Tasks Size: " + myPublishTaskList.size());
                 return true;
             }
@@ -136,7 +143,6 @@ public class PublishedTaskFragment extends Fragment {
 
                     }
                 });
-
                 myPublishTaskAdapter.notifyDataSetChanged();
             }
         }
@@ -169,4 +175,34 @@ public class PublishedTaskFragment extends Fragment {
         @Override
         protected void onCancelled() { }
     }
+
+
+    private void rearrangeTaskSort(){
+        ArrayList<Task> confirmTasks = new ArrayList<>();
+        ArrayList<Task> ongoingTasks = new ArrayList<>();
+        ArrayList<Task> openTasks = new ArrayList<>();
+        ArrayList<Task> finishTasks = new ArrayList<>();
+        ArrayList<Task> cancelTask = new ArrayList<>();
+        for(Task tempTask : myPublishTaskList){
+            if(tempTask.getStatus() == StatusType.WAITCONFIRM.getCode()){
+                confirmTasks.add(tempTask);
+            }else if(tempTask.getStatus() == StatusType.GOINGON.getCode()){
+                ongoingTasks.add(tempTask);
+            }else if(tempTask.getStatus() == StatusType.OPEN.getCode()){
+                openTasks.add(tempTask);
+            }else if(tempTask.getStatus() == StatusType.FINISHED.getCode()){
+                finishTasks.add(tempTask);
+            }else{
+                cancelTask.add(tempTask);
+            }
+        }
+        ArrayList<Task> newList = new ArrayList<>();
+        newList.addAll(confirmTasks);
+        newList.addAll(ongoingTasks);
+        newList.addAll(openTasks);
+        newList.addAll(finishTasks);
+        newList.addAll(cancelTask);
+        myPublishTaskList = newList;
+    }
+
 }

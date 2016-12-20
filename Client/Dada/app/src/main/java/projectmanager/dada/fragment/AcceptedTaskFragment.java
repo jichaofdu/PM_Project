@@ -17,6 +17,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import projectmanager.dada.R;
 import projectmanager.dada.adapter.ViewMyAcceptTaskAdapter;
+import projectmanager.dada.model.StatusType;
 import projectmanager.dada.model.Task;
 import projectmanager.dada.model.User;
 import projectmanager.dada.pages.MyAcceptTaskDetailActivity;
@@ -100,8 +101,12 @@ public class AcceptedTaskFragment extends Fragment {
             nowLoginUser = DataManager.getInstance().getCurrentUser();
         }
         @Override
-        protected Boolean doInBackground(Void... voids) {
+        protected void onPreExecute(){
             showProgress(true);
+        }
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+
             ArrayList<Task> acceptList = ApiManager.getInstance().handleGetAcceptTasks(nowLoginUser.getUserId(),
                     0,10);
             if(acceptList == null || acceptList.isEmpty()){
@@ -109,6 +114,7 @@ public class AcceptedTaskFragment extends Fragment {
                 return false;
             }else{
                 myAcceptTaskList = acceptList;
+                rearrangeTaskSort();
                 return true;
             }
         }
@@ -127,8 +133,6 @@ public class AcceptedTaskFragment extends Fragment {
                         DataManager.getInstance().setSelectedMyAcceptTask(clickTask);
                         Intent nextPage = new Intent(getActivity(),MyAcceptTaskDetailActivity.class);
                         startActivity(nextPage);
-
-
                     }
                 });
                 myAcceptTaskAdapter.notifyDataSetChanged();
@@ -162,5 +166,33 @@ public class AcceptedTaskFragment extends Fragment {
         }
         @Override
         protected void onCancelled() { }
+    }
+
+    private void rearrangeTaskSort(){
+        ArrayList<Task> confirmTasks = new ArrayList<>();
+        ArrayList<Task> ongoingTasks = new ArrayList<>();
+        ArrayList<Task> openTasks = new ArrayList<>();
+        ArrayList<Task> finishTasks = new ArrayList<>();
+        ArrayList<Task> cancelTask = new ArrayList<>();
+        for(Task tempTask : myAcceptTaskList){
+            if(tempTask.getStatus() == StatusType.WAITCONFIRM.getCode()){
+                confirmTasks.add(tempTask);
+            }else if(tempTask.getStatus() == StatusType.GOINGON.getCode()){
+                ongoingTasks.add(tempTask);
+            }else if(tempTask.getStatus() == StatusType.OPEN.getCode()){
+                openTasks.add(tempTask);
+            }else if(tempTask.getStatus() == StatusType.FINISHED.getCode()){
+                finishTasks.add(tempTask);
+            }else{
+                cancelTask.add(tempTask);
+            }
+        }
+        ArrayList<Task> newList = new ArrayList<>();
+        newList.addAll(confirmTasks);
+        newList.addAll(ongoingTasks);
+        newList.addAll(openTasks);
+        newList.addAll(finishTasks);
+        newList.addAll(cancelTask);
+        myAcceptTaskList = newList;
     }
 }

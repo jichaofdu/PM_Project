@@ -356,6 +356,7 @@ public class ApiManager {
                 String result = jsonObj.getString("result");
                 if(result.equals("succeed")){
                     String tasksString = jsonObj.getString("tasks");
+                    System.out.println("[Tip] " + tasksString);
                     JSONArray taskJsonArray = new JSONArray(tasksString);
                     ArrayList<Task> rtResultList = new ArrayList<>();
                     for(int i = 0;i < taskJsonArray.length();i++){

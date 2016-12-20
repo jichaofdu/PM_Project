@@ -19,7 +19,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Crypt;
 use Symfony\Component\Filesystem\Filesystem;
 
-//require __DIR__.'/../../../vendor/autoload.php';
 use Intervention\Image\ImageManagerStatic as Image;
 
 //require 'constants.php';
@@ -199,19 +198,16 @@ class UserController extends Controller
             }
             try {
                 $rootDir='avatars/';
-                $imgName = uniqid() . '.jpg';
 
                 $fs = new Filesystem();
                 if (!$fs->exists($rootDir)) $fs->mkdir($rootDir);
-                while ($fs->exists($rootDir.$imgName)) $imgName = uniqid() . '.jpg';
+                do $imgName=uniqid().'.jpg'; while ($fs->exists($rootDir.$imgName));
 
-                Image::make($photo)->fit(200, 200, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save($rootDir.$imgName);
+                Image::make($photo)->fit(200, 200)->save($rootDir.$imgName);
 
-                if (!empty($user->avatar) && $user->avatar != 'default.jpg' && $fs->exists($rootDir.$user->avatar))
+                if (!empty($user->avatar) && $user->avatar!='default.jpg' && $fs->exists($rootDir.$user->avatar))
                     $fs->remove($rootDir.$user->avatar);
-                $user->avatar = $imgName;
+                $user->avatar=$imgName;
             }
             catch (Exception $e){
                 $result = FAILED;

@@ -109,9 +109,13 @@ public class AcceptedTaskFragment extends Fragment {
 
             ArrayList<Task> acceptList = ApiManager.getInstance().handleGetAcceptTasks(nowLoginUser.getUserId(),
                     0,10);
-            if(acceptList == null || acceptList.isEmpty()){
-                System.out.println("[Tip] Get My accept task set fail. Empty Set.");
+            if(acceptList == null) {
+                System.out.println("[Tip] Get My accept task set fail. Null set.");
                 return false;
+            }else if(acceptList.isEmpty()){
+                myAcceptTaskList = new ArrayList<>();
+                rearrangeTaskSort();
+                return true;
             }else{
                 myAcceptTaskList = acceptList;
                 rearrangeTaskSort();

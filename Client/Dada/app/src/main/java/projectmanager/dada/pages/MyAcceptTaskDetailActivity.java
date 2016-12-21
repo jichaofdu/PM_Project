@@ -115,7 +115,7 @@ public class MyAcceptTaskDetailActivity extends AppCompatActivity {
     }
 
     private void clickQuitButton(){
-        new AlertDialog.Builder(this).setTitle("确认要放弃这个任务吗？（可能受到信用惩罚）")
+        new AlertDialog.Builder(this).setTitle("确认要放弃这个任务吗？（将受到5点信用惩罚）")
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setPositiveButton("确定放弃", new DialogInterface.OnClickListener() {
                     @Override
@@ -164,7 +164,7 @@ public class MyAcceptTaskDetailActivity extends AppCompatActivity {
                 Toast.makeText(MyAcceptTaskDetailActivity.this, "操作成功", Toast.LENGTH_SHORT).show();
                 finish();
             }else{
-                Toast.makeText(MyAcceptTaskDetailActivity.this, doneResult, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyAcceptTaskDetailActivity.this, "操作失败：原因不明", Toast.LENGTH_SHORT).show();
             }
         }
         @Override
@@ -193,7 +193,11 @@ public class MyAcceptTaskDetailActivity extends AppCompatActivity {
                 Toast.makeText(MyAcceptTaskDetailActivity.this, "操作成功", Toast.LENGTH_SHORT).show();
                 finish();
             }else{
-                Toast.makeText(MyAcceptTaskDetailActivity.this, quitResult, Toast.LENGTH_SHORT).show();
+                if(quitResult.contains("Credit")){
+                    Toast.makeText(MyAcceptTaskDetailActivity.this, "信用值不足，无法取消", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(MyAcceptTaskDetailActivity.this, "操作失败：原因不明", Toast.LENGTH_SHORT).show();
+                }
             }
         }
         @Override

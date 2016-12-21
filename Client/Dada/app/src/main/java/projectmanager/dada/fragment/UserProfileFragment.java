@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -49,6 +50,7 @@ public class UserProfileFragment extends Fragment {
     private TextView phone;
     private TextView bio;
     private TextView resetPassword;
+    private TextView creditView;
     private Type type;
     private MPoPuWindow puWindow;
     private File file;
@@ -69,6 +71,7 @@ public class UserProfileFragment extends Fragment {
         phone = (TextView) view.findViewById(R.id.phone);
         bio = (TextView) view.findViewById(R.id.bio);
         resetPassword = (TextView) view.findViewById(R.id.reset_password);
+        creditView = (TextView)view.findViewById(R.id.my_credit);
         if(currentUser != null){
             if(currentUser.getUsername() != null && !currentUser.getUsername().equals("")){
                 username.setText(currentUser.getUsername());
@@ -98,6 +101,7 @@ public class UserProfileFragment extends Fragment {
             }else {
                 bio.setText("未填写");
             }
+            creditView.setText("" + currentUser.getCredit());
         }
 
         View avatarView = view.findViewById(R.id.avatarLayout);
@@ -168,13 +172,6 @@ public class UserProfileFragment extends Fragment {
             }
         });
 
-        View phoneView = view.findViewById(R.id.phoneLayout);
-        phoneView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getActivity(), "click the phone view", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         View bioView = view.findViewById(R.id.bioLayout);
         bioView.setOnClickListener(new View.OnClickListener() {
@@ -225,15 +222,13 @@ public class UserProfileFragment extends Fragment {
             }else {
                 bio.setText("未填写");
             }
+
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i("xwk", "i'm in?");
-        Log.e("requestCode", type + "");
         if (requestCode == 1) {
             if (ImgUri != null) {
                 puWindow.onPhoto(ImgUri, 300, 300);

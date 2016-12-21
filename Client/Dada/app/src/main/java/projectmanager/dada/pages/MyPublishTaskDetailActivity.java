@@ -1,12 +1,9 @@
 package projectmanager.dada.pages;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,8 +13,6 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import projectmanager.dada.MainActivity;
 import projectmanager.dada.R;
 import projectmanager.dada.model.StatusType;
 import projectmanager.dada.model.Tag;
@@ -106,19 +101,36 @@ public class MyPublishTaskDetailActivity extends AppCompatActivity {
     }
 
     private void clickCancelButton(){
-        new AlertDialog.Builder(this).setTitle("确认要取消这个任务吗？（可能受到信用惩罚）")
-                .setIcon(android.R.drawable.ic_dialog_info)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        cancelTask = new CancelMyPublishTask();
-                        cancelTask.execute();
-                    }
-                })
-                .setNegativeButton("不取消了", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) { }
-                }).show();
+        if(selectedTask.getStatus() == StatusType.OPEN.getCode()){
+            new AlertDialog.Builder(this).setTitle("确认要取消这个任务吗？（无信用惩罚）")
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            cancelTask = new CancelMyPublishTask();
+                            cancelTask.execute();
+                        }
+                    })
+                    .setNegativeButton("不取消了", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) { }
+                    }).show();
+        }else{
+            new AlertDialog.Builder(this).setTitle("确认要取消这个任务吗？（将受到6点信用惩罚）")
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            cancelTask = new CancelMyPublishTask();
+                            cancelTask.execute();
+                        }
+                    })
+                    .setNegativeButton("不取消了", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) { }
+                    }).show();
+        }
+
     }
 
     private void clickConfirmButton(){
@@ -171,7 +183,11 @@ public class MyPublishTaskDetailActivity extends AppCompatActivity {
                 Toast.makeText(MyPublishTaskDetailActivity.this, "操作成功", Toast.LENGTH_SHORT).show();
                 finish();
             }else{
-                Toast.makeText(MyPublishTaskDetailActivity.this, cancelResult, Toast.LENGTH_SHORT).show();
+                if(cancelResult.contains("Credit")){
+                    Toast.makeText(MyPublishTaskDetailActivity.this, "信用值不足，无法取消", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(MyPublishTaskDetailActivity.this, "取消失败：原因不明", Toast.LENGTH_SHORT).show();
+                }
             }
         }
         @Override
@@ -200,7 +216,7 @@ public class MyPublishTaskDetailActivity extends AppCompatActivity {
                 Toast.makeText(MyPublishTaskDetailActivity.this, "操作成功", Toast.LENGTH_SHORT).show();
                 finish();
             }else{
-                Toast.makeText(MyPublishTaskDetailActivity.this, confirmResult, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyPublishTaskDetailActivity.this, "确认失败：原因不明", Toast.LENGTH_SHORT).show();
             }
         }
         @Override

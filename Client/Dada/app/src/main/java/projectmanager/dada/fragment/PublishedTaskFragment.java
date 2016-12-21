@@ -114,14 +114,17 @@ public class PublishedTaskFragment extends Fragment {
         protected Boolean doInBackground(Void... voids) {
             ArrayList<Task> acceptList = ApiManager.getInstance().handleGetPublishTasks(nowLoginUser.getUserId(),
                     0,10);
-            if(acceptList == null || acceptList.isEmpty()){
+            if(acceptList == null) {
                 myPublishTaskList = new ArrayList<>();
                 System.out.println("[Tip] Get My publish task set fail. Empty Set.");
                 return false;
+            }else if(acceptList.isEmpty()){
+                myPublishTaskList = new ArrayList<>();
+                rearrangeTaskSort();
+                return true;
             }else{
                 myPublishTaskList = acceptList;
                 rearrangeTaskSort();
-                System.out.println("[Tip]My Publish Tasks Size: " + myPublishTaskList.size());
                 return true;
             }
         }

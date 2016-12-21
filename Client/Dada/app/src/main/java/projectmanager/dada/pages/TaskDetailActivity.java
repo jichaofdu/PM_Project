@@ -1,6 +1,5 @@
 package projectmanager.dada.pages;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
@@ -15,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import projectmanager.dada.R;
+import projectmanager.dada.model.StatusType;
 import projectmanager.dada.model.Tag;
 import projectmanager.dada.model.TagListView;
 import projectmanager.dada.model.Task;
@@ -44,7 +44,6 @@ public class TaskDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_task_detail);
         final Task task = (Task) getIntent().getSerializableExtra("task");
         Toast.makeText(this, task.getTitle(), Toast.LENGTH_SHORT).show();
-
         taskTitle = (TextView) findViewById(R.id.task_title);
         taskPublisher = (TextView) findViewById(R.id.task_publisher);
         taskPublishTime = (TextView) findViewById(R.id.task_publish_time);
@@ -53,26 +52,33 @@ public class TaskDetailActivity extends AppCompatActivity {
         taskStatus = (TextView) findViewById(R.id.task_status);
         taskAcceptor = (TextView) findViewById(R.id.task_acceptor);
         taskCredit = (TextView) findViewById(R.id.task_credit);
-
         btnAccept = (Button) findViewById(R.id.btn_accept_task);
-
         taskTitle.setText(task.getTitle());
         taskPublisher.setText(task.getPublisher().getUsername());
-        taskPublishTime.setText(new SimpleDateFormat("yyyy-MM-dd").format(task.getPublishedTime()));
-        taskDeadline.setText(new SimpleDateFormat("yyyy-MM-dd").format(task.getDeadline()));
+        taskPublishTime.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(task.getPublishedTime()));
+        String deadlineString;
+        if(task.getDeadline() != null){
+            deadlineString = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(task.getDeadline());
+        }else{
+            deadlineString = "无限期";
+        }
+        taskDeadline.setText(deadlineString);
         taskDescription.setText(task.getDescription());
-        if(task.getStatus() == 1){
-            taskStatus.setText("待接受");
-        }else if(task.getStatus() == 2){
-            taskStatus.setText("进行中");
-            btnAccept.setText("进行中");
+        if(task.getStatus() == StatusType.OPEN.getCode()){
+            taskStatus.setText(StatusType.OPEN.getName());
+        }else if(task.getStatus() == StatusType.GOINGON.getCode()){
+            taskStatus.setText(StatusType.GOINGON.getName());
+            btnAccept.setText(StatusType.GOINGON.getName());
             btnAccept.setEnabled(false);
-        }else if(task.getStatus() == 3){
-            taskStatus.setText("已完成");
-            btnAccept.setText("已完成");
+        }else if(task.getStatus() == StatusType.FINISHED.getCode()){
+            taskStatus.setText(StatusType.FINISHED.getName());
+            btnAccept.setText(StatusType.FINISHED.getName());
+            btnAccept.setEnabled(false);
+        }else if(task.getStatus() == StatusType.CLOSED.getCode()){
+            taskStatus.setText(StatusType.CLOSED.getName());
             btnAccept.setEnabled(false);
         }else{
-            taskStatus.setText("已取消");
+            taskStatus.setText(StatusType.WAITCONFIRM.getCode());
             btnAccept.setEnabled(false);
         }
         if(task.getAccepter() == null){
@@ -80,29 +86,9 @@ public class TaskDetailActivity extends AppCompatActivity {
         }else {
             taskAcceptor.setText(task.getAccepter().getUsername());
         }
-
         taskCredit.setText(task.getCredit() + "");
-
-
         mTagListView = (TagListView) findViewById(R.id.task_tag_view);
-        /*mTagListView.setOnTagClickListener(new TagListView.OnTagClickListener() {
-            @Override
-            public void onTagClick(TagView tagView, Tag tag) {
-
-                if (tag.isChecked()) {
-                    tagView.setBackgroundResource(R.drawable.tag_normal);
-                    tagView.setTextColor(getResources().getColor(R.color.blue));
-                    tag.setChecked(false);
-                }else {
-                    tagView.setBackgroundResource(R.drawable.tag_checked_normal);
-                    tagView.setTextColor(getResources().getColor(R.color.white));
-                    tag.setChecked(true);
-                }
-
-            }
-        });*/
         mTagListView.setTags(initTags(task.getTags()));
-
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,7 +107,6 @@ public class TaskDetailActivity extends AppCompatActivity {
                                     AcceptTask acceptTask = new AcceptTask(task.getTaskId(), DataManager.getInstance().getCurrentUser().getUserId());
                                     acceptTask.execute((Void)null);
                                 }
-
                             }
                         })
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -134,7 +119,6 @@ public class TaskDetailActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private List<Tag> initTags(String[] tags) {
         List<Tag> mTags = new ArrayList<Tag>();
@@ -167,7 +151,6 @@ public class TaskDetailActivity extends AppCompatActivity {
         AcceptTask(int taskId, int userId) {
             this.taskId = taskId;
             this.userId = userId;
-
         }
 
         @Override
@@ -186,18 +169,17 @@ public class TaskDetailActivity extends AppCompatActivity {
             if(success && task != null){
                 taskTitle.setText(task.getTitle());
                 taskPublisher.setText(task.getPublisher().getUsername());
-                taskPublishTime.setText(new SimpleDateFormat("yyyy-MM-dd").format(task.getPublishedTime()));
-                taskDeadline.setText(new SimpleDateFormat("yyyy-MM-dd").format(task.getDeadline()));
+                taskPublishTime.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(task.getPublishedTime()));
+                taskDeadline.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(task.getDeadline()));
                 taskDescription.setText(task.getDescription());
-                taskStatus.setText(task.getStatus() + "");
+                taskStatus.setText(StatusType.getTypeByStatusId(task.getStatus()));
                 if(task.getAccepter() == null){
-                    taskAcceptor.setText("无");
+                    taskAcceptor.setText("暂无人接受任务");
                 }else {
                     taskAcceptor.setText(task.getAccepter().getUsername());
                 }
-
                 taskCredit.setText(task.getCredit() + "");
-                btnAccept.setText("已接受");
+                btnAccept.setText(StatusType.GOINGON.getName());
                 btnAccept.setEnabled(false);
                 List<Task> taskList = DataManager.getInstance().getNearbyList();
                 for(Task temp : taskList){
@@ -206,13 +188,10 @@ public class TaskDetailActivity extends AppCompatActivity {
                         DataManager.getInstance().setNearbyList(taskList);
                     }
                 }
-
             }else {
-                Toast.makeText(TaskDetailActivity.this, "failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TaskDetailActivity.this, "操作失败：原因不详", Toast.LENGTH_SHORT).show();
             }
-
         }
-
         @Override
         protected void onCancelled() {
         }

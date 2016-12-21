@@ -130,7 +130,6 @@
                     android:id="@+id/sex"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="昵称"
                     android:layout_gravity="right"
                     android:gravity="center_vertical"
                     android:layout_marginEnd="18dip"/>
@@ -171,7 +170,6 @@
                     android:id="@+id/phone"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="昵称"
                     android:layout_gravity="right"
                     android:gravity="center_vertical"
                     android:layout_marginEnd="18dip"/>
@@ -212,7 +210,6 @@
                     android:id="@+id/bio"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="昵称"
                     android:layout_gravity="right"
                     android:gravity="center_vertical"
                     android:layout_marginEnd="18dip"/>
@@ -220,7 +217,46 @@
             </LinearLayout>
 
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/creditLayout"
+            android:layout_width="match_parent"
+            android:layout_height="120px"
+            android:background="@drawable/item_selector"
+            android:clickable="true">
 
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="信用值"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="8dip"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/my_credit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:gravity="center_vertical"
+                    android:layout_marginEnd="18dip"
+                    android:textColor="@color/dada_blue"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
         <LinearLayout
             android:id="@+id/passwordLayout"
             android:layout_width="match_parent"

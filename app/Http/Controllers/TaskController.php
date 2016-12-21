@@ -48,7 +48,7 @@ class TaskController extends Controller
             abort(400);
         }
 
-        if (!is_int($credit)) {
+        if (!is_int($credit) || $credit < 0) {
             $credit = DEFAULT_TASK_CREDIT;
         }
 

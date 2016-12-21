@@ -45,13 +45,13 @@ class Task extends CamelModel
             ->whereBetween("longitude", [$lon - $coordRadius, $lon + $coordRadius])
             ->where('status', STATUS_PENDING)
             ->get();
-        foreach ($tasks as $i => $task){
-            if (sqrt(pow($task->latitude-$lat, 2)+pow($task->longitude-$lon, 2))>$coordRadius)
+        foreach ($tasks as $i => $task) {
+            if (sqrt(pow($task->latitude - $lat, 2) + pow($task->longitude - $lon, 2)) > $coordRadius)
                 unset($tasks[$i]);
         }
-        $ret=[];
+        $ret = [];
         foreach ($tasks as $task)
-            $ret[]=$this->formatTask($task, new User, new Tag);
+            $ret[] = $this->formatTask($task, new User, new Tag);
         return $ret;
     }
 

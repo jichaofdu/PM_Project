@@ -212,23 +212,23 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         // ImageView和TetxView置为绿色，页面随之跳转
         switch (v.getId()) {
             case R.id.nearby:
-                img_nearby.setImageResource(R.drawable.main_tab_item_user_focus);
-                tv_nearby.setTextColor(0xff1B940A);
+                img_nearby.setImageResource(R.drawable.nearby_selected);
+                tv_nearby.setTextColor(getResources().getColor(R.color.dada_blue));
                 initFragment(0);
                 break;
             case R.id.accepted:
-                img_accepted.setImageResource(R.drawable.main_tab_item_user_focus);
-                tv_accepted.setTextColor(0xff1B940A);
+                img_accepted.setImageResource(R.drawable.accepted_task_selected);
+                tv_accepted.setTextColor(getResources().getColor(R.color.dada_blue));
                 initFragment(1);
                 break;
             case R.id.published:
-                img_published.setImageResource(R.drawable.main_tab_item_user_focus);
-                tv_published.setTextColor(0xff1B940A);
+                img_published.setImageResource(R.drawable.published_task_selected);
+                tv_published.setTextColor(getResources().getColor(R.color.dada_blue));
                 initFragment(2);
                 break;
             case R.id.profile:
-                img_profile.setImageResource(R.drawable.main_tab_item_user_focus);
-                tv_profile.setTextColor(0xff1B940A);
+                img_profile.setImageResource(R.drawable.profile_selected);
+                tv_profile.setTextColor(getResources().getColor(R.color.dada_blue));
                 initFragment(3);
                 break;
 
@@ -240,15 +240,15 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 
     private void restartBotton() {
         // ImageView置为灰色
-        img_nearby.setImageResource(R.drawable.main_tab_item_user_normal);
-        img_accepted.setImageResource(R.drawable.main_tab_item_user_normal);
-        img_published.setImageResource(R.drawable.main_tab_item_user_normal);
-        img_profile.setImageResource(R.drawable.main_tab_item_user_normal);
+        img_nearby.setImageResource(R.drawable.nearby_normal);
+        img_accepted.setImageResource(R.drawable.accepted_task_normal);
+        img_published.setImageResource(R.drawable.published_task_normal);
+        img_profile.setImageResource(R.drawable.profile_normal);
         // TextView置为白色
-        tv_nearby.setTextColor(0xffffffff);
-        tv_accepted.setTextColor(0xffffffff);
-        tv_published.setTextColor(0xffffffff);
-        tv_profile.setTextColor(0xffffffff);
+        tv_nearby.setTextColor(getResources().getColor(R.color.gray));
+        tv_accepted.setTextColor(getResources().getColor(R.color.gray));
+        tv_published.setTextColor(getResources().getColor(R.color.gray));
+        tv_profile.setTextColor(getResources().getColor(R.color.gray));
     }
 
     @Override

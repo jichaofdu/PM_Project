@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/blue"
+    android:background="@color/white"
     >
     <LinearLayout
         android:id="@+id/nearby"
@@ -16,14 +16,14 @@
             android:id="@+id/img_nearby"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/main_tab_item_user_normal"/>
+            android:src="@drawable/nearby_normal"/>
         <TextView
             android:id="@+id/txt_nearby"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:text="附近"
-            android:textColor="@color/white"
+            android:textColor="@color/gray"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -38,14 +38,14 @@
             android:id="@+id/img_published"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/main_tab_item_user_normal"/>
+            android:src="@drawable/published_task_normal"/>
         <TextView
             android:id="@+id/txt_published"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:text="我发布的"
-            android:textColor="@color/white"
+            android:textColor="@color/gray"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -60,14 +60,14 @@
             android:id="@+id/img_accepted"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/main_tab_item_user_normal"/>
+            android:src="@drawable/accepted_task_normal"/>
         <TextView
             android:id="@+id/txt_accepted"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:text="我接受的"
-            android:textColor="@color/white"
+            android:textColor="@color/gray"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -82,14 +82,14 @@
             android:id="@+id/img_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/main_tab_item_user_normal"/>
+            android:src="@drawable/profile_normal"/>
         <TextView
             android:id="@+id/txt_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:text="个人信息"
-            android:textColor="@color/white"
+            android:textColor="@color/gray"
             android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>

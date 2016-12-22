@@ -61,8 +61,6 @@ public class LoginActivity extends AppCompatActivity{
                 turnToInstructionPage();
             }
         });
-        phoneView.setText("111111");
-        passwordView.setText("111111");
     }
 
     /**

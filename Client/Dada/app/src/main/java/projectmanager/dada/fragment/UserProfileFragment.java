@@ -215,7 +215,33 @@ public class UserProfileFragment extends Fragment {
             }else {
                 bio.setText("未填写");
             }
+        }else{
+            if(currentUser.getUsername() != null && !currentUser.getUsername().equals("")){
+                username.setText(currentUser.getUsername());
+            }else {
+                username.setText("未填写");
+            }
 
+            if(currentUser.getAvatar() != null && !currentUser.getAvatar().equals("")){
+                UserAvatar userAvatar = new UserAvatar(currentUser.getAvatar());
+                userAvatar.execute((Void) null);
+            }
+            if(currentUser.getSex() <= 3) {
+                sex.setText(SexType.getTypeBySexId(currentUser.getSex()));
+            }else {
+                sex.setText(SexType.getTypeBySexId(0));
+            }
+            if(currentUser.getPhone() != null && !currentUser.getPhone().equals("")){
+                phone.setText(currentUser.getPhone());
+            }else {
+                phone.setText("未绑定手机");
+            }
+            if(currentUser.getBio() != null && !currentUser.getBio().equals("")){
+                bio.setText(currentUser.getBio());
+            }else {
+                bio.setText("未填写");
+            }
+            creditView.setText("" + currentUser.getCredit());
         }
     }
 

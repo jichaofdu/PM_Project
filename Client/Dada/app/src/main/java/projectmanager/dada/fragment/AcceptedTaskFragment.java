@@ -156,7 +156,7 @@ public class AcceptedTaskFragment extends Fragment {
         protected Boolean doInBackground(Void... voids) {
             newLoginUser = ApiManager.getInstance().handleGetUserById
                     (DataManager.getInstance().getCurrentUser().getUserId());
-            if(newLoginUser== null){
+            if(newLoginUser == null){
                 return false;
             }else{
                 return true;

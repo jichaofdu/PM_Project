@@ -12,7 +12,6 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CompoundButton;
-
 import projectmanager.dada.R;
 import projectmanager.dada.util.FlowLayout;
 
@@ -35,7 +34,6 @@ public class TagListView extends FlowLayout implements OnClickListener {
      */
     public TagListView(Context context) {
         super(context);
-        // TODO Auto-generated constructor stub
         init();
     }
 
@@ -45,7 +43,6 @@ public class TagListView extends FlowLayout implements OnClickListener {
      */
     public TagListView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-        // TODO Auto-generated constructor stub
         init();
     }
 
@@ -56,7 +53,6 @@ public class TagListView extends FlowLayout implements OnClickListener {
      */
     public TagListView(Context context, AttributeSet attributeSet, int defStyle) {
         super(context, attributeSet, defStyle);
-        // TODO Auto-generated constructor stub
         init();
     }
 

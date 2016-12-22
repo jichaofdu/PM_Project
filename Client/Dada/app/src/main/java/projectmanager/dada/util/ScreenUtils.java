@@ -1,8 +1,5 @@
 package projectmanager.dada.util;
 
-/**
- * Created by yinwei on 15-7-6.
- */
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;

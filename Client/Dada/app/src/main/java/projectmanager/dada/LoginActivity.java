@@ -63,7 +63,6 @@ public class LoginActivity extends AppCompatActivity{
         });
         phoneView.setText("111111");
         passwordView.setText("111111");
-
     }
 
     /**
@@ -173,7 +172,6 @@ public class LoginActivity extends AppCompatActivity{
         protected Boolean doInBackground(Void... params) {
             loginUser = ApiManager.getInstance().handleLogin(phone,password);
             if(loginUser == null){
-                System.out.println("[Tip] Login Fail.");
                 return false;
             }else{
                 return true;

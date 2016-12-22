@@ -1,7 +1,6 @@
 package projectmanager.dada.adapter;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,13 +40,11 @@ public class ViewMyPublishTaskAdapter extends ArrayAdapter<Task> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Task task = getItem(position);
-
         View view = LayoutInflater.from(getContext()).inflate(resourceId, null);//子项的view
         TextView titleView = (TextView) view.findViewById(R.id.my_publish_task_title);
         TextView descriptionView = (TextView)view.findViewById(R.id.my_publish_task_content);
         TextView deadlineView = (TextView)view.findViewById(R.id.my_publish_task_deadline);
         TextView statusView = (TextView)view.findViewById(R.id.my_publish_task_status);
-
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String deadlineString;
         if(task.getDeadline() != null){

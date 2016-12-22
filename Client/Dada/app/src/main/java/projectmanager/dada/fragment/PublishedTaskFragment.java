@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,12 +50,6 @@ public class PublishedTaskFragment extends Fragment {
         tryGetMyPublishTasks();
         new UpdateUserProfile().execute();
     }
-
-
-    /**
-     * ---------------------------------------------------------------------------------------------
-     * -------------------------------------向服务器提交伪造的数据-------------------------------------
-     */
 
     /**
      * 执行从服务器获取数据的动作
@@ -116,7 +109,6 @@ public class PublishedTaskFragment extends Fragment {
                     0,10);
             if(acceptList == null) {
                 myPublishTaskList = new ArrayList<>();
-                System.out.println("[Tip] Get My publish task set fail. Empty Set.");
                 return false;
             }else if(acceptList.isEmpty()){
                 myPublishTaskList = new ArrayList<>();
@@ -163,7 +155,6 @@ public class PublishedTaskFragment extends Fragment {
             newLoginUser = ApiManager.getInstance().handleGetUserById
                     (DataManager.getInstance().getCurrentUser().getUserId());
             if(newLoginUser== null){
-                System.out.println("[Tip] Get My accept task set fail. Cannot Get Login User");
                 return false;
             }else{
                 return true;
@@ -207,5 +198,4 @@ public class PublishedTaskFragment extends Fragment {
         newList.addAll(cancelTask);
         myPublishTaskList = newList;
     }
-
 }

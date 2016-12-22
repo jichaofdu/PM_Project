@@ -158,10 +158,8 @@ public class ResetPasswordActivity extends AppCompatActivity{
 
         @Override
         protected Boolean doInBackground(Void... params) {
-//            ApiManager apiManager = new ApiManager();
             resetResult = ApiManager.getInstance().handleChangePassword(userId,oldPassword,newPassword);
             if(!resetResult.equals("succeed")){
-                System.out.println("[Tip] Change Password Fail.");
                 return false;
             }else{
                 return true;

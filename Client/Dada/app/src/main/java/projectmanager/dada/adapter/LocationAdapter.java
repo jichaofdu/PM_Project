@@ -31,14 +31,6 @@ public class LocationAdapter extends ArrayAdapter<PoiItem> {
         TextView address = (TextView) view.findViewById(R.id.locatin_address);
         name.setText(tip.getTitle());
         address.setText(tip.getSnippet());
-//        view.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                onClick(view);
-//            }
-//        });
         return view;
     }
-
-
 }

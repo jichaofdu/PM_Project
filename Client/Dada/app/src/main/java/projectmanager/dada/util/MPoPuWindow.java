@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,7 +72,6 @@ public class MPoPuWindow extends PopupWindow implements OnClickListener {
 			this.showAtLocation(parent, Gravity.BOTTOM, 0, 0);
 		} else {
 			this.dismiss();
-
 		}
 	}
 
@@ -92,7 +90,6 @@ public class MPoPuWindow extends PopupWindow implements OnClickListener {
 				listener.getType(type);
 				listener.getImgUri(ImgUri, file);
 			}
-			Log.i("xwk", "come 1");
 			this.dismiss();
 			break;
 		case R.id.photo_album:
@@ -104,7 +101,6 @@ public class MPoPuWindow extends PopupWindow implements OnClickListener {
 				listener.getType(type);
 			}
 			this.dismiss();
-			Log.i("xwk", "come 2");
 			break;
 		case R.id.photo_cancel:
 			this.dismiss();
@@ -115,7 +111,7 @@ public class MPoPuWindow extends PopupWindow implements OnClickListener {
 	}
 
 	public void onPhoto(Uri uri, int outputX, int outputY) {
-		Intent intent = null;
+		Intent intent;
 		intent = new Intent("com.android.camera.action.CROP");
 		intent.setDataAndType(uri, "image/*");
 		intent.putExtra("crop", "true");
@@ -134,7 +130,6 @@ public class MPoPuWindow extends PopupWindow implements OnClickListener {
 
 	public interface onGetTypeClckListener {
 		void getType(Type type);
-
 		void getImgUri(Uri ImgUri, File file);
 	}
 

@@ -53,24 +53,12 @@ public class Tag implements Serializable {
         return this.isChecked;
     }
 
-    public void setBackgroundResId(int paramInt) {
-        this.backgroundResId = paramInt;
-    }
-
     public void setChecked(boolean paramBoolean) {
         this.isChecked = paramBoolean;
     }
 
     public void setId(int paramInt) {
         this.id = paramInt;
-    }
-
-    public void setLeftDrawableResId(int paramInt) {
-        this.leftDrawableResId = paramInt;
-    }
-
-    public void setRightDrawableResId(int paramInt) {
-        this.rightDrawableResId = paramInt;
     }
 
     public void setTitle(String paramString) {

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -183,10 +182,8 @@ public class RegisterActivity extends AppCompatActivity{
         protected Boolean doInBackground(Void... params) {
             registerUser = ApiManager.getInstance().handleRegister(phone,username,password);
             if(registerUser == null){
-                System.out.println("[Tip] Register Fail.");
                 return false;
             }else{
-                System.out.println("[Tip] Register Success. User Id is:" + registerUser.getUserId());
                 return true;
             }
         }

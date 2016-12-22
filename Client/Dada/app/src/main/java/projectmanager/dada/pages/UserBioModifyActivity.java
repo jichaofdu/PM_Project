@@ -1,6 +1,5 @@
 package projectmanager.dada.pages;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -68,7 +67,6 @@ public class UserBioModifyActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             currentUser = ApiManager.getInstance().handleUpdateProfile(DataManager.getInstance().getCurrentUser().getUserId(), DataManager.getInstance().getCurrentUser().getUsername(), DataManager.getInstance().getCurrentUser().getSex(), DataManager.getInstance().getCurrentUser().getAvatar(), bio);
             if(currentUser == null){
-                System.out.println("[Tip] Login Fail.");
                 return false;
             }else{
                 return true;
@@ -82,13 +80,11 @@ public class UserBioModifyActivity extends AppCompatActivity {
                 finish();
 
             }else {
-                Toast.makeText(UserBioModifyActivity.this, "failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserBioModifyActivity.this, "操作失败：原因不明", Toast.LENGTH_SHORT).show();
             }
-
         }
 
         @Override
-        protected void onCancelled() {
-        }
+        protected void onCancelled() { }
     }
 }

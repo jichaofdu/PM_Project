@@ -1,30 +1,20 @@
 package projectmanager.dada;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.InflateException;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewConfiguration;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.lang.reflect.Field;
-
 import projectmanager.dada.fragment.AcceptedTaskFragment;
 import projectmanager.dada.fragment.NearbyFragment;
 import projectmanager.dada.fragment.PublishedTaskFragment;
@@ -70,14 +60,12 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         // 初始化控件
         initView();
         // 初始化底部按钮事件
         initEvent();
         // 初始化并设置当前Fragment
         onClick(nearby);
-
     }
 
     private void initEvent() {
@@ -86,17 +74,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         accepted.setOnClickListener(this);
         published.setOnClickListener(this);
         profile.setOnClickListener(this);
-//        publishTask.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent nextPage = new Intent(MainActivity.this, PublishTaskStepOneActivity.class);
-//                startActivity(nextPage);
-//            }
-//        });
     }
 
     private void initView() {
-
         // 底部菜单4个Linearlayout
         this.nearby = (LinearLayout) findViewById(R.id.nearby);
         this.accepted = (LinearLayout) findViewById(R.id.accepted);
@@ -114,9 +94,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         this.tv_accepted = (TextView) findViewById(R.id.txt_accepted);
         this.tv_published = (TextView) findViewById(R.id.txt_published);
         this.tv_profile = (TextView) findViewById(R.id.txt_profile);
-
-//        this.publishTask = (TextView) findViewById(R.id.publishTask);
-
     }
 
     private void initFragment(int index) {
@@ -125,9 +102,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         // 开启事务
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         // 隐藏所有Fragment
-
         hideFragment(transaction);
-
         switch (index) {
             case 0:
                 if (nearbyFragment == null) {
@@ -140,42 +115,34 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
                 break;
             case 1:
                 if (acceptedFragment == null) {
-//                    addressFragment = new AddressFragment();
                     acceptedFragment = new AcceptedTaskFragment();
                     transaction.add(R.id.fl_content, acceptedFragment, tag1);
                 } else {
                     transaction.show(acceptedFragment);
                 }
-
                 break;
             case 2:
                 if (publishedFragment == null) {
-//                    publishedFragment = new FriendFragment();
                     publishedFragment = new PublishedTaskFragment();
                     transaction.add(R.id.fl_content, publishedFragment, tag2);
                 } else {
                     transaction.show(publishedFragment);
                 }
-
                 break;
             case 3:
                 if (profileFragment == null) {
-//                    settingFragment = new SettingFragment();
                     profileFragment = new UserProfileFragment();
                     transaction.add(R.id.fl_content, profileFragment, tag3);
                 } else {
                     transaction.show(profileFragment);
                 }
-
                 break;
-
             default:
                 break;
         }
         transaction.addToBackStack(null);
         // 提交事务
         transaction.commit();
-
     }
 
     //隐藏Fragment
@@ -192,16 +159,13 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
         if (profileFragment != null) {
             transaction.hide(profileFragment);
         }
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         fragmentManager = getSupportFragmentManager();
         Fragment f = fragmentManager.findFragmentByTag(tag3);
-        Log.i("xwk", (f == null) + "");
         f.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -235,7 +199,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
             default:
                 break;
         }
-
     }
 
     private void restartBotton() {
@@ -258,8 +221,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
         return true;
@@ -267,7 +228,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case R.id.publish_new_task:
                 Intent nextPage = new Intent(MainActivity.this, PublishTaskStepOneActivity.class);

@@ -14,7 +14,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -24,9 +23,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.io.File;
-
 import projectmanager.dada.R;
 import projectmanager.dada.model.SexType;
 import projectmanager.dada.model.User;
@@ -117,7 +114,6 @@ public class UserProfileFragment extends Fragment {
                         UserProfileFragment.this.type = type;
                     }
 
-
                     @Override
                     public void getImgUri(Uri ImgUri, File file) {
                         UserProfileFragment.this.ImgUri = ImgUri;
@@ -141,11 +137,10 @@ public class UserProfileFragment extends Fragment {
         sexView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("请选择性别");
-                final String[] sexStrs = new String[]{"男", "女", "其他"};
-
+                final String[] sexStrs = new String[]{SexType.MALE.getName(),
+                        SexType.FEMALE.getName(), SexType.OTHER.getName() };
                 int tempSex = currentUser.getSex();
                 if(tempSex == 0){
                     tempSex = 3;
@@ -154,12 +149,10 @@ public class UserProfileFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         currentUser.setSex(i + 1);
-
                     }
                 }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
                         UserInfoTask userInfoTask = new UserInfoTask(currentUser.getUsername(), currentUser.getSex(), currentUser.getBio());
                         userInfoTask.execute((Void) null);
                     }
@@ -237,8 +230,6 @@ public class UserProfileFragment extends Fragment {
             if (data != null) {
                 Uri uri = data.getData();
                 temp = uri;
-                //        Log.i("xwk", data.toString());
-
                 puWindow.onPhoto(uri, 300, 300);
             }
         } else if (requestCode == 3) {
@@ -246,23 +237,16 @@ public class UserProfileFragment extends Fragment {
                 if (data != null) {
                     try{
                         String[] pojo = {MediaStore.Images.Media.DATA};
-                        Log.i("xwk", String.valueOf(temp));
                         Cursor cursor = getActivity().managedQuery(temp, pojo, null, null, null);
                         if(cursor != null){
                             ContentResolver cr = getActivity().getContentResolver();
                             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
                             cursor.moveToFirst();
                             String path = cursor.getString(column_index);
-
                             if(path.endsWith("jpg") || path.endsWith("png")){
                                 picPath = path;
-                                Log.i("xwk", picPath);
                                 UploadFileTask uploadFileTask = new UploadFileTask(getActivity());
                                 uploadFileTask.execute(picPath);
-//                                Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(temp));
-//                                if(bitmap != null){
-//                                    avatar.setImageBitmap(bitmap);
-//                                }
                             }else {
                                 alert();
                             }
@@ -275,15 +259,13 @@ public class UserProfileFragment extends Fragment {
                 }
             } else if (type == Type.CAMERA) {
                 avatar.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
-                Log.i("xwk", file.getPath());
                 UploadFileTask uploadFileTask = new UploadFileTask(getActivity());
                 uploadFileTask.execute(file.getPath());
             }
         }
     }
 
-    private void alert()
-    {
+    private void alert() {
         Dialog dialog = new AlertDialog.Builder(getContext())
                 .setTitle("提示")
                 .setMessage("您选择的不是有效的图片")
@@ -313,7 +295,6 @@ public class UserProfileFragment extends Fragment {
         protected Boolean doInBackground(Void... params) {
             currentUser = ApiManager.getInstance().handleUpdateProfile(DataManager.getInstance().getCurrentUser().getUserId(), username, sexId, DataManager.getInstance().getCurrentUser().getAvatar(), bio);
             if(currentUser == null){
-                System.out.println("[Tip] Login Fail.");
                 return false;
             }else{
                 return true;
@@ -326,7 +307,7 @@ public class UserProfileFragment extends Fragment {
                 DataManager.getInstance().setCurrentUser(currentUser);
                 sex.setText(SexType.getTypeBySexId(currentUser.getSex()));
             }else {
-                Toast.makeText(getActivity(), "failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "操作失败：原因不明", Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -377,7 +358,6 @@ public class UserProfileFragment extends Fragment {
         protected Boolean doInBackground(Void... params) {
             bitmap = ApiManager.getInstance().getAvatarBitmap(image);
             if(bitmap == null){
-                System.out.println("[Tip] get avatar fail.");
                 return false;
             }else{
                 return true;
@@ -389,9 +369,8 @@ public class UserProfileFragment extends Fragment {
             if(success){
                 avatar.setImageBitmap(bitmap);
             }else {
-                Toast.makeText(getActivity(), "failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "操作失败：原因不明", Toast.LENGTH_SHORT).show();
             }
-
         }
 
         @Override

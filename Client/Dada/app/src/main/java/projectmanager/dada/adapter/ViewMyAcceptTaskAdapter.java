@@ -40,13 +40,11 @@ public class ViewMyAcceptTaskAdapter extends ArrayAdapter<Task> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Task task = getItem(position);
-
         View view = LayoutInflater.from(getContext()).inflate(resourceId, null);//子项的view
         TextView titleView = (TextView) view.findViewById(R.id.my_accept_task_title);
         TextView descriptionView = (TextView)view.findViewById(R.id.my_accept_task_content);
         TextView deadlineView = (TextView)view.findViewById(R.id.my_accept_task_deadline);
         TextView statusView = (TextView)view.findViewById(R.id.my_accept_task_status);
-
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String deadlineString;
         if(task.getDeadline() != null){
@@ -67,6 +65,4 @@ public class ViewMyAcceptTaskAdapter extends ArrayAdapter<Task> {
         }
         return view;
     }
-
-
 }

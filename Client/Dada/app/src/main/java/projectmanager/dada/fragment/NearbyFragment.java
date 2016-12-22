@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,34 +77,6 @@ public class NearbyFragment extends Fragment implements LocationSource, AMapLoca
         return view;
     }
 
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//
-//        mapView = (MapView) findViewById(R.id.map);
-//        mapView.onCreate(savedInstanceState);
-//
-//        aMap = mapView.getMap();
-//
-//        //设置显示定位按钮 并且可以点击
-//        UiSettings settings = aMap.getUiSettings();
-//        //设置定位监听
-//        aMap.setLocationSource(this);
-//        // 是否显示定位按钮
-//        settings.setMyLocationButtonEnabled(true);
-//        // 是否可触发定位并显示定位层
-//        aMap.setMyLocationEnabled(true);
-//
-//        MyLocationStyle myLocationStyle = new MyLocationStyle();
-//        myLocationStyle.strokeColor(Color.argb(0,0,0,0));
-//        myLocationStyle.radiusFillColor(Color.argb(0,0,0,0));
-//        aMap.setMyLocationStyle(myLocationStyle);
-//        aMap.setOnMarkerClickListener(this);
-//        initLoc();
-//
-//        Toast.makeText(getActivity(), "我也执行了", Toast.LENGTH_SHORT).show();
-//    }
-
     //定位
     private void initLoc() {
         //初始化定位
@@ -143,10 +114,7 @@ public class NearbyFragment extends Fragment implements LocationSource, AMapLoca
     public void onResume() {
         super.onResume();
         //在activity执行onResume时执行mMapView.onResume ()，实现地图生命周期管理
-
         mapView.onResume();
-
-
     }
     @Override
     public void onPause() {
@@ -207,11 +175,9 @@ public class NearbyFragment extends Fragment implements LocationSource, AMapLoca
                     intent.putExtras(bundle);
                 }
             }
-
             startActivity(intent);
             return false;
         }
-
     }
 
     public class NearbyTask extends AsyncTask<Void, Void, Boolean> {
@@ -222,7 +188,6 @@ public class NearbyFragment extends Fragment implements LocationSource, AMapLoca
         NearbyTask(Location location, double radius) {
             this.location = location;
             this.radius = radius;
-
         }
 
         @Override
@@ -230,11 +195,8 @@ public class NearbyFragment extends Fragment implements LocationSource, AMapLoca
             taskList = ApiManager.getInstance().handleGetNearbyTasks(location, radius);
             DataManager.getInstance().setNearbyList(taskList);
             if(taskList == null){
-                System.out.println("[Tip] get nearby tasks failed.");
-                Log.i("xwk", "get nearby task failed");
                 return false;
             }else{
-                Log.i("xwk", taskList.size() + "");
                 return true;
             }
         }
@@ -248,9 +210,8 @@ public class NearbyFragment extends Fragment implements LocationSource, AMapLoca
                     marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.task));
                 }
             }else {
-                Toast.makeText(getActivity(), "failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "获取失败：原因不明", Toast.LENGTH_SHORT).show();
             }
-
         }
 
         @Override

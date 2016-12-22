@@ -25,9 +25,8 @@ import projectmanager.dada.util.DataManager;
  * Created by JScarlet on 2016/12/11.
  */
 public class TaskDetailActivity extends AppCompatActivity {
-    private TagListView mTagListView;
 
-    private final String[] titles = { "快递", "外卖", "紧急" };
+    private TagListView mTagListView;
     private TextView taskTitle;
     private TextView taskPublisher;
     private TextView taskPublishTime;
@@ -193,7 +192,6 @@ public class TaskDetailActivity extends AppCompatActivity {
             }
         }
         @Override
-        protected void onCancelled() {
-        }
+        protected void onCancelled() { }
     }
 }

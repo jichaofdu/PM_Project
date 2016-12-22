@@ -106,11 +106,10 @@ public class AcceptedTaskFragment extends Fragment {
         }
         @Override
         protected Boolean doInBackground(Void... voids) {
-
-            ArrayList<Task> acceptList = ApiManager.getInstance().handleGetAcceptTasks(nowLoginUser.getUserId(),
+            ArrayList<Task> acceptList = ApiManager.getInstance().handleGetAcceptTasks(
+                    nowLoginUser.getUserId(),
                     0,10);
             if(acceptList == null) {
-                System.out.println("[Tip] Get My accept task set fail. Null set.");
                 return false;
             }else if(acceptList.isEmpty()){
                 myAcceptTaskList = new ArrayList<>();
@@ -156,7 +155,6 @@ public class AcceptedTaskFragment extends Fragment {
             newLoginUser = ApiManager.getInstance().handleGetUserById
                     (DataManager.getInstance().getCurrentUser().getUserId());
             if(newLoginUser== null){
-                System.out.println("[Tip] Get My accept task set fail. Cannot Get Login User");
                 return false;
             }else{
                 return true;

@@ -31,14 +31,6 @@ public class LocationSearchedAdapter extends ArrayAdapter<Tip> {
         TextView address = (TextView) view.findViewById(R.id.locatin_address);
         name.setText(tip.getName());
         address.setText(tip.getDistrict());
-//        view.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                onClick(view);
-//            }
-//        });
         return view;
     }
-
-
 }

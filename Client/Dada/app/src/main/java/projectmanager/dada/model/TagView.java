@@ -7,7 +7,6 @@ package projectmanager.dada.model;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ToggleButton;
-
 import projectmanager.dada.R;
 
 public class TagView extends ToggleButton {

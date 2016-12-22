@@ -11,7 +11,6 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-
 import projectmanager.dada.R;
 
 public class FlowLayout extends ViewGroup {
@@ -223,8 +222,7 @@ public class FlowLayout extends ViewGroup {
     }
 
     private void readStyleParameters(Context context, AttributeSet attributeSet) {
-        TypedArray a = context.obtainStyledAttributes(attributeSet,
-                R.styleable.FlowLayout);
+        TypedArray a = context.obtainStyledAttributes(attributeSet, R.styleable.FlowLayout);
         try {
             horizontalSpacing = a.getDimensionPixelSize(
                     R.styleable.FlowLayout_horizontalSpacing, 0);
@@ -242,13 +240,10 @@ public class FlowLayout extends ViewGroup {
         if (!debugDraw) {
             return;
         }
-
         Paint childPaint = this.createPaint(0xffffff00);
         Paint layoutPaint = this.createPaint(0xff00ff00);
         Paint newLinePaint = this.createPaint(0xffff0000);
-
         LayoutParams lp = (LayoutParams) child.getLayoutParams();
-
         if (lp.horizontalSpacing > 0) {
             float x = child.getRight();
             float y = child.getTop() + child.getHeight() / 2.0f;
@@ -266,7 +261,6 @@ public class FlowLayout extends ViewGroup {
             canvas.drawLine(x + this.horizontalSpacing - 4.0f, y + 4.0f, x
                     + this.horizontalSpacing, y, layoutPaint);
         }
-
         if (lp.verticalSpacing > 0) {
             float x = child.getLeft() + child.getWidth() / 2.0f;
             float y = child.getBottom();
@@ -284,7 +278,6 @@ public class FlowLayout extends ViewGroup {
             canvas.drawLine(x + 4.0f, y + this.verticalSpacing - 4.0f, x, y
                     + this.verticalSpacing, layoutPaint);
         }
-
         if (lp.newLine) {
             if (orientation == HORIZONTAL) {
                 float x = child.getLeft();
@@ -340,8 +333,7 @@ public class FlowLayout extends ViewGroup {
             this.y = y;
         }
 
-        private void readStyleParameters(Context context,
-                                         AttributeSet attributeSet) {
+        private void readStyleParameters(Context context, AttributeSet attributeSet) {
             TypedArray a = context.obtainStyledAttributes(attributeSet,
                     R.styleable.FlowLayout_LayoutParams);
             try {

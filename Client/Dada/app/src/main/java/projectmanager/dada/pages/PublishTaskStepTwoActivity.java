@@ -3,7 +3,6 @@ package projectmanager.dada.pages;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,8 +12,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
-import android.widget.Toast;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.text.SimpleDateFormat;
@@ -76,7 +73,6 @@ public class PublishTaskStepTwoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                //// TODO: 2016/11/27
                 //   将获取到的用户的输入信息存放在DataManager中，留作后用
                 String title = inputTaskTitle.getText().toString();
                 String content = inputTaskContent.getText().toString();
@@ -116,7 +112,6 @@ public class PublishTaskStepTwoActivity extends AppCompatActivity {
                 if (b) {
                     focus.requestFocus();
                 }else {
-//                finish();
                     Intent nextPage = new Intent(PublishTaskStepTwoActivity.this, PublishTaskStepThreeActivity.class);
                     startActivity(nextPage);
                 }

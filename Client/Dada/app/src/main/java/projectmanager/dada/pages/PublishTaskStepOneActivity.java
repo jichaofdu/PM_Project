@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -97,13 +95,6 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
                 PoiSearch poiSearch = new PoiSearch(PublishTaskStepOneActivity.this, query);
                 poiSearch.setOnPoiSearchListener(PublishTaskStepOneActivity.this);
                 poiSearch.searchPOIAsyn();
-//                InputtipsQuery inputquery = new InputtipsQuery(keyword,"");
-//                inputquery.setCityLimit(true);
-//
-//
-//                Inputtips inputTips = new Inputtips(PublishTaskStepOneActivity.this, inputquery);
-//                inputTips.setInputtipsListener(PublishTaskStepOneActivity.this);
-//                inputTips.requestInputtipsAsyn();
             }
 
             @Override
@@ -116,9 +107,6 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
         stepOneFinishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-                //// TODO: 2016/11/27
                 //  将从地图上选到的地址信息，存放在DataManager中。留作后用。
                 //然后跳转到第二步的页面中
                 if (marker != null && marker.getPosition() != null) {
@@ -128,7 +116,6 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
                     Task task = new Task();
                     task.setLocation(location);
                     DataManager.getInstance().setNewTask(task);
-//                    finish();
                     Intent nextPage = new Intent(PublishTaskStepOneActivity.this, PublishTaskStepTwoActivity.class);
                     startActivity(nextPage);
                 } else {
@@ -195,9 +182,6 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
             mMapView.getMap().moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 17));
         }
         isFirstLoc = true;
-//        mLocationClient.startLocation();
-//        initLocation();
-
     }
 
     @Override
@@ -222,7 +206,6 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
                     LatLng latLng = new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude());
                     mMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
                     mMap.moveCamera(CameraUpdateFactory.zoomTo(17));
-
                     myLatLng = latLng;
                     isFirstLoc = false;
                 }
@@ -234,28 +217,6 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
     @Override
     public void onGetInputtips(List<Tip> tipList, int rCode) {
         if (rCode == 1000) {
-//            List<HashMap<String, String>> listString = new ArrayList<HashMap<String, String>>();
-//            for (int i = 0; i < tipList.size(); i++) {
-//                HashMap<String, String> map = new HashMap<String, String>();
-//                map.put("name", tipList.get(i).getName());
-//                map.put("address", tipList.get(i).getDistrict());
-//                listString.add(map);
-//            }
-//            SimpleAdapter aAdapter = new SimpleAdapter(getApplicationContext(), listString, R.layout.item_layout,
-//                    new String[] {"name","address"}, new int[] {R.id.poi_field_id, R.id.poi_value_id});
-//
-//            search.setAdapter(aAdapter);
-//            aAdapter.notifyDataSetChanged();
-//            Toast.makeText(PublishTaskStepOneActivity.this, "tips", Toast.LENGTH_SHORT).show();
-//            List<String> listString = new ArrayList<String>();
-//            for (int i = 0; i < tipList.size(); i++) {
-//                listString.add(tipList.get(i).getName());
-//            }
-//            ArrayAdapter<String> aAdapter = new ArrayAdapter<String>(
-//                    getApplicationContext(),
-//                    R.layout.tiplist, listString);
-//            search.setAdapter(aAdapter);
-//            aAdapter.notifyDataSetChanged();
             adapter = new LocationSearchedAdapter(PublishTaskStepOneActivity.this, R.layout.tiplist, tipList);
             search.setAdapter(adapter);
             adapter.notifyDataSetChanged();
@@ -269,14 +230,10 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
                     } else {
                         marker.setPosition(latLng);
                     }
-
                     search.setText(tip.getName());
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
-
                 }
             });
-
-
         }
     }
 
@@ -285,25 +242,7 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
         if (rCode == 1000) {
             if (result != null && result.getQuery() != null) {// 搜索poi的结果
                 if (result.getQuery().equals(query)) {// 是否是同一条
-
-                    // 取得搜索到的poiitems有多少页
                     List<PoiItem> poiItems = result.getPois();// 取得第一页的poiitem数据，页数从数字0开始
-//                    List<SuggestionCity> suggestionCities = result
-//                            .getSearchSuggestionCitys();// 当搜索不到poiitem数据时，会返回含有搜索关键字的城市信息
-//
-//                    if (poiItems != null && poiItems.size() > 0) {
-//                        mMap.clear();// 清理之前的图标
-//                        PoiOverlay poiOverlay = new PoiOverlay(mMap, poiItems);
-//                        poiOverlay.removeFromMap();
-//                        poiOverlay.addToMap();
-//                        poiOverlay.zoomToSpan();
-//                    } else if (suggestionCities != null
-//                            && suggestionCities.size() > 0) {
-////                        showSuggestCity(suggestionCities);
-//                    } else {
-////                        ToastUtil.show(PoiKeywordSearchActivity.this,
-////                                R.string.no_result);
-//                    }
                     final LocationAdapter adapter2 = new LocationAdapter(PublishTaskStepOneActivity.this, R.layout.tiplist, poiItems);
                     search.setAdapter(adapter2);
                     adapter2.notifyDataSetChanged();
@@ -317,9 +256,7 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
                             } else {
                                 marker.setPosition(latLng);
                             }
-//                            search.setText(tip.getName());
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
-
                         }
                     });
                 }
@@ -329,9 +266,7 @@ public class PublishTaskStepOneActivity extends CheckPermissionsActivity impleme
     }
 
     @Override
-    public void onPoiItemSearched(PoiItem poiItem, int i) {
-
-    }
+    public void onPoiItemSearched(PoiItem poiItem, int i) { }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

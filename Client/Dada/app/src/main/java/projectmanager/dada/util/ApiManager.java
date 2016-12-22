@@ -3,13 +3,11 @@ package projectmanager.dada.util;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -26,7 +24,6 @@ import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +33,6 @@ import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
 import projectmanager.dada.model.Location;
 import projectmanager.dada.model.Task;
 import projectmanager.dada.model.User;
@@ -77,7 +73,6 @@ public class ApiManager {
             UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters,HTTP.UTF_8);
             request.setEntity(formEntity);
             HttpResponse response = client.execute(request);
-
             if (response.getStatusLine().getStatusCode() == 200) {
                 InputStream is = response.getEntity().getContent();
                 String str = convertStreamToString(is);
@@ -440,14 +435,8 @@ public class ApiManager {
         try{
             Log.i("xwk", location.getLatitude() + " " + location.getLongitude() + " " + radius);
             HttpClient client = new DefaultHttpClient();
-            HttpGet request = new HttpGet("https://relay.nxtsysx.net/getTasksAround?lat=" + location.getLatitude() + "&lon=" + location.getLongitude() + "&radius=" + radius);
-         /*   List<NameValuePair> postParameters = new ArrayList<>();
-            postParameters.add(new BasicNameValuePair("lat", "" + location.getLatitude()));
-            postParameters.add(new BasicNameValuePair("lon", "" + location.getLongitude()));
-            postParameters.add(new BasicNameValuePair("radius", "" + radius));
-            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters,HTTP.UTF_8);
-     //       request.setEntity(formEntity);
-            request.setConnectionRequest((ClientConnectionRequest) formEntity);*/
+            HttpGet request = new HttpGet("https://relay.nxtsysx.net/getTasksAround?lat=" +
+                    location.getLatitude() + "&lon=" + location.getLongitude() + "&radius=" + radius);
             HttpResponse response = client.execute(request);
             Log.i("xwk", response.getStatusLine().getStatusCode() + "");
             if (response.getStatusLine().getStatusCode() == 200) {
@@ -861,20 +850,6 @@ public class ApiManager {
                 credit,sex,avatorString,bioString);
         return returnUser;
     }
-
-
-    /**
-     * 解析Locations数据
-     */
-    public Location parseLocation(JSONObject locationJson) throws  JSONException{
-        String logitutdeString = locationJson.getString("longitude");
-        double longitude = Double.parseDouble(logitutdeString);
-        String latitudeString = locationJson.getString("latitude");
-        double latitude = Double.parseDouble(latitudeString);
-        String description = locationJson.getString("description");
-        return new Location(0,longitude,latitude,description);
-    }
-
 
     /**
      * 本方法用于将字节流转化成字符串。

@@ -1,6 +1,5 @@
 package projectmanager.dada.pages;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import projectmanager.dada.R;
 
 /**
@@ -56,7 +54,6 @@ public class ProjectInstructionActivity extends AppCompatActivity implements Vie
 
                 @Override
                 public boolean onTouch(View arg0, MotionEvent arg1) {
-                    // TODO Auto-generated method stub
                     return true;
                 }
             });

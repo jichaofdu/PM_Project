@@ -2,7 +2,6 @@ package projectmanager.dada.util;
 
 import java.util.HashMap;
 import java.util.List;
-
 import projectmanager.dada.model.Task;
 import projectmanager.dada.model.User;
 
@@ -91,30 +90,6 @@ public class DataManager {
 
     public void setSelectedMyPublishTask(Task selectedMyPublishTask) {
         this.selectedMyPublishTask = selectedMyPublishTask;
-    }
-
-    public HashMap<Integer, Task> getMyPublishList() {
-        return myPublishList;
-    }
-
-    public void setMyPublishList(HashMap<Integer, Task> myPublishList) {
-        this.myPublishList = myPublishList;
-    }
-
-    public HashMap<Integer, Task> getMyAcceptList() {
-        return myAcceptList;
-    }
-
-    public void setMyAcceptList(HashMap<Integer, Task> myAcceptList) {
-        this.myAcceptList = myAcceptList;
-    }
-
-    public HashMap<Integer, Task> getMyNearbyList() {
-        return myNearbyList;
-    }
-
-    public void setMyNearbyList(HashMap<Integer, Task> myNearbyList) {
-        this.myNearbyList = myNearbyList;
     }
 
     public List<Task> getNearbyList() {

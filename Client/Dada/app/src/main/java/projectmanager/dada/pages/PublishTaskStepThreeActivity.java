@@ -80,8 +80,6 @@ public class PublishTaskStepThreeActivity extends Activity {
         stepThreeFinishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                //// TODO: 2016/11/27
                 //   将用户的输入进行联网操作。
                 //   然后成功后再返回到主页面去
                 Task task = DataManager.getInstance().getNewTask();
@@ -139,11 +137,8 @@ public class PublishTaskStepThreeActivity extends Activity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-//            ApiManager apiManager = new ApiManager();
-//            Task t = apiManager.handlePublishTask(task);
             Task t = ApiManager.getInstance().handlePublishTask(task);
             if(t == null){
-                System.out.println("[Tip] Publish New Task Fail.");
                 return false;
             }else{
                 return true;

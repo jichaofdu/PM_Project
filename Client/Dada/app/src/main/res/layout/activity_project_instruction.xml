@@ -16,9 +16,9 @@
             android:id="@+id/viewPagerDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#655b5d"
+            android:background="@color/black_dada_alpha"
             android:textSize="16dp"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
             android:layout_alignParentBottom="true"/>
 
       <!--  <Button

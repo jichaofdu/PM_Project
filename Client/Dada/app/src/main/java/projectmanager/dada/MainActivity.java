@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
                 } else {
 
                     transaction.show(nearbyFragment);
+                    nearbyFragment.onResume();
                 }
                 break;
             case 1:
@@ -119,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
                     transaction.add(R.id.fl_content, acceptedFragment, tag1);
                 } else {
                     transaction.show(acceptedFragment);
+                    acceptedFragment.onResume();
                 }
                 break;
             case 2:
@@ -127,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
                     transaction.add(R.id.fl_content, publishedFragment, tag2);
                 } else {
                     transaction.show(publishedFragment);
+                    publishedFragment.onResume();
                 }
                 break;
             case 3:
@@ -135,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener{
                     transaction.add(R.id.fl_content, profileFragment, tag3);
                 } else {
                     transaction.show(profileFragment);
+                    profileFragment.onResume();
                 }
                 break;
             default:

@@ -115,6 +115,8 @@ public class NearbyFragment extends Fragment implements LocationSource, AMapLoca
         super.onResume();
         //在activity执行onResume时执行mMapView.onResume ()，实现地图生命周期管理
         mapView.onResume();
+        aMap.clear();
+        isFirstLoc = true;
     }
     @Override
     public void onPause() {
@@ -150,7 +152,6 @@ public class NearbyFragment extends Fragment implements LocationSource, AMapLoca
                     LatLng latLng = new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude());
                     aMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
                     aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
-                    mapListener.onLocationChanged(aMapLocation);
                     isFirstLoc = false;
                     aMap.addCircle(new CircleOptions().center(new LatLng(aMap.getMyLocation().getLatitude(), aMap.getMyLocation().getLongitude())).fillColor(Color.argb(80, 15, 137, 248)).strokeColor(Color.argb(100, 92, 124, 153)).strokeWidth(5).radius(300));
                     Location location = new Location(0, aMap.getMyLocation().getLongitude(), aMap.getMyLocation().getLatitude(), "");

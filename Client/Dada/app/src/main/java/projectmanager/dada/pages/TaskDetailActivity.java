@@ -168,7 +168,13 @@ public class TaskDetailActivity extends AppCompatActivity {
                 taskTitle.setText(task.getTitle());
                 taskPublisher.setText(task.getPublisher().getUsername());
                 taskPublishTime.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(task.getPublishedTime()));
-                taskDeadline.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(task.getDeadline()));
+                String deadlineString;
+                if(task.getDeadline() != null){
+                    deadlineString = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(task.getDeadline());
+                }else{
+                    deadlineString = "无限期";
+                }
+                taskDeadline.setText(deadlineString);
                 taskDescription.setText(task.getDescription());
                 taskStatus.setText(StatusType.getTypeByStatusId(task.getStatus()));
                 if(task.getAccepter() == null){

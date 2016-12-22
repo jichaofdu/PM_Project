@@ -42,7 +42,6 @@ public class TaskDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail);
         final Task task = (Task) getIntent().getSerializableExtra("task");
-        Toast.makeText(this, task.getTitle(), Toast.LENGTH_SHORT).show();
         taskTitle = (TextView) findViewById(R.id.task_title);
         taskPublisher = (TextView) findViewById(R.id.task_publisher);
         taskPublishTime = (TextView) findViewById(R.id.task_publish_time);

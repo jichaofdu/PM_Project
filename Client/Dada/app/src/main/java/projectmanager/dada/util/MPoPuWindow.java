@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import java.io.File;
@@ -50,13 +51,13 @@ public class MPoPuWindow extends PopupWindow implements OnClickListener {
 		// 设置SelectPicPopupWindow弹出窗体的宽
 		this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
 		// 设置SelectPicPopupWindow弹出窗体的高
-		this.setHeight(ScreenUtils.getScreenHeight(mContext));
+		this.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
 
 		// 设置SelectPicPopupWindow弹出窗体可点�?
 		this.setTouchable(true);
 		this.setFocusable(true);
 		this.setOutsideTouchable(true);
-
+		this.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 		// 刷新状�?
 		this.update();
 		// 设置SelectPicPopupWindow弹出窗体动画效果

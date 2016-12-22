@@ -259,10 +259,10 @@ public class UserProfileFragment extends Fragment {
                                 Log.i("xwk", picPath);
                                 UploadFileTask uploadFileTask = new UploadFileTask(getActivity());
                                 uploadFileTask.execute(picPath);
-                                Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(temp));
-                                if(bitmap != null){
-                                    avatar.setImageBitmap(bitmap);
-                                }
+//                                Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(temp));
+//                                if(bitmap != null){
+//                                    avatar.setImageBitmap(bitmap);
+//                                }
                             }else {
                                 alert();
                             }
@@ -356,6 +356,9 @@ public class UserProfileFragment extends Fragment {
             progressDialog.dismiss();
             if(s.equalsIgnoreCase("SUCCESS")){
                 Toast.makeText(context, "上传成功", Toast.LENGTH_SHORT).show();
+                currentUser = DataManager.getInstance().getCurrentUser();
+                UserAvatar userAvatar = new UserAvatar(currentUser.getAvatar());
+                userAvatar.execute((Void) null);
             }else {
                 Toast.makeText(context, "上传失败", Toast.LENGTH_SHORT).show();
             }

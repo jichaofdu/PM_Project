@@ -294,7 +294,12 @@ public class ApiManager {
                 String str = convertStreamToString(is);
                 JSONObject resultJson = new JSONObject(str);
                 String result = resultJson.getString("result");
+
                 if(result.equals("succeed")){
+                    JSONObject jsonObject = resultJson.getJSONObject("user");
+                    User user = parseUser(jsonObject);
+                    DataManager.getInstance().setCurrentUser(user);
+                    System.out.println(user.getAvatar());
                     return "SUCCESS";
                 }else{
                     String error = resultJson.getString("error");

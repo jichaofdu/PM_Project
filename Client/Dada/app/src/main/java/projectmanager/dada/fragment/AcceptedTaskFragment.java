@@ -30,6 +30,7 @@ import projectmanager.dada.util.DataManager;
 
 public class AcceptedTaskFragment extends Fragment {
     private GetMyAcceptTaskSetTask getMyAcceptSetTask;
+    private View myAcceptTotalLinearLayout;
     private View progressView;
     private ListView myAcceptListView;
     private ArrayList<Task> myAcceptTaskList;
@@ -40,6 +41,7 @@ public class AcceptedTaskFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_my_accept_task, container, false);
         myAcceptListView = (ListView) view.findViewById(R.id.my_accept_task_list_view);
         progressView = view.findViewById(R.id.get_my_accept_task_progress);
+        myAcceptTotalLinearLayout = view.findViewById(R.id.my_accept_total_linear_layout);
         return view;
     }
 
@@ -69,12 +71,12 @@ public class AcceptedTaskFragment extends Fragment {
     private void showProgress(final boolean show) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-            myAcceptListView.setVisibility(show ? View.GONE : View.VISIBLE);
-            myAcceptListView.animate().setDuration(shortAnimTime).alpha(
+            myAcceptTotalLinearLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+            myAcceptTotalLinearLayout.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    myAcceptListView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    myAcceptTotalLinearLayout.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
             progressView.setVisibility(show ? View.VISIBLE : View.GONE);
@@ -87,7 +89,7 @@ public class AcceptedTaskFragment extends Fragment {
             });
         } else {
             progressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            myAcceptListView.setVisibility(show ? View.GONE : View.VISIBLE);
+            myAcceptTotalLinearLayout.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 

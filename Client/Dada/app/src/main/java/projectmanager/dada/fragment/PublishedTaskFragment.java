@@ -31,6 +31,7 @@ import projectmanager.dada.util.DataManager;
 public class PublishedTaskFragment extends Fragment {
     private GetMyPublishTaskSetTask getMyPublishSetTask;
     private ListView myPublishListView;
+    private View myPublishLinearLayout;
     private View progressView;
     private ArrayList<Task> myPublishTaskList;
     private ViewMyPublishTaskAdapter myPublishTaskAdapter;
@@ -40,6 +41,7 @@ public class PublishedTaskFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_my_publish_task, container, false);
         myPublishListView = (ListView) view.findViewById(R.id.my_publish_task_list_view);
         progressView = view.findViewById(R.id.get_my_publish_task_progress);
+        myPublishLinearLayout = view.findViewById(R.id.my_publish_total_linear_layout);
         return view;
     }
 
@@ -68,12 +70,12 @@ public class PublishedTaskFragment extends Fragment {
     private void showProgress(final boolean show) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-            myPublishListView.setVisibility(show ? View.GONE : View.VISIBLE);
-            myPublishListView.animate().setDuration(shortAnimTime).alpha(
+            myPublishLinearLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+            myPublishLinearLayout.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    myPublishListView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    myPublishLinearLayout.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
             progressView.setVisibility(show ? View.VISIBLE : View.GONE);
@@ -86,7 +88,7 @@ public class PublishedTaskFragment extends Fragment {
             });
         } else {
             progressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            myPublishListView.setVisibility(show ? View.GONE : View.VISIBLE);
+            myPublishLinearLayout.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 

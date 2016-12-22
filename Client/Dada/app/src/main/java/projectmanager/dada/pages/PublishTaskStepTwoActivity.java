@@ -41,10 +41,11 @@ public class PublishTaskStepTwoActivity extends AppCompatActivity {
         deadline = (Button) findViewById(R.id.step_two_deadline);
         inputTaskCredit = (EditText) findViewById(R.id.step_two_input_credit);
         stepTwoFinishButton = (Button) findViewById(R.id.step_two_ok_button);
-        calendar = Calendar.getInstance();
+
         deadline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                calendar = Calendar.getInstance();
                 now = Calendar.getInstance();
                 new DatePickerDialog(PublishTaskStepTwoActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -56,10 +57,12 @@ public class PublishTaskStepTwoActivity extends AppCompatActivity {
                                 if (calendar.after(now)) {
                                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                                     deadline.setText(sdf.format(calendar.getTime()));
+                                    deadline.setTextColor(getResources().getColor(R.color.white));
                                 }else {
                                     calendar = null;
                                     deadline.setText("请选择当前时刻之后的时间");
-                                    deadline.setError("请选择当前时刻之后的时间");
+                                    deadline.setTextColor(getResources().getColor(R.color.red));
+//                                    deadline.setError("请选择当前时刻之后的时间");
                                 }
 
                             }
